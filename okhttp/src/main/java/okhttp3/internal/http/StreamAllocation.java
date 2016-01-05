@@ -151,9 +151,9 @@ public final class StreamAllocation {
       boolean connectionRetryEnabled) throws IOException, RouteException {
     Route selectedRoute;
     synchronized (connectionPool) {
-      if (released) throw new IllegalStateException("released");
       if (stream != null) throw new IllegalStateException("stream != null");
       if (canceled) throw new IOException("Canceled");
+      if (released) throw new IllegalStateException("released");
 
       RealConnection allocatedConnection = this.connection;
       if (allocatedConnection != null && !allocatedConnection.noNewStreams) {
