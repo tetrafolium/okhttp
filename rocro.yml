@@ -1,5 +1,3 @@
 inspecode:
-  checkstyle:
-  - config-file: ""
-    auto-fix: true
-  - auto-fix: true
+  checkstyle: auto-fix
+  pmd: auto-fix
