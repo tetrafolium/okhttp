@@ -25,13 +25,11 @@ import okhttp3.Response;
 
 public final class RewriteResponseCacheControl {
   /** Dangerous interceptor that rewrites the server's cache-control header. */
-  private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = new Interceptor() {
-    @Override public Response intercept(Chain chain) throws IOException {
-      Response originalResponse = chain.proceed(chain.request());
-      return originalResponse.newBuilder()
-          .header("Cache-Control", "max-age=60")
-          .build();
-    }
+  private static final Interceptor REWRITE_CACHE_CONTROL_INTERCEPTOR = chain -> {
+    Response originalResponse = chain.proceed(chain.request());
+    return originalResponse.newBuilder()
+        .header("Cache-Control", "max-age=60")
+        .build();
   };
 
   private final OkHttpClient client;
@@ -66,12 +64,12 @@ public final class RewriteResponseCacheControl {
         clientForCall = client;
       }
 
-      Response response = clientForCall.newCall(request).execute();
-      response.body().close();
-      if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+      try (Response response = clientForCall.newCall(request).execute()) {
+        if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-      System.out.println("    Network: " + (response.networkResponse() != null));
-      System.out.println();
+        System.out.println("    Network: " + (response.networkResponse() != null));
+        System.out.println();
+      }
     }
   }
 

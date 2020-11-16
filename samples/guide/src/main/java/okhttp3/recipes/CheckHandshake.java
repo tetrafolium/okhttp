@@ -28,7 +28,8 @@ import okhttp3.Response;
 public final class CheckHandshake {
   /** Rejects otherwise-trusted certificates. */
   private static final Interceptor CHECK_HANDSHAKE_INTERCEPTOR = new Interceptor() {
-    Set<String> blacklist = Collections.singleton("sha1/DmxUShsZuNiqPQsX2Oi9uv2sCnw=");
+    Set<String> blacklist = Collections.singleton(
+        "sha256/afwiKY3RxoMmLkuRW1l7QsPZTJPwDS2pdDROQjXw8ig=");
 
     @Override public Response intercept(Chain chain) throws IOException {
       for (Certificate certificate : chain.connection().handshake().peerCertificates()) {
@@ -50,10 +51,11 @@ public final class CheckHandshake {
         .url("https://publicobject.com/helloworld.txt")
         .build();
 
-    Response response = client.newCall(request).execute();
-    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    try (Response response = client.newCall(request).execute()) {
+      if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-    System.out.println(response.body().string());
+      System.out.println(response.body().string());
+    }
   }
 
   public static void main(String... args) throws Exception {

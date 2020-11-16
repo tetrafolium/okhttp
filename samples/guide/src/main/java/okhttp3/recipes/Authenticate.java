@@ -30,6 +30,10 @@ public final class Authenticate {
     client = new OkHttpClient.Builder()
         .authenticator(new Authenticator() {
           @Override public Request authenticate(Route route, Response response) throws IOException {
+            if (response.request().header("Authorization") != null) {
+              return null; // Give up, we've already attempted to authenticate.
+            }
+
             System.out.println("Authenticating for response: " + response);
             System.out.println("Challenges: " + response.challenges());
             String credential = Credentials.basic("jesse", "password1");
@@ -46,10 +50,11 @@ public final class Authenticate {
         .url("http://publicobject.com/secrets/hellosecret.txt")
         .build();
 
-    Response response = client.newCall(request).execute();
-    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    try (Response response = client.newCall(request).execute()) {
+      if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-    System.out.println(response.body().string());
+      System.out.println(response.body().string());
+    }
   }
 
   public static void main(String... args) throws Exception {

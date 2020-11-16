@@ -25,7 +25,7 @@ import okio.BufferedSink;
 
 public final class PostStreaming {
   public static final MediaType MEDIA_TYPE_MARKDOWN
-      = MediaType.parse("text/x-markdown; charset=utf-8");
+      = MediaType.get("text/x-markdown; charset=utf-8");
 
   private final OkHttpClient client = new OkHttpClient();
 
@@ -57,10 +57,11 @@ public final class PostStreaming {
         .post(requestBody)
         .build();
 
-    Response response = client.newCall(request).execute();
-    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+    try (Response response = client.newCall(request).execute()) {
+      if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
-    System.out.println(response.body().string());
+      System.out.println(response.body().string());
+    }
   }
 
   public static void main(String... args) throws Exception {
