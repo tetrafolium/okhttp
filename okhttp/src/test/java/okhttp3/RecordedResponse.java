@@ -33,8 +33,8 @@ public final class RecordedResponse {
   public final @Nullable String body;
   public final @Nullable IOException failure;
 
-  public RecordedResponse(Request request, @Nullable Response response,
-      @Nullable WebSocket webSocket, @Nullable String body, @Nullable IOException failure) {
+  public RecordedResponse(final Request request, final @Nullable Response response,
+      final @Nullable WebSocket webSocket, final @Nullable String body, final @Nullable IOException failure) {
     this.request = request;
     this.response = response;
     this.webSocket = webSocket;
@@ -42,22 +42,22 @@ public final class RecordedResponse {
     this.failure = failure;
   }
 
-  public RecordedResponse assertRequestUrl(HttpUrl url) {
+  public RecordedResponse assertRequestUrl(final HttpUrl url) {
     assertThat(request.url()).isEqualTo(url);
     return this;
   }
 
-  public RecordedResponse assertRequestMethod(String method) {
+  public RecordedResponse assertRequestMethod(final String method) {
     assertThat(request.method()).isEqualTo(method);
     return this;
   }
 
-  public RecordedResponse assertRequestHeader(String name, String... values) {
+  public RecordedResponse assertRequestHeader(final String name, final String... values) {
     assertThat(request.headers(name)).containsExactly(values);
     return this;
   }
 
-  public RecordedResponse assertCode(int expectedCode) {
+  public RecordedResponse assertCode(final int expectedCode) {
     assertThat(response.code()).isEqualTo(expectedCode);
     return this;
   }
@@ -73,17 +73,17 @@ public final class RecordedResponse {
     return this;
   }
 
-  public RecordedResponse assertHeader(String name, String... values) {
+  public RecordedResponse assertHeader(final String name, final String... values) {
     assertThat(response.headers(name)).containsExactly(values);
     return this;
   }
 
-  public RecordedResponse assertHeaders(Headers headers) {
+  public RecordedResponse assertHeaders(final Headers headers) {
     assertThat(response.headers()).isEqualTo(headers);
     return this;
   }
 
-  public RecordedResponse assertBody(String expectedBody) {
+  public RecordedResponse assertBody(final String expectedBody) {
     assertThat(body).isEqualTo(expectedBody);
     return this;
   }
@@ -141,7 +141,7 @@ public final class RecordedResponse {
     return new RecordedResponse(cacheResponse.request(), cacheResponse, null, null, null);
   }
 
-  public RecordedResponse assertFailure(Class<?>... allowedExceptionTypes) {
+  public RecordedResponse assertFailure(final Class<?>... allowedExceptionTypes) {
     boolean found = false;
     for (Class expectedClass : allowedExceptionTypes) {
       if (expectedClass.isInstance(failure)) {
@@ -156,13 +156,13 @@ public final class RecordedResponse {
     return this;
   }
 
-  public RecordedResponse assertFailure(String... messages) {
+  public RecordedResponse assertFailure(final String... messages) {
     assertThat(failure).overridingErrorMessage("No failure found").isNotNull();
     assertThat(messages).contains(failure.getMessage());
     return this;
   }
 
-  public RecordedResponse assertFailureMatches(String... patterns) {
+  public RecordedResponse assertFailureMatches(final String... patterns) {
     assertThat(failure).isNotNull();
     for (String pattern : patterns) {
       if (failure.getMessage().matches(pattern)) return this;
@@ -170,24 +170,24 @@ public final class RecordedResponse {
     throw new AssertionError(failure.getMessage());
   }
 
-  public RecordedResponse assertSentRequestAtMillis(long minimum, long maximum) {
+  public RecordedResponse assertSentRequestAtMillis(final long minimum, final long maximum) {
     assertDateInRange(minimum, response.sentRequestAtMillis(), maximum);
     return this;
   }
 
-  public RecordedResponse assertReceivedResponseAtMillis(long minimum, long maximum) {
+  public RecordedResponse assertReceivedResponseAtMillis(final long minimum, final long maximum) {
     assertDateInRange(minimum, response.receivedResponseAtMillis(), maximum);
     return this;
   }
 
-  private void assertDateInRange(long minimum, long actual, long maximum) {
+  private void assertDateInRange(final long minimum, final long actual, final long maximum) {
     assertThat(actual)
         .overridingErrorMessage("%s <= %s <= %s", format(minimum), format(actual), format(maximum))
         .isBetween(minimum, maximum);
 
   }
 
-  private String format(long time) {
+  private String format(final long time) {
     return new SimpleDateFormat("HH:mm:ss.SSS").format(new Date(time));
   }
 

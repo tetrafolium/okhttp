@@ -38,7 +38,7 @@ public final class LoggingInterceptors {
   }
 
   private static class LoggingInterceptor implements Interceptor {
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       long t1 = System.nanoTime();
       Request request = chain.request();
       logger.info(String.format("Sending request %s on %s%n%s",
@@ -52,7 +52,7 @@ public final class LoggingInterceptors {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new LoggingInterceptors().run();
   }
 }

@@ -32,22 +32,22 @@ final class TunnelingUnixSocket extends UnixSocket {
   private final File path;
   private InetSocketAddress inetSocketAddress;
 
-  TunnelingUnixSocket(File path, UnixSocketChannel channel) {
+  TunnelingUnixSocket(final File path, final UnixSocketChannel channel) {
     super(channel);
     this.path = path;
   }
 
-  TunnelingUnixSocket(File path, UnixSocketChannel channel, InetSocketAddress address) {
+  TunnelingUnixSocket(final File path, final UnixSocketChannel channel, final InetSocketAddress address) {
     this(path, channel);
     this.inetSocketAddress = address;
   }
 
-  @Override public void connect(SocketAddress endpoint) throws IOException {
+  @Override public void connect(final SocketAddress endpoint) throws IOException {
     this.inetSocketAddress = (InetSocketAddress) endpoint;
     super.connect(new UnixSocketAddress(path), 0);
   }
 
-  @Override public void connect(SocketAddress endpoint, int timeout) throws IOException {
+  @Override public void connect(final SocketAddress endpoint, final int timeout) throws IOException {
     this.inetSocketAddress = (InetSocketAddress) endpoint;
     super.connect(new UnixSocketAddress(path), timeout);
   }

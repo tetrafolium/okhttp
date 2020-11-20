@@ -117,7 +117,7 @@ public final class CallTest {
   private RecordingCallback callback = new RecordingCallback();
   private Cache cache = new Cache(new File("/cache/"), Integer.MAX_VALUE, fileSystem);
 
-  public CallTest(MockWebServer server, MockWebServer server2) {
+  public CallTest(final MockWebServer server, final MockWebServer server2) {
     this.server = server;
     this.server2 = server2;
   }
@@ -401,7 +401,7 @@ public final class CallTest {
     postBodyRetransmittedAfterAuthorizationFail("");
   }
 
-  private void postBodyRetransmittedAfterAuthorizationFail(String body) throws Exception {
+  private void postBodyRetransmittedAfterAuthorizationFail(final String body) throws Exception {
     server.enqueue(new MockResponse().setResponseCode(401));
     server.enqueue(new MockResponse());
 
@@ -761,11 +761,11 @@ public final class CallTest {
         .build();
 
     client.newCall(request).enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         fail();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         throw new IOException("a");
       }
     });
@@ -870,11 +870,11 @@ public final class CallTest {
 
     Request request = new Request.Builder().url(server.url("/a")).build();
     client.newCall(request).enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         throw new AssertionError();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         InputStream bytes = response.body().byteStream();
         assertThat(bytes.read()).isEqualTo('a');
         assertThat(bytes.read()).isEqualTo('b');
@@ -978,7 +978,7 @@ public final class CallTest {
 
     client = client.newBuilder()
         .addInterceptor(new Interceptor() {
-          @Override public Response intercept(Chain chain) throws IOException {
+          @Override public Response intercept(final Chain chain) throws IOException {
             try {
               chain.proceed(chain.request());
               throw new AssertionError();
@@ -1004,7 +1004,7 @@ public final class CallTest {
 
     client = clientTestRule.newClientBuilder()
         .addInterceptor(new Interceptor() {
-          @Override public Response intercept(Chain chain) throws IOException {
+          @Override public Response intercept(final Chain chain) throws IOException {
             Response response = chain.proceed(chain.request());
             try {
               chain.proceed(chain.request());
@@ -1053,7 +1053,8 @@ public final class CallTest {
   /** https://github.com/square/okhttp/issues/1801 */
   @Test public void asyncCallEngineInitialized() throws Exception {
     OkHttpClient c = client.newBuilder()
-        .addInterceptor(chain -> { throw new IOException(); })
+        .addInterceptor(chain -> {
+            throw new IOException(); })
         .build();
     Request request = new Request.Builder().url(server.url("/")).build();
     c.newCall(request).enqueue(callback);
@@ -1071,7 +1072,7 @@ public final class CallTest {
         return MediaType.get("text/plain");
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("abc");
         sink.timeout().deadline(5, TimeUnit.SECONDS);
       }
@@ -1089,7 +1090,7 @@ public final class CallTest {
         return MediaType.get("text/plain");
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         assertThat(sink.timeout().hasDeadline()).isFalse();
         sink.writeUtf8("def");
       }
@@ -1157,7 +1158,7 @@ public final class CallTest {
     CountDownLatch requestFinished = new CountDownLatch(2);
 
     QueueDispatcher dispatcher = new QueueDispatcher() {
-      @Override public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+      @Override public MockResponse dispatch(final RecordedRequest request) throws InterruptedException {
         if (peek().getSocketPolicy() == SocketPolicy.DISCONNECT_AFTER_REQUEST) {
           requestFinished.await();
         }
@@ -1170,7 +1171,7 @@ public final class CallTest {
     server.setDispatcher(dispatcher);
 
     listener = new RecordingEventListener() {
-      @Override public void requestHeadersEnd(Call call, Request request) {
+      @Override public void requestHeadersEnd(final Call call, final Request request) {
         requestFinished.countDown();
         super.responseHeadersStart(call);
       }
@@ -2019,7 +2020,7 @@ public final class CallTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sink.writeUtf8("attempt " + attempt++);
           }
         })
@@ -2050,7 +2051,7 @@ public final class CallTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sink.writeUtf8("attempt " + attempt++);
           }
 
@@ -2305,7 +2306,7 @@ public final class CallTest {
         .assertFailureMatches(".*unexpected end of stream on " + server.url("/").redact());
   }
 
-  private String stringFill(char fillChar, int length) {
+  private String stringFill(final char fillChar, final int length) {
     char[] value = new char[length];
     Arrays.fill(value, fillChar);
     return new String(value);
@@ -2332,7 +2333,7 @@ public final class CallTest {
   }
 
   /** Cancel a call that's waiting for connect to complete. */
-  private void cancelDuringConnect(String scheme) throws Exception {
+  private void cancelDuringConnect(final String scheme) throws Exception {
     server.enqueue(new MockResponse()
         .setSocketPolicy(SocketPolicy.STALL_SOCKET_AT_START));
 
@@ -2391,7 +2392,7 @@ public final class CallTest {
     server.enqueue(new MockResponse().setBody("A"));
 
     EventListener listener = new EventListener() {
-      @Override public void requestHeadersStart(Call call) {
+      @Override public void requestHeadersStart(final Call call) {
         try {
           // Cancel call from another thread to avoid reentrance.
           cancelLater(call, 0).join();
@@ -2439,7 +2440,7 @@ public final class CallTest {
     final Call call = client.newCall(request);
 
     server.setDispatcher(new Dispatcher() {
-      @Override public MockResponse dispatch(RecordedRequest request) {
+      @Override public MockResponse dispatch(final RecordedRequest request) {
         call.cancel();
         return new MockResponse().setBody("A");
       }
@@ -2484,7 +2485,7 @@ public final class CallTest {
     server.setDispatcher(new Dispatcher() {
       char nextResponse = 'A';
 
-      @Override public MockResponse dispatch(RecordedRequest request) {
+      @Override public MockResponse dispatch(final RecordedRequest request) {
         callB.cancel();
         return new MockResponse().setBody(Character.toString(nextResponse++));
       }
@@ -2513,7 +2514,7 @@ public final class CallTest {
     Request requestA = new Request.Builder().url(server.url("/a")).build();
     final Call call = client.newCall(requestA);
     server.setDispatcher(new Dispatcher() {
-      @Override public MockResponse dispatch(RecordedRequest request) {
+      @Override public MockResponse dispatch(final RecordedRequest request) {
         call.cancel();
         return new MockResponse().setBody("A");
       }
@@ -2550,12 +2551,12 @@ public final class CallTest {
     Request request = new Request.Builder().url(server.url("/a")).build();
     final Call call = client.newCall(request);
     call.enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         failureRef.set(true);
         latch.countDown();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         call.cancel();
         try {
           bodyRef.set(response.body().string());
@@ -2680,11 +2681,11 @@ public final class CallTest {
 
     final BlockingQueue<Response> responseRef = new SynchronousQueue<>();
     client.newCall(request).enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         throw new AssertionError();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         try {
           responseRef.put(response);
         } catch (InterruptedException e) {
@@ -2973,7 +2974,7 @@ public final class CallTest {
         return null;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("abc");
         sink.flush();
 
@@ -3567,7 +3568,7 @@ public final class CallTest {
         return chunked ? -1L : size;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         for (int count = 0; count < size; count += writeSize) {
           sink.write(buffer, 0, (int) Math.min(size - count, writeSize));
         }
@@ -3618,11 +3619,11 @@ public final class CallTest {
 
     CountDownLatch latch = new CountDownLatch(1);
     client.newCall(request).enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         fail();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         // Ignore the response so it gets leaked then GC'd.
         latch.countDown();
       }
@@ -3643,7 +3644,8 @@ public final class CallTest {
         .setResponseCode(401));
 
     client = client.newBuilder()
-        .authenticator((route, response) -> { throw new IOException("IOException!"); })
+        .authenticator((route, response) -> {
+            throw new IOException("IOException!"); })
         .build();
 
     Request request = new Request.Builder()
@@ -3661,7 +3663,8 @@ public final class CallTest {
         .setResponseCode(407));
 
     client = client.newBuilder()
-        .proxyAuthenticator((route, response) -> { throw new IOException("IOException!"); })
+        .proxyAuthenticator((route, response) -> {
+            throw new IOException("IOException!"); })
         .build();
 
     Request request = new Request.Builder()
@@ -3721,7 +3724,7 @@ public final class CallTest {
         return MediaType.get("application/octet-stream");
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         called.incrementAndGet();
         throw new FileNotFoundException();
       }
@@ -3800,7 +3803,7 @@ public final class CallTest {
 
   @Test public void connectionIsImmediatelyUnhealthy() throws Exception {
     EventListener listener = new EventListener() {
-      @Override public void connectionAcquired(Call call, Connection connection) {
+      @Override public void connectionAcquired(final Call call, final Connection connection) {
         Util.closeQuietly(connection.socket());
       }
     };
@@ -3824,7 +3827,7 @@ public final class CallTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sink.flush(); // For determinism, always send a partial request to the server.
             throw new IOException("boom");
           }
@@ -3857,7 +3860,7 @@ public final class CallTest {
 
     OkHttpClient cancelClient = client.newBuilder()
         .eventListener(new EventListener() {
-          @Override public void responseBodyEnd(Call call, long byteCount) {
+          @Override public void responseBodyEnd(final Call call, final long byteCount) {
             call.cancel();
           }
         })
@@ -3881,7 +3884,7 @@ public final class CallTest {
 
     client = client.newBuilder()
         .addInterceptor(new Interceptor() {
-          @Override public Response intercept(Chain chain) throws IOException {
+          @Override public Response intercept(final Chain chain) throws IOException {
             Response response = chain.proceed(chain.request());
             chain.call().cancel(); // Cancel after we have the response.
             ForwardingSource closeTrackingSource = new ForwardingSource(response.body().source()) {
@@ -3911,7 +3914,7 @@ public final class CallTest {
         return 1;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.flush(); // For determinism, always send a partial request to the server.
         throw new IOException("write body fail!");
       }
@@ -3931,7 +3934,7 @@ public final class CallTest {
     }
   }
 
-  private RecordedResponse executeSynchronously(String path, String... headers) throws IOException {
+  private RecordedResponse executeSynchronously(final String path, final String... headers) throws IOException {
     Request.Builder builder = new Request.Builder();
     builder.url(server.url(path));
     for (int i = 0, size = headers.length; i < size; i += 2) {
@@ -3940,7 +3943,7 @@ public final class CallTest {
     return executeSynchronously(builder.build());
   }
 
-  private RecordedResponse executeSynchronously(Request request) throws IOException {
+  private RecordedResponse executeSynchronously(final Request request) throws IOException {
     Call call = client.newCall(request);
     try {
       Response response = call.execute();
@@ -3955,7 +3958,7 @@ public final class CallTest {
    * Tests that use this will fail unless boot classpath is set. Ex. {@code
    * -Xbootclasspath/p:/tmp/alpn-boot-8.0.0.v20140317}
    */
-  private void enableProtocol(Protocol protocol) {
+  private void enableProtocol(final Protocol protocol) {
     enableTls();
     client = client.newBuilder()
         .protocols(asList(protocol, Protocol.HTTP_1_1))
@@ -3972,7 +3975,7 @@ public final class CallTest {
     server.useHttps(handshakeCertificates.sslSocketFactory(), false);
   }
 
-  private Buffer gzip(String data) throws IOException {
+  private Buffer gzip(final String data) throws IOException {
     Buffer result = new Buffer();
     BufferedSink sink = Okio.buffer(new GzipSink(result));
     sink.writeUtf8(data);
@@ -3998,8 +4001,8 @@ public final class CallTest {
   private SSLSocketFactory socketFactoryWithCipherSuite(
       final SSLSocketFactory sslSocketFactory, final CipherSuite cipherSuite) {
     return new DelegatingSSLSocketFactory(sslSocketFactory) {
-      @Override protected SSLSocket configureSocket(SSLSocket sslSocket) throws IOException {
-        sslSocket.setEnabledCipherSuites(new String[] { cipherSuite.javaName() });
+      @Override protected SSLSocket configureSocket(final SSLSocket sslSocket) throws IOException {
+        sslSocket.setEnabledCipherSuites(new String[] {cipherSuite.javaName() });
         return super.configureSocket(sslSocket);
       }
     };
@@ -4009,12 +4012,12 @@ public final class CallTest {
 
     private List<SSLSocket> socketsCreated = new ArrayList<>();
 
-    public RecordingSSLSocketFactory(SSLSocketFactory delegate) {
+    public RecordingSSLSocketFactory(final SSLSocketFactory delegate) {
       super(delegate);
     }
 
     @Override
-    protected SSLSocket configureSocket(SSLSocket sslSocket) throws IOException {
+    protected SSLSocket configureSocket(final SSLSocket sslSocket) throws IOException {
       socketsCreated.add(sslSocket);
       return sslSocket;
     }

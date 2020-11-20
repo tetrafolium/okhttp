@@ -35,7 +35,7 @@ public final class PostStreaming {
         return MEDIA_TYPE_MARKDOWN;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("Numbers\n");
         sink.writeUtf8("-------\n");
         for (int i = 2; i <= 997; i++) {
@@ -43,7 +43,7 @@ public final class PostStreaming {
         }
       }
 
-      private String factor(int n) {
+      private String factor(final int n) {
         for (int i = 2; i < n; i++) {
           int x = n / i;
           if (x * i == n) return factor(x) + " × " + i;
@@ -64,7 +64,7 @@ public final class PostStreaming {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new PostStreaming().run();
   }
 }

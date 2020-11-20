@@ -59,7 +59,7 @@ public final class LoggingEventListenerTest {
   private HttpUrl url;
 
   @BeforeEach
-  public void setUp(MockWebServer server) {
+  public void setUp(final MockWebServer server) {
     this.server = server;
     client =
         new OkHttpClient.Builder()
@@ -196,7 +196,8 @@ public final class LoggingEventListenerTest {
   @Test
   public void dnsFail() throws IOException {
     client = new OkHttpClient.Builder()
-        .dns(hostname -> { throw new UnknownHostException("reason"); })
+        .dns(hostname -> {
+            throw new UnknownHostException("reason"); })
         .eventListenerFactory(loggingEventListenerFactory)
         .build();
 
@@ -272,7 +273,7 @@ public final class LoggingEventListenerTest {
   }
 
   private static class LogRecorder extends HttpLoggingInterceptorTest.LogRecorder {
-    @Override LogRecorder assertLogMatch(String pattern) {
+    @Override LogRecorder assertLogMatch(final String pattern) {
       return (LogRecorder) super.assertLogMatch("\\[\\d+ ms] " + pattern);
     }
   }

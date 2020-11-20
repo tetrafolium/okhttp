@@ -49,7 +49,7 @@ public class Case implements Cloneable {
     return seqno;
   }
 
-  public void setWire(ByteString wire) {
+  public void setWire(final ByteString wire) {
     this.wire = wire.hex();
   }
 

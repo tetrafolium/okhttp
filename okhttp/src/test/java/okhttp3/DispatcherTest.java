@@ -309,7 +309,7 @@ public final class DispatcherTest {
         .containsExactly("CallStart", "CallStart", "CallFailed");
   }
 
-  private Thread makeSynchronousCall(Call call) {
+  private Thread makeSynchronousCall(final Call call) {
     Thread thread = new Thread(() -> {
       try {
         call.execute();
@@ -321,11 +321,11 @@ public final class DispatcherTest {
     return thread;
   }
 
-  private Request newRequest(String url) {
+  private Request newRequest(final String url) {
     return new Request.Builder().url(url).build();
   }
 
-  private Request newRequest(String url, String tag) {
+  private Request newRequest(final String url, final String tag) {
     return new Request.Builder().url(url).tag(tag).build();
   }
 }

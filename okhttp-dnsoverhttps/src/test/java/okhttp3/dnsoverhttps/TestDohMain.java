@@ -29,7 +29,7 @@ import okhttp3.OkHttpClient;
 import static java.util.Arrays.asList;
 
 public class TestDohMain {
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     Security.insertProviderAt(new org.conscrypt.OpenSSLProvider(), 1);
 
     OkHttpClient bootstrapClient = new OkHttpClient.Builder().build();
@@ -72,7 +72,7 @@ public class TestDohMain {
     }
   }
 
-  private static void runBatch(List<DnsOverHttps> dnsProviders, List<String> names) {
+  private static void runBatch(final List<DnsOverHttps> dnsProviders, final List<String> names) {
     long time = System.currentTimeMillis();
 
     for (DnsOverHttps dns : dnsProviders) {

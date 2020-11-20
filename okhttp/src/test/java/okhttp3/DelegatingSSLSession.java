@@ -26,7 +26,7 @@ import javax.security.cert.X509Certificate;
 public abstract class DelegatingSSLSession implements SSLSession {
   protected final SSLSession delegate;
 
-  public DelegatingSSLSession(SSLSession delegate) {
+  public DelegatingSSLSession(final SSLSession delegate) {
     this.delegate = delegate;
   }
 
@@ -54,15 +54,15 @@ public abstract class DelegatingSSLSession implements SSLSession {
     return delegate.isValid();
   }
 
-  @Override public void putValue(String s, Object o) {
+  @Override public void putValue(final String s, final Object o) {
     delegate.putValue(s, o);
   }
 
-  @Override public Object getValue(String s) {
+  @Override public Object getValue(final String s) {
     return delegate.getValue(s);
   }
 
-  @Override public void removeValue(String s) {
+  @Override public void removeValue(final String s) {
     delegate.removeValue(s);
   }
 

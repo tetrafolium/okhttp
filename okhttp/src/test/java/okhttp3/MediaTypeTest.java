@@ -38,15 +38,15 @@ public class MediaTypeTest {
   @Parameterized.Parameters(name = "Use get = {0}")
   public static Collection<Object[]> parameters() {
     return asList(
-        new Object[] { true },
-        new Object[] { false }
+        new Object[] {true },
+        new Object[] {false }
     );
   }
 
   @Parameterized.Parameter
   public boolean useGet;
 
-  private MediaType parse(String string) {
+  private MediaType parse(final String string) {
     return useGet
         ? MediaType.get(string)
         : MediaType.parse(string);
@@ -230,11 +230,11 @@ public class MediaTypeTest {
     assertThat(mediaType.parameter("number")).isEqualTo("2");
   }
 
-  private void assertMediaType(String string) {
+  private void assertMediaType(final String string) {
     assertThat(parse(string).toString()).isEqualTo(string);
   }
 
-  private void assertInvalid(String string, String exceptionMessage) {
+  private void assertInvalid(final String string, final String exceptionMessage) {
     if (useGet) {
       try {
         parse(string);

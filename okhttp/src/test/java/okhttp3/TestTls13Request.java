@@ -37,7 +37,7 @@ public class TestTls13Request {
   private TestTls13Request() {
   }
 
-  public static void main(String[] args) {
+  public static void main(final String[] args) {
     //System.setProperty("javax.net.debug", "ssl:handshake:verbose");
     Security.insertProviderAt(Conscrypt.newProviderBuilder().provideTrustManager().build(), 1);
 
@@ -64,7 +64,7 @@ public class TestTls13Request {
     testClient(urls, buildClient(TLS_13, TLS_12));
   }
 
-  private static void testClient(List<String> urls, OkHttpClient client) {
+  private static void testClient(final List<String> urls, final OkHttpClient client) {
     try {
       for (String url : urls) {
         sendRequest(client, url);
@@ -75,11 +75,11 @@ public class TestTls13Request {
     }
   }
 
-  private static OkHttpClient buildClient(ConnectionSpec... specs) {
+  private static OkHttpClient buildClient(final ConnectionSpec... specs) {
     return new OkHttpClient.Builder().connectionSpecs(asList(specs)).build();
   }
 
-  private static void sendRequest(OkHttpClient client, String url) {
+  private static void sendRequest(final OkHttpClient client, final String url) {
     System.out.printf("%-40s ", url);
     System.out.flush();
 

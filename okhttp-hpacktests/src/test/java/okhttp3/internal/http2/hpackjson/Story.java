@@ -37,7 +37,7 @@ public class Story implements Cloneable {
   /**
    * The filename is only used in the toString representation.
    */
-  void setFileName(String fileName) {
+  void setFileName(final String fileName) {
     this.fileName = fileName;
   }
 

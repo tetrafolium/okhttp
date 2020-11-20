@@ -52,7 +52,7 @@ public final class PublicSuffixListGenerator {
   private static final ByteString EXCEPTION_RULE_MARKER = ByteString.encodeUtf8("!");
   private static final String WILDCARD_CHAR = "*";
 
-  public static void main(String... args) throws IOException {
+  public static void main(final String... args) throws IOException {
     File resources = new File(OKHTTP_RESOURCE_DIR);
     File testResources = publicSuffixListDotDat.getParentFile();
     for (File file : Arrays.asList(resources, testResources)) {
@@ -120,7 +120,7 @@ public final class PublicSuffixListGenerator {
    * favor of supporting what's actually used in practice. That means if these assertions ever fail,
    * the implementation will need to be revisited to support a more flexible rule.
    */
-  private static void assertWildcardRule(String rule) {
+  private static void assertWildcardRule(final String rule) {
     if (rule.indexOf(WILDCARD_CHAR) != 0) {
       throw new RuntimeException("Wildcard Assertion Failure: " + rule + "\nA wildcard rule was "
           + "added with a wildcard that is not in leftmost position! We'll need to change the "

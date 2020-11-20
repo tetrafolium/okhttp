@@ -236,7 +236,7 @@ public final class RealWebSocketTest {
     // Manually write an invalid masked close frame.
     server.getSink().write(ByteString.decodeHex("888760b420bb635c68de0cd84f")).emit();
 
-    client.processNextFrame();// Detects error, disconnects immediately since close already sent.
+    client.processNextFrame(); // Detects error, disconnects immediately since close already sent.
     assertThat(client.closed).isTrue();
     client.listener.assertFailure(
         ProtocolException.class, "Server-sent frames must not be masked.");
@@ -403,18 +403,18 @@ public final class RealWebSocketTest {
     boolean closeThrows;
     boolean closed;
 
-    public TestStreams(boolean client, Pipe source, Pipe sink) {
+    public TestStreams(final boolean client, final Pipe source, final Pipe sink) {
       super(client, Okio.buffer(source.source()), Okio.buffer(sink.sink()));
       this.name = client ? "client" : "server";
       this.listener = new WebSocketRecorder(name);
     }
 
-    public void initWebSocket(Random random, int pingIntervalMillis) throws IOException {
+    public void initWebSocket(final Random random, final int pingIntervalMillis) throws IOException {
       initWebSocket(random, pingIntervalMillis, Headers.of());
     }
 
     public void initWebSocket(
-        Random random, int pingIntervalMillis, Headers responseHeaders) throws IOException {
+        final Random random, final int pingIntervalMillis, final Headers responseHeaders) throws IOException {
       String url = "http://example.com/websocket";
       Response response = new Response.Builder()
           .code(101)

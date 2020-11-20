@@ -56,7 +56,7 @@ public class DnsOverHttpsTest {
       .protocols(asList(Protocol.HTTP_2, Protocol.HTTP_1_1))
       .build();
 
-  @BeforeEach public void setUp(MockWebServer server) {
+  @BeforeEach public void setUp(final MockWebServer server) {
     this.server = server;
     server.setProtocols(bootstrapClient.protocols());
     dns = buildLocalhost(bootstrapClient, false);
@@ -222,13 +222,13 @@ public class DnsOverHttpsTest {
         "/lookup?ct&dns=AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ");
   }
 
-  private MockResponse dnsResponse(String s) {
+  private MockResponse dnsResponse(final String s) {
     return new MockResponse().setBody(new Buffer().write(ByteString.decodeHex(s)))
         .addHeader("content-type", "application/dns-message")
         .addHeader("content-length", s.length() / 2);
   }
 
-  private DnsOverHttps buildLocalhost(OkHttpClient bootstrapClient, boolean includeIPv6) {
+  private DnsOverHttps buildLocalhost(final OkHttpClient bootstrapClient, final boolean includeIPv6) {
     HttpUrl url = server.url("/lookup?ct");
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .includeIPv6(includeIPv6)
@@ -237,7 +237,7 @@ public class DnsOverHttpsTest {
         .build();
   }
 
-  private static InetAddress address(String host) {
+  private static InetAddress address(final String host) {
     try {
       return InetAddress.getByName(host);
     } catch (UnknownHostException e) {

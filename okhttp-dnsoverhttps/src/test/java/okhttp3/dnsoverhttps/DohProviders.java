@@ -28,14 +28,14 @@ import okhttp3.OkHttpClient;
  * https://github.com/curl/curl/wiki/DNS-over-HTTPS
  */
 public class DohProviders {
-  static DnsOverHttps buildGoogle(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildGoogle(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://dns.google/dns-query"))
         .bootstrapDnsHosts(getByIp("8.8.4.4"), getByIp("8.8.8.8"))
         .build();
   }
 
-  static DnsOverHttps buildGooglePost(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildGooglePost(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://dns.google/dns-query"))
         .bootstrapDnsHosts(getByIp("8.8.4.4"), getByIp("8.8.8.8"))
@@ -43,14 +43,14 @@ public class DohProviders {
         .build();
   }
 
-  static DnsOverHttps buildCloudflareIp(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildCloudflareIp(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://1.1.1.1/dns-query"))
         .includeIPv6(false)
         .build();
   }
 
-  static DnsOverHttps buildCloudflare(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildCloudflare(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://1.1.1.1/dns-query"))
         .bootstrapDnsHosts(getByIp("1.1.1.1"), getByIp("1.0.0.1"))
@@ -58,7 +58,7 @@ public class DohProviders {
         .build();
   }
 
-  static DnsOverHttps buildCloudflarePost(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildCloudflarePost(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://cloudflare-dns.com/dns-query"))
         .bootstrapDnsHosts(getByIp("1.1.1.1"), getByIp("1.0.0.1"))
@@ -67,29 +67,29 @@ public class DohProviders {
         .build();
   }
 
-  static DnsOverHttps buildCleanBrowsing(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildCleanBrowsing(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://doh.cleanbrowsing.org/doh/family-filter/"))
         .includeIPv6(false)
         .build();
   }
 
-  static DnsOverHttps buildChantra(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildChantra(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://dns.dnsoverhttps.net/dns-query"))
         .includeIPv6(false)
         .build();
   }
 
-  static DnsOverHttps buildCryptoSx(OkHttpClient bootstrapClient) {
+  static DnsOverHttps buildCryptoSx(final OkHttpClient bootstrapClient) {
     return new DnsOverHttps.Builder().client(bootstrapClient)
         .url(HttpUrl.get("https://doh.crypto.sx/dns-query"))
         .includeIPv6(false)
         .build();
   }
 
-  public static List<DnsOverHttps> providers(OkHttpClient client, boolean http2Only,
-      boolean workingOnly, boolean getOnly) {
+  public static List<DnsOverHttps> providers(final OkHttpClient client, final boolean http2Only,
+      final boolean workingOnly, final boolean getOnly) {
 
     List<DnsOverHttps> result = new ArrayList<>();
 
@@ -111,7 +111,7 @@ public class DohProviders {
     return result;
   }
 
-  private static InetAddress getByIp(String host) {
+  private static InetAddress getByIp(final String host) {
     try {
       return InetAddress.getByName(host);
     } catch (UnknownHostException e) {

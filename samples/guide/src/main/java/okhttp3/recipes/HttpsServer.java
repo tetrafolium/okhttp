@@ -56,7 +56,7 @@ public class HttpsServer {
     System.out.println(response.handshake().tlsVersion());
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new HttpsServer().run();
   }
 }

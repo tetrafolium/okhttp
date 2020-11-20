@@ -582,7 +582,7 @@ public final class CookieTest {
     }
   }
 
-  private Date date(String s) throws ParseException {
+  private Date date(final String s) throws ParseException {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
     format.setTimeZone(Util.UTC);
     return format.parse(s);

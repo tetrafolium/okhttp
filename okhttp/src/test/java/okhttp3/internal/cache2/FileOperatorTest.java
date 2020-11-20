@@ -178,7 +178,7 @@ public final class FileOperatorTest {
     }
   }
 
-  private ByteString randomByteString(int byteCount) {
+  private ByteString randomByteString(final int byteCount) {
     byte[] bytes = new byte[byteCount];
     new Random(0).nextBytes(bytes);
     return ByteString.of(bytes);
@@ -190,7 +190,7 @@ public final class FileOperatorTest {
     return source.readByteString();
   }
 
-  private void write(ByteString data) throws IOException {
+  private void write(final ByteString data) throws IOException {
     BufferedSink sink = Okio.buffer(Okio.sink(file));
     sink.write(data);
     sink.close();

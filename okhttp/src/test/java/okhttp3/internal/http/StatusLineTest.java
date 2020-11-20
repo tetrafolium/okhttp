@@ -108,7 +108,7 @@ public final class StatusLineTest {
     assertInvalid("HTTP/1.1 200_");
   }
 
-  private void assertInvalid(String statusLine) throws IOException {
+  private void assertInvalid(final String statusLine) throws IOException {
     try {
       StatusLine.Companion.parse(statusLine);
       fail("");

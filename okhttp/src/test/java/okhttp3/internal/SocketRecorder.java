@@ -35,9 +35,9 @@ public final class SocketRecorder {
   private final Deque<RecordedSocket> recordedSockets = new LinkedBlockingDeque<>();
 
   /** Returns an SSLSocketFactory whose sockets will record all transmitted bytes. */
-  public SSLSocketFactory sslSocketFactory(SSLSocketFactory delegate) {
+  public SSLSocketFactory sslSocketFactory(final SSLSocketFactory delegate) {
     return new DelegatingSSLSocketFactory(delegate) {
-      @Override protected SSLSocket configureSocket(SSLSocket sslSocket) throws IOException {
+      @Override protected SSLSocket configureSocket(final SSLSocket sslSocket) throws IOException {
         RecordedSocket recordedSocket = new RecordedSocket();
         recordedSockets.add(recordedSocket);
         return new RecordingSSLSocket(sslSocket, recordedSocket);
@@ -54,19 +54,19 @@ public final class SocketRecorder {
     private final Buffer bytesWritten = new Buffer();
     private final Buffer bytesRead = new Buffer();
 
-    synchronized void byteWritten(int b) {
+    synchronized void byteWritten(final int b) {
       bytesWritten.writeByte(b);
     }
 
-    synchronized void byteRead(int b) {
+    synchronized void byteRead(final int b) {
       bytesRead.writeByte(b);
     }
 
-    synchronized void bytesWritten(byte[] bytes, int offset, int length) {
+    synchronized void bytesWritten(final byte[] bytes, final int offset, final int length) {
       bytesWritten.write(bytes, offset, length);
     }
 
-    synchronized void bytesRead(byte[] bytes, int offset, int length) {
+    synchronized void bytesRead(final byte[] bytes, final int offset, final int length) {
       bytesRead.write(bytes, offset, length);
     }
 
@@ -85,7 +85,7 @@ public final class SocketRecorder {
     private final Socket socket;
     private final RecordedSocket recordedSocket;
 
-    RecordingInputStream(Socket socket, RecordedSocket recordedSocket) {
+    RecordingInputStream(final Socket socket, final RecordedSocket recordedSocket) {
       this.socket = socket;
       this.recordedSocket = recordedSocket;
     }
@@ -97,7 +97,7 @@ public final class SocketRecorder {
       return b;
     }
 
-    @Override public int read(byte[] b, int off, int len) throws IOException {
+    @Override public int read(final byte[] b, final int off, final int len) throws IOException {
       int read = socket.getInputStream().read(b, off, len);
       if (read == -1) return -1;
       recordedSocket.bytesRead(b, off, read);
@@ -113,17 +113,17 @@ public final class SocketRecorder {
     private final Socket socket;
     private final RecordedSocket recordedSocket;
 
-    RecordingOutputStream(Socket socket, RecordedSocket recordedSocket) {
+    RecordingOutputStream(final Socket socket, final RecordedSocket recordedSocket) {
       this.socket = socket;
       this.recordedSocket = recordedSocket;
     }
 
-    @Override public void write(int b) throws IOException {
+    @Override public void write(final int b) throws IOException {
       socket.getOutputStream().write(b);
       recordedSocket.byteWritten(b);
     }
 
-    @Override public void write(byte[] b, int off, int len) throws IOException {
+    @Override public void write(final byte[] b, final int off, final int len) throws IOException {
       socket.getOutputStream().write(b, off, len);
       recordedSocket.bytesWritten(b, off, len);
     }
@@ -141,7 +141,7 @@ public final class SocketRecorder {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    RecordingSSLSocket(SSLSocket delegate, RecordedSocket recordedSocket) {
+    RecordingSSLSocket(final SSLSocket delegate, final RecordedSocket recordedSocket) {
       super(delegate);
       inputStream = new RecordingInputStream(delegate, recordedSocket);
       outputStream = new RecordingOutputStream(delegate, recordedSocket);

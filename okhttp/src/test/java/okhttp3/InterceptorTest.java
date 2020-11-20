@@ -55,7 +55,7 @@ public final class InterceptorTest {
   private RecordingCallback callback = new RecordingCallback();
 
   @BeforeEach
-  public void setUp(MockWebServer server) throws Exception {
+  public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
   }
 
@@ -254,7 +254,7 @@ public final class InterceptorTest {
     rewriteRequestToServer(true);
   }
 
-  private void rewriteRequestToServer(boolean network) throws Exception {
+  private void rewriteRequestToServer(final boolean network) throws Exception {
     server.enqueue(new MockResponse());
 
     addInterceptor(network, chain -> {
@@ -288,7 +288,7 @@ public final class InterceptorTest {
     rewriteResponseFromServer(true);
   }
 
-  private void rewriteResponseFromServer(boolean network) throws Exception {
+  private void rewriteResponseFromServer(final boolean network) throws Exception {
     server.enqueue(new MockResponse()
         .addHeader("Original-Header: foo")
         .setBody("abc"));
@@ -319,7 +319,7 @@ public final class InterceptorTest {
     multipleInterceptors(true);
   }
 
-  private void multipleInterceptors(boolean network) throws Exception {
+  private void multipleInterceptors(final boolean network) throws Exception {
     server.enqueue(new MockResponse());
 
     addInterceptor(network, chain -> {
@@ -361,7 +361,7 @@ public final class InterceptorTest {
     asyncInterceptors(true);
   }
 
-  private void asyncInterceptors(boolean network) throws Exception {
+  private void asyncInterceptors(final boolean network) throws Exception {
     server.enqueue(new MockResponse());
 
     addInterceptor(network, chain -> {
@@ -472,8 +472,9 @@ public final class InterceptorTest {
    * When an interceptor throws an unexpected exception, synchronous callers can catch it and deal
    * with it.
    */
-  private void interceptorThrowsRuntimeExceptionSynchronous(boolean network) throws Exception {
-    addInterceptor(network, chain -> { throw new RuntimeException("boom!"); });
+  private void interceptorThrowsRuntimeExceptionSynchronous(final boolean network) throws Exception {
+    addInterceptor(network, chain -> {
+        throw new RuntimeException("boom!"); });
 
     Request request = new Request.Builder()
         .url(server.url("/"))
@@ -526,9 +527,10 @@ public final class InterceptorTest {
    * When an interceptor throws an unexpected exception, asynchronous calls are canceled. The
    * exception goes to the uncaught exception handler.
    */
-  private void interceptorThrowsRuntimeExceptionAsynchronous(boolean network) throws Exception {
+  private void interceptorThrowsRuntimeExceptionAsynchronous(final boolean network) throws Exception {
     RuntimeException boom = new RuntimeException("boom!");
-    addInterceptor(network, chain -> { throw boom; });
+    addInterceptor(network, chain -> {
+        throw boom; });
 
     ExceptionCatchingExecutor executor = new ExceptionCatchingExecutor();
     client = client.newBuilder()
@@ -874,7 +876,7 @@ public final class InterceptorTest {
     assertThat(callRef.get()).isSameAs(call);
   }
 
-  private RequestBody uppercase(RequestBody original) {
+  private RequestBody uppercase(final RequestBody original) {
     return new RequestBody() {
       @Override public MediaType contentType() {
         return original.contentType();
@@ -884,7 +886,7 @@ public final class InterceptorTest {
         return original.contentLength();
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         Sink uppercase = uppercase(sink);
         BufferedSink bufferedSink = Okio.buffer(uppercase);
         original.writeTo(bufferedSink);
@@ -893,22 +895,22 @@ public final class InterceptorTest {
     };
   }
 
-  private Sink uppercase(BufferedSink original) {
+  private Sink uppercase(final BufferedSink original) {
     return new ForwardingSink(original) {
-      @Override public void write(Buffer source, long byteCount) throws IOException {
+      @Override public void write(final Buffer source, final long byteCount) throws IOException {
         original.writeUtf8(source.readUtf8(byteCount).toUpperCase(Locale.US));
       }
     };
   }
 
-  static ResponseBody uppercase(ResponseBody original) throws IOException {
+  static ResponseBody uppercase(final ResponseBody original) throws IOException {
     return ResponseBody.create(Okio.buffer(uppercase(original.source())),
         original.contentType(), original.contentLength());
   }
 
-  private static Source uppercase(Source original) {
+  private static Source uppercase(final Source original) {
     return new ForwardingSource(original) {
-      @Override public long read(Buffer sink, long byteCount) throws IOException {
+      @Override public long read(final Buffer sink, final long byteCount) throws IOException {
         Buffer mixedCase = new Buffer();
         long count = original.read(mixedCase, byteCount);
         sink.writeUtf8(mixedCase.readUtf8().toUpperCase(Locale.US));
@@ -917,7 +919,7 @@ public final class InterceptorTest {
     };
   }
 
-  private Buffer gzip(String data) throws IOException {
+  private Buffer gzip(final String data) throws IOException {
     Buffer result = new Buffer();
     BufferedSink sink = Okio.buffer(new GzipSink(result));
     sink.writeUtf8(data);
@@ -925,7 +927,7 @@ public final class InterceptorTest {
     return result;
   }
 
-  private void addInterceptor(boolean network, Interceptor interceptor) {
+  private void addInterceptor(final boolean network, final Interceptor interceptor) {
     OkHttpClient.Builder builder = client.newBuilder();
     if (network) {
       builder.addNetworkInterceptor(interceptor);
@@ -943,7 +945,7 @@ public final class InterceptorTest {
       super(1, 1, 0, TimeUnit.SECONDS, new SynchronousQueue<>());
     }
 
-    @Override public void execute(Runnable runnable) {
+    @Override public void execute(final Runnable runnable) {
       super.execute(() -> {
         try {
           runnable.run();

@@ -28,12 +28,12 @@ public final class SlackClient {
   /** Guarded by this. */
   private OAuthSession session;
 
-  public SlackClient(SlackApi slackApi) {
+  public SlackClient(final SlackApi slackApi) {
     this.slackApi = slackApi;
   }
 
   /** Shows a browser URL to authorize this app to act as this user. */
-  public void requestOauthSession(String scopes, String team) throws Exception {
+  public void requestOauthSession(final String scopes, final String team) throws Exception {
     if (sessionFactory == null) {
       sessionFactory = new OAuthSessionFactory(slackApi);
       sessionFactory.start();
@@ -48,13 +48,13 @@ public final class SlackClient {
   }
 
   /** Set the OAuth session for this client. */
-  public synchronized void initOauthSession(OAuthSession session) {
+  public synchronized void initOauthSession(final OAuthSession session) {
     this.session = session;
     this.notifyAll();
   }
 
   /** Waits for an OAuth session for this client to be set. */
-  public synchronized void awaitAccessToken(Timeout timeout) throws InterruptedIOException {
+  public synchronized void awaitAccessToken(final Timeout timeout) throws InterruptedIOException {
     while (session == null) {
       timeout.waitUntilNotified(this);
     }
@@ -71,7 +71,7 @@ public final class SlackClient {
     rtmSession.open(accessToken);
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     String clientId = "0000000000.00000000000";
     String clientSecret = "00000000000000000000000000000000";
     int port = 53203;

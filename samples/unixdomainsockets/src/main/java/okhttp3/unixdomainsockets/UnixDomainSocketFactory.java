@@ -27,7 +27,7 @@ import jnr.unixsocket.UnixSocketChannel;
 public final class UnixDomainSocketFactory extends SocketFactory {
   private final File path;
 
-  public UnixDomainSocketFactory(File path) {
+  public UnixDomainSocketFactory(final File path) {
     this.path = path;
   }
 
@@ -36,25 +36,25 @@ public final class UnixDomainSocketFactory extends SocketFactory {
     return new TunnelingUnixSocket(path, channel);
   }
 
-  @Override public Socket createSocket(String host, int port) throws IOException {
+  @Override public Socket createSocket(final String host, final int port) throws IOException {
     Socket result = createSocket();
     result.connect(new InetSocketAddress(host, port));
     return result;
   }
 
   @Override public Socket createSocket(
-      String host, int port, InetAddress localHost, int localPort) throws IOException {
+      final String host, final int port, final InetAddress localHost, final int localPort) throws IOException {
     return createSocket(host, port);
   }
 
-  @Override public Socket createSocket(InetAddress host, int port) throws IOException {
+  @Override public Socket createSocket(final InetAddress host, final int port) throws IOException {
     Socket result = createSocket();
     result.connect(new InetSocketAddress(host, port));
     return result;
   }
 
   @Override public Socket createSocket(
-      InetAddress host, int port, InetAddress localAddress, int localPort) throws IOException {
+      final InetAddress host, final int port, final InetAddress localAddress, final int localPort) throws IOException {
     return createSocket(host, port);
   }
 }

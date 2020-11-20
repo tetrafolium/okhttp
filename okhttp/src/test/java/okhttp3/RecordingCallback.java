@@ -29,12 +29,12 @@ public class RecordingCallback implements Callback {
 
   private final List<RecordedResponse> responses = new ArrayList<>();
 
-  @Override public synchronized void onFailure(Call call, IOException e) {
+  @Override public synchronized void onFailure(final Call call, final IOException e) {
     responses.add(new RecordedResponse(call.request(), null, null, null, e));
     notifyAll();
   }
 
-  @Override public synchronized void onResponse(Call call, Response response) throws IOException {
+  @Override public synchronized void onResponse(final Call call, final Response response) throws IOException {
     String body = response.body().string();
     responses.add(new RecordedResponse(call.request(), response, null, body, null));
     notifyAll();
@@ -44,7 +44,7 @@ public class RecordingCallback implements Callback {
    * Returns the recorded response triggered by {@code request}. Throws if the response isn't
    * enqueued before the timeout.
    */
-  public synchronized RecordedResponse await(HttpUrl url) throws Exception {
+  public synchronized RecordedResponse await(final HttpUrl url) throws Exception {
     long timeoutMillis = TimeUnit.NANOSECONDS.toMillis(System.nanoTime()) + TIMEOUT_MILLIS;
     while (true) {
       for (Iterator<RecordedResponse> i = responses.iterator(); i.hasNext(); ) {

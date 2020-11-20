@@ -65,7 +65,7 @@ public final class PostStreamingWithPipe {
         }
       }
 
-      private String factor(int n) {
+      private String factor(final int n) {
         for (int i = 2; i < n; i++) {
           int x = n / i;
           if (x * i == n) return factor(x) + " × " + i;
@@ -94,12 +94,12 @@ public final class PostStreamingWithPipe {
       return MEDIA_TYPE_MARKDOWN;
     }
 
-    @Override public void writeTo(BufferedSink sink) throws IOException {
+    @Override public void writeTo(final BufferedSink sink) throws IOException {
       sink.writeAll(pipe.source());
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new PostStreamingWithPipe().run();
   }
 }

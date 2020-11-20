@@ -50,7 +50,7 @@ public final class WebPlatformUrlTestData {
     return scheme.isEmpty();
   }
 
-  private void set(String name, String value) {
+  private void set(final String name, final String value) {
     switch (name) {
       case "s":
         scheme = value;
@@ -85,7 +85,7 @@ public final class WebPlatformUrlTestData {
     return Util.format("Parsing: <%s> against <%s>", input, base);
   }
 
-  public static List<WebPlatformUrlTestData> load(BufferedSource source) throws IOException {
+  public static List<WebPlatformUrlTestData> load(final BufferedSource source) throws IOException {
     List<WebPlatformUrlTestData> list = new ArrayList<>();
     for (String line; (line = source.readUtf8Line()) != null; ) {
       if (line.isEmpty() || line.startsWith("#")) continue;
@@ -112,7 +112,7 @@ public final class WebPlatformUrlTestData {
     return list;
   }
 
-  private static String unescape(String s) throws EOFException {
+  private static String unescape(final String s) throws EOFException {
     Buffer in = new Buffer().writeUtf8(s);
     StringBuilder result = new StringBuilder();
     while (!in.exhausted()) {

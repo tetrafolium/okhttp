@@ -208,12 +208,12 @@ public final class ServerSentEventIteratorTest {
     assertThat(callbacks).isEmpty();
   }
 
-  private void consumeEvents(String source) throws IOException {
+  private void consumeEvents(final String source) throws IOException {
     ServerSentEventReader.Callback callback = new ServerSentEventReader.Callback() {
-      @Override public void onEvent(@Nullable String id, @Nullable String type, String data) {
+      @Override public void onEvent(final @Nullable String id, final @Nullable String type, final String data) {
         callbacks.add(new Event(id, type, data));
       }
-      @Override public void onRetryChange(long timeMs) {
+      @Override public void onRetryChange(final long timeMs) {
         callbacks.add(timeMs);
       }
     };

@@ -27,7 +27,7 @@ import javax.net.SocketFactory;
 public class DelegatingSocketFactory extends SocketFactory {
   private final SocketFactory delegate;
 
-  public DelegatingSocketFactory(SocketFactory delegate) {
+  public DelegatingSocketFactory(final SocketFactory delegate) {
     this.delegate = delegate;
   }
 
@@ -36,29 +36,29 @@ public class DelegatingSocketFactory extends SocketFactory {
     return configureSocket(socket);
   }
 
-  @Override public Socket createSocket(String host, int port) throws IOException {
+  @Override public Socket createSocket(final String host, final int port) throws IOException {
     Socket socket = delegate.createSocket(host, port);
     return configureSocket(socket);
   }
 
-  @Override public Socket createSocket(String host, int port, InetAddress localAddress,
-      int localPort) throws IOException {
+  @Override public Socket createSocket(final String host, final int port, final InetAddress localAddress,
+      final int localPort) throws IOException {
     Socket socket = delegate.createSocket(host, port, localAddress, localPort);
     return configureSocket(socket);
   }
 
-  @Override public Socket createSocket(InetAddress host, int port) throws IOException {
+  @Override public Socket createSocket(final InetAddress host, final int port) throws IOException {
     Socket socket = delegate.createSocket(host, port);
     return configureSocket(socket);
   }
 
-  @Override public Socket createSocket(InetAddress host, int port, InetAddress localAddress,
-      int localPort) throws IOException {
+  @Override public Socket createSocket(final InetAddress host, final int port, final InetAddress localAddress,
+      final int localPort) throws IOException {
     Socket socket = delegate.createSocket(host, port, localAddress, localPort);
     return configureSocket(socket);
   }
 
-  protected Socket configureSocket(Socket socket) throws IOException {
+  protected Socket configureSocket(final Socket socket) throws IOException {
     // No-op by default.
     return socket;
   }

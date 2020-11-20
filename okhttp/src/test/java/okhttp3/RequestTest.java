@@ -234,7 +234,7 @@ public final class RequestTest {
     assertForbiddenHeader("\ud83c\udf69");
   }
 
-  private void assertForbiddenHeader(String s) {
+  private void assertForbiddenHeader(final String s) {
     Request.Builder builder = new Request.Builder();
     try {
       builder.header(s, "Value");
@@ -363,7 +363,7 @@ public final class RequestTest {
     assertThat(requestC.tag(String.class)).isSameAs("c");
   }
 
-  private String bodyToHex(RequestBody body) throws IOException {
+  private String bodyToHex(final RequestBody body) throws IOException {
     Buffer buffer = new Buffer();
     body.writeTo(buffer);
     return buffer.readByteString().hex();

@@ -33,7 +33,7 @@ import jnr.unixsocket.UnixSocketChannel;
 public final class UnixDomainServerSocketFactory extends ServerSocketFactory {
   private final File path;
 
-  public UnixDomainServerSocketFactory(File path) {
+  public UnixDomainServerSocketFactory(final File path) {
     this.path = path;
   }
 
@@ -41,16 +41,16 @@ public final class UnixDomainServerSocketFactory extends ServerSocketFactory {
     return new UnixDomainServerSocket();
   }
 
-  @Override public ServerSocket createServerSocket(int port) throws IOException {
+  @Override public ServerSocket createServerSocket(final int port) throws IOException {
     return createServerSocket();
   }
 
-  @Override public ServerSocket createServerSocket(int port, int backlog) throws IOException {
+  @Override public ServerSocket createServerSocket(final int port, final int backlog) throws IOException {
     return createServerSocket();
   }
 
   @Override public ServerSocket createServerSocket(
-      int port, int backlog, InetAddress inetAddress) throws IOException {
+      final int port, final int backlog, final InetAddress inetAddress) throws IOException {
     return createServerSocket();
   }
 
@@ -61,7 +61,7 @@ public final class UnixDomainServerSocketFactory extends ServerSocketFactory {
     UnixDomainServerSocket() throws IOException {
     }
 
-    @Override public void bind(SocketAddress endpoint, int backlog) throws IOException {
+    @Override public void bind(final SocketAddress endpoint, final int backlog) throws IOException {
       this.endpoint = (InetSocketAddress) endpoint;
 
       UnixSocketAddress address = new UnixSocketAddress(path);

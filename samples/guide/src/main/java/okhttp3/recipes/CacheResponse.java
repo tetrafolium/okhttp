@@ -25,7 +25,7 @@ import okhttp3.Response;
 public final class CacheResponse {
   private final OkHttpClient client;
 
-  public CacheResponse(File cacheDirectory) throws Exception {
+  public CacheResponse(final File cacheDirectory) throws Exception {
     int cacheSize = 10 * 1024 * 1024; // 10 MiB
     Cache cache = new Cache(cacheDirectory, cacheSize);
 
@@ -62,7 +62,7 @@ public final class CacheResponse {
     System.out.println("Response 2 equals Response 1? " + response1Body.equals(response2Body));
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new CacheResponse(new File("CacheResponse.tmp")).run();
   }
 }

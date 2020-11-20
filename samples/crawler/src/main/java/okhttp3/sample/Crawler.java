@@ -44,11 +44,11 @@ public final class Crawler {
   private final LinkedBlockingQueue<HttpUrl> queue = new LinkedBlockingQueue<>();
   private final ConcurrentHashMap<String, AtomicInteger> hostnames = new ConcurrentHashMap<>();
 
-  public Crawler(OkHttpClient client) {
+  public Crawler(final OkHttpClient client) {
     this.client = client;
   }
 
-  private void parallelDrainQueue(int threadCount) {
+  private void parallelDrainQueue(final int threadCount) {
     ExecutorService executor = Executors.newFixedThreadPool(threadCount);
     for (int i = 0; i < threadCount; i++) {
       executor.execute(() -> {
@@ -81,7 +81,7 @@ public final class Crawler {
     }
   }
 
-  public void fetch(HttpUrl url) throws IOException {
+  public void fetch(final HttpUrl url) throws IOException {
     // Skip hosts that we've visited many times.
     AtomicInteger hostnameCount = new AtomicInteger();
     AtomicInteger previous = hostnames.putIfAbsent(url.host(), hostnameCount);
@@ -121,7 +121,7 @@ public final class Crawler {
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     if (args.length != 2) {
       System.out.println("Usage: Crawler <cache dir> <root>");
       return;

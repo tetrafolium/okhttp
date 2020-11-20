@@ -36,15 +36,15 @@ public final class HttpUrlTest {
   @Parameterized.Parameters(name = "Use get = {0}")
   public static Collection<Object[]> parameters() {
     return asList(
-        new Object[] { true },
-        new Object[] { false }
+        new Object[] {true },
+        new Object[] {false }
     );
   }
 
   @Parameterized.Parameter
   public boolean useGet;
 
-  HttpUrl parse(String url) {
+  HttpUrl parse(final String url) {
     return useGet
         ? HttpUrl.get(url)
         : HttpUrl.parse(url);
@@ -1792,7 +1792,7 @@ public final class HttpUrlTest {
     assertThat(parse("http://FacebooK.com").host()).isEqualTo("facebook.com");
   }
 
-  private void assertInvalid(String string, String exceptionMessage) {
+  private void assertInvalid(final String string, final String exceptionMessage) {
     if (useGet) {
       try {
         parse(string);

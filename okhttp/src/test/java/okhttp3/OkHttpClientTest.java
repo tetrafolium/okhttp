@@ -62,7 +62,7 @@ public final class OkHttpClientTest {
   private MockWebServer server;
 
   @BeforeEach
-  public void setUp(MockWebServer server) throws Exception {
+  public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
   }
 
@@ -276,17 +276,17 @@ public final class OkHttpClientTest {
 
   @Test public void nullHostileProtocolList() {
     List<Protocol> nullHostileProtocols = new AbstractList<Protocol>() {
-      @Override public boolean contains(Object o) {
+      @Override public boolean contains(final Object o) {
         if (o == null) throw new NullPointerException();
         return super.contains(o);
       }
 
-      @Override public int indexOf(Object o) {
+      @Override public int indexOf(final Object o) {
         if (o == null) throw new NullPointerException();
         return super.indexOf(o);
       }
 
-      @Override public Protocol get(int index) {
+      @Override public Protocol get(final int index) {
         if (index != 0) throw new IndexOutOfBoundsException();
         return Protocol.HTTP_1_1;
       }
@@ -342,12 +342,12 @@ public final class OkHttpClientTest {
 
     ProxySelector proxySelector = new ProxySelector() {
       @Override
-      public List<Proxy> select(URI uri) {
+      public List<Proxy> select(final URI uri) {
         return emptyList();
       }
 
       @Override
-      public void connectFailed(URI uri, SocketAddress socketAddress, IOException e) {
+      public void connectFailed(final URI uri, final SocketAddress socketAddress, final IOException e) {
       }
     };
 

@@ -196,7 +196,7 @@ public final class MultipartBodyTest {
     class StreamingBody extends RequestBody {
       private final String body;
 
-      StreamingBody(String body) {
+      StreamingBody(final String body) {
         this.body = body;
       }
 
@@ -204,7 +204,7 @@ public final class MultipartBodyTest {
         return null;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8(body);
       }
     }

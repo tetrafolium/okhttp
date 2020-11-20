@@ -91,7 +91,7 @@ public final class OsgiTest {
     return workspace;
   }
 
-  private void prepareWorkspace(Workspace workspace) throws Exception {
+  private void prepareWorkspace(final Workspace workspace) throws Exception {
     RepositoryPlugin repositoryPlugin = workspace.getRepository(REPO_NAME);
 
     // Deploy the bundles in the deployments test directory.
@@ -99,7 +99,7 @@ public final class OsgiTest {
     deployClassPath(repositoryPlugin);
   }
 
-  private Bndrun createBndRun(Workspace workspace) throws Exception {
+  private Bndrun createBndRun(final Workspace workspace) throws Exception {
     // Creating the run require string. It will always use the latest version of each bundle
     // available in the repository.
     String runRequireString = REQUIRED_BUNDLES.stream()
@@ -117,7 +117,7 @@ public final class OsgiTest {
     return result;
   }
 
-  private void deployDirectory(RepositoryPlugin repository, File directory) throws Exception {
+  private void deployDirectory(final RepositoryPlugin repository, final File directory) throws Exception {
     File[] files = directory.listFiles();
     if (files == null) return;
 
@@ -126,14 +126,14 @@ public final class OsgiTest {
     }
   }
 
-  private void deployClassPath(RepositoryPlugin repositoryPlugin) throws Exception {
+  private void deployClassPath(final RepositoryPlugin repositoryPlugin) throws Exception {
     String classpath = System.getProperty("java.class.path");
     for (String classPathEntry : classpath.split(File.pathSeparator)) {
       deployFile(repositoryPlugin, new File(classPathEntry));
     }
   }
 
-  private void deployFile(RepositoryPlugin repositoryPlugin, File file) throws Exception {
+  private void deployFile(final RepositoryPlugin repositoryPlugin, final File file) throws Exception {
     if (!file.exists() || file.isDirectory()) return;
 
     try (BufferedSource source = Okio.buffer(Okio.source(file))) {
@@ -148,7 +148,7 @@ public final class OsgiTest {
     }
   }
 
-  private static void deleteDirectory(File dir) throws IOException {
+  private static void deleteDirectory(final File dir) throws IOException {
     if (!dir.exists()) return;
 
     Files.walk(dir.toPath())

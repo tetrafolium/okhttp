@@ -476,16 +476,16 @@ public final class ResponseBodyTest {
     body.close();
   }
 
-  static ResponseBody body(String hex) {
+  static ResponseBody body(final String hex) {
     return body(hex, null);
   }
 
-  static ResponseBody body(String hex, String charset) {
+  static ResponseBody body(final String hex, final String charset) {
     MediaType mediaType = charset == null ? null : MediaType.get("any/thing; charset=" + charset);
     return ResponseBody.create(ByteString.decodeHex(hex), mediaType);
   }
 
-  static String exhaust(Reader reader) throws IOException {
+  static String exhaust(final Reader reader) throws IOException {
     StringBuilder builder = new StringBuilder();
     char[] buf = new char[10];
     int read;

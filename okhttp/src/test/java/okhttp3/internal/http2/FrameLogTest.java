@@ -158,7 +158,7 @@ public final class FrameLogTest {
     );
   }
 
-  private String frameLog(boolean inbound, int streamId, int length, int type, int flags) {
+  private String frameLog(final boolean inbound, final int streamId, final int length, final int type, final int flags) {
     return Http2.INSTANCE.frameLog(inbound, streamId, length, type, flags);
   }
 }

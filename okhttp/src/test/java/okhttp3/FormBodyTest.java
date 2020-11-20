@@ -193,7 +193,7 @@ public final class FormBodyTest {
     assertThat(formEncode(255)).isEqualTo("%C3%BF");
   }
 
-  private String formEncode(int codePoint) throws IOException {
+  private String formEncode(final int codePoint) throws IOException {
     // Wrap the codepoint with regular printable characters to prevent trimming.
     FormBody body = new FormBody.Builder()
         .add("a", new String(new int[] {'b', codePoint, 'c'}, 0, 3))

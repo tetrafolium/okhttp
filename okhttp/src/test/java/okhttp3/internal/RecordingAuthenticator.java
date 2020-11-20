@@ -27,7 +27,7 @@ public final class RecordingAuthenticator extends Authenticator {
   public final List<String> calls = new ArrayList<>();
   public final PasswordAuthentication authentication;
 
-  public RecordingAuthenticator(PasswordAuthentication authentication) {
+  public RecordingAuthenticator(final PasswordAuthentication authentication) {
     this.authentication = authentication;
   }
 

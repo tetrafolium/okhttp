@@ -45,7 +45,7 @@ public final class ConnectionReuseTest {
   private OkHttpClient client = clientTestRule.newClient();
 
   @BeforeEach
-  public void setUp(MockWebServer server) throws Exception {
+  public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
   }
 
@@ -353,7 +353,7 @@ public final class ConnectionReuseTest {
     enableHttpsAndAlpn(Protocol.HTTP_2, Protocol.HTTP_1_1);
   }
 
-  private void enableHttpsAndAlpn(Protocol... protocols) {
+  private void enableHttpsAndAlpn(final Protocol... protocols) {
     client = client.newBuilder()
         .sslSocketFactory(
             handshakeCertificates.sslSocketFactory(), handshakeCertificates.trustManager())
@@ -364,7 +364,7 @@ public final class ConnectionReuseTest {
     server.setProtocols(client.protocols());
   }
 
-  private void assertConnectionReused(Request... requests) throws Exception {
+  private void assertConnectionReused(final Request... requests) throws Exception {
     for (int i = 0; i < requests.length; i++) {
       Response response = client.newCall(requests[i]).execute();
       response.body().string(); // Discard the response body.
@@ -372,7 +372,7 @@ public final class ConnectionReuseTest {
     }
   }
 
-  private void assertConnectionNotReused(Request... requests) throws Exception {
+  private void assertConnectionNotReused(final Request... requests) throws Exception {
     for (Request request : requests) {
       Response response = client.newCall(request).execute();
       response.body().string(); // Discard the response body.

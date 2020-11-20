@@ -39,7 +39,7 @@ public final class CurrentDateHeader {
   }
 
   static class CurrentDateInterceptor implements Interceptor {
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       Request request = chain.request();
       Headers newHeaders = request.headers()
           .newBuilder()
@@ -52,7 +52,7 @@ public final class CurrentDateHeader {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new CurrentDateHeader().run();
   }
 }

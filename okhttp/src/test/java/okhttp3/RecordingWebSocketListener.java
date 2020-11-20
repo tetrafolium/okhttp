@@ -19,27 +19,27 @@ import javax.annotation.Nullable;
 import okio.ByteString;
 
 public final class RecordingWebSocketListener extends WebSocketListener {
-  @Override public void onOpen(WebSocket webSocket, Response response) {
+  @Override public void onOpen(final WebSocket webSocket, final Response response) {
     // TODO
   }
 
-  @Override public void onMessage(WebSocket webSocket, String text) {
+  @Override public void onMessage(final WebSocket webSocket, final String text) {
     // TODO
   }
 
-  @Override public void onMessage(WebSocket webSocket, ByteString bytes) {
+  @Override public void onMessage(final WebSocket webSocket, final ByteString bytes) {
     // TODO
   }
 
-  @Override public void onClosing(WebSocket webSocket, int code, String reason) {
+  @Override public void onClosing(final WebSocket webSocket, final int code, final String reason) {
     // TODO
   }
 
-  @Override public void onClosed(WebSocket webSocket, int code, String reason) {
+  @Override public void onClosed(final WebSocket webSocket, final int code, final String reason) {
     // TODO
   }
 
-  @Override public void onFailure(WebSocket webSocket, Throwable t, @Nullable Response response) {
+  @Override public void onFailure(final WebSocket webSocket, final Throwable t, final @Nullable Response response) {
     // TODO
   }
 }

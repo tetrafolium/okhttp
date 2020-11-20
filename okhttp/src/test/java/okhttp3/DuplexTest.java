@@ -59,7 +59,7 @@ public final class DuplexTest {
       .eventListenerFactory(clientTestRule.wrap(listener))
       .build();
 
-  @BeforeEach public void setUp(MockWebServer server) {
+  @BeforeEach public void setUp(final MockWebServer server) {
     this.server = server;
     platform.assumeNotOpenJSSE();
     platform.assumeHttp2Support();
@@ -300,7 +300,7 @@ public final class DuplexTest {
 
     CountDownLatch duplexResponseSent = new CountDownLatch(1);
     listener = new RecordingEventListener() {
-      @Override public void responseHeadersEnd(Call call, Response response) {
+      @Override public void responseHeadersEnd(final Call call, final Response response) {
         try {
           // Wait for the server to send the duplex response before acting on the 301 response
           // and resetting the stream.
@@ -545,7 +545,7 @@ public final class DuplexTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             try {
               for (int i = 0; i < 10; i++) {
                 sink.writeUtf8(".");
@@ -572,7 +572,7 @@ public final class DuplexTest {
   }
 
   private MockDuplexResponseBody enqueueResponseWithBody(
-      MockResponse response, MockDuplexResponseBody body) {
+      final MockResponse response, final MockDuplexResponseBody body) {
     MwsDuplexAccess.instance.setBody(response, body);
     server.enqueue(response);
     return body;
@@ -582,7 +582,7 @@ public final class DuplexTest {
    * Tests that use this will fail unless boot classpath is set. Ex. {@code
    * -Xbootclasspath/p:/tmp/alpn-boot-8.0.0.v20140317}
    */
-  private void enableProtocol(Protocol protocol) {
+  private void enableProtocol(final Protocol protocol) {
     enableTls();
     client = client.newBuilder()
         .protocols(asList(protocol, Protocol.HTTP_1_1))

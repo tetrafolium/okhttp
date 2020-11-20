@@ -55,7 +55,7 @@ public final class MockHttp2Peer implements Closeable {
   private ServerSocket serverSocket;
   private Socket socket;
 
-  public void setClient(boolean client) {
+  public void setClient(final boolean client) {
     if (this.client == client) {
       return;
     }
@@ -87,7 +87,7 @@ public final class MockHttp2Peer implements Closeable {
    * close the socket as soon as this frame has been written; otherwise the peer stays open until
    * explicitly closed.
    */
-  public Http2Writer truncateLastFrame(int length) {
+  public Http2Writer truncateLastFrame(final int length) {
     OutFrame lastFrame = outFrames.remove(outFrames.size() - 1);
     if (length >= bytesOut.size() - lastFrame.start) throw new IllegalArgumentException();
 
@@ -200,7 +200,7 @@ public final class MockHttp2Peer implements Closeable {
     private final long start;
     private final boolean truncated;
 
-    private OutFrame(int sequence, long start, boolean truncated) {
+    private OutFrame(final int sequence, final long start, final boolean truncated) {
       this.sequence = sequence;
       this.start = start;
       this.truncated = truncated;
@@ -225,12 +225,12 @@ public final class MockHttp2Peer implements Closeable {
     public int payload1;
     public int payload2;
 
-    public InFrame(int sequence, Http2Reader reader) {
+    public InFrame(final int sequence, final Http2Reader reader) {
       this.sequence = sequence;
       this.reader = reader;
     }
 
-    @Override public void settings(boolean clearPrevious, Settings settings) {
+    @Override public void settings(final boolean clearPrevious, final Settings settings) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_SETTINGS;
       this.clearPrevious = clearPrevious;
@@ -243,8 +243,8 @@ public final class MockHttp2Peer implements Closeable {
       this.ack = true;
     }
 
-    @Override public void headers(boolean inFinished, int streamId,
-        int associatedStreamId, List<Header> headerBlock) {
+    @Override public void headers(final boolean inFinished, final int streamId,
+        final int associatedStreamId, final List<Header> headerBlock) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_HEADERS;
       this.inFinished = inFinished;
@@ -253,7 +253,7 @@ public final class MockHttp2Peer implements Closeable {
       this.headerBlock = headerBlock;
     }
 
-    @Override public void data(boolean inFinished, int streamId, BufferedSource source, int length)
+    @Override public void data(final boolean inFinished, final int streamId, final BufferedSource source, final int length)
         throws IOException {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_DATA;
@@ -262,14 +262,14 @@ public final class MockHttp2Peer implements Closeable {
       this.data = source.readByteString(length).toByteArray();
     }
 
-    @Override public void rstStream(int streamId, ErrorCode errorCode) {
+    @Override public void rstStream(final int streamId, final ErrorCode errorCode) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_RST_STREAM;
       this.streamId = streamId;
       this.errorCode = errorCode;
     }
 
-    @Override public void ping(boolean ack, int payload1, int payload2) {
+    @Override public void ping(final boolean ack, final int payload1, final int payload2) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_PING;
       this.ack = ack;
@@ -277,7 +277,7 @@ public final class MockHttp2Peer implements Closeable {
       this.payload2 = payload2;
     }
 
-    @Override public void goAway(int lastGoodStreamId, ErrorCode errorCode, ByteString debugData) {
+    @Override public void goAway(final int lastGoodStreamId, final ErrorCode errorCode, final ByteString debugData) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_GOAWAY;
       this.streamId = lastGoodStreamId;
@@ -285,28 +285,28 @@ public final class MockHttp2Peer implements Closeable {
       this.data = debugData.toByteArray();
     }
 
-    @Override public void windowUpdate(int streamId, long windowSizeIncrement) {
+    @Override public void windowUpdate(final int streamId, final long windowSizeIncrement) {
       if (this.type != -1) throw new IllegalStateException();
       this.type = Http2.TYPE_WINDOW_UPDATE;
       this.streamId = streamId;
       this.windowSizeIncrement = windowSizeIncrement;
     }
 
-    @Override public void priority(int streamId, int streamDependency, int weight,
-        boolean exclusive) {
+    @Override public void priority(final int streamId, final int streamDependency, final int weight,
+        final boolean exclusive) {
       throw new UnsupportedOperationException();
     }
 
     @Override
-    public void pushPromise(int streamId, int associatedStreamId, List<Header> headerBlock) {
+    public void pushPromise(final int streamId, final int associatedStreamId, final List<Header> headerBlock) {
       this.type = Http2.TYPE_PUSH_PROMISE;
       this.streamId = streamId;
       this.associatedStreamId = associatedStreamId;
       this.headerBlock = headerBlock;
     }
 
-    @Override public void alternateService(int streamId, String origin, ByteString protocol,
-        String host, int port, long maxAge) {
+    @Override public void alternateService(final int streamId, final String origin, final ByteString protocol,
+        final String host, final int port, final long maxAge) {
       throw new UnsupportedOperationException();
     }
   }

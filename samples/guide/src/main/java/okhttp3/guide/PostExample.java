@@ -12,7 +12,7 @@ public class PostExample {
 
   OkHttpClient client = new OkHttpClient();
 
-  String post(String url, String json) throws IOException {
+  String post(final String url, final String json) throws IOException {
     RequestBody body = RequestBody.create(json, JSON);
     Request request = new Request.Builder()
         .url(url)
@@ -23,7 +23,7 @@ public class PostExample {
     }
   }
 
-  String bowlingJson(String player1, String player2) {
+  String bowlingJson(final String player1, final String player2) {
     return "{'winCondition':'HIGH_SCORE',"
         + "'name':'Bowling',"
         + "'round':4,"
@@ -35,7 +35,7 @@ public class PostExample {
         + "]}";
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(final String[] args) throws IOException {
     PostExample example = new PostExample();
     String json = example.bowlingJson("Jesse", "Jake");
     String response = example.post("http://www.roundsapp.com/post", json);

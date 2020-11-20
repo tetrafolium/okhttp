@@ -31,7 +31,7 @@ public final class CheckHandshake {
     Set<String> blacklist = Collections.singleton(
         "sha256/afwiKY3RxoMmLkuRW1l7QsPZTJPwDS2pdDROQjXw8ig=");
 
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       for (Certificate certificate : chain.connection().handshake().peerCertificates()) {
         String pin = CertificatePinner.pin(certificate);
         if (blacklist.contains(pin)) {
@@ -58,7 +58,7 @@ public final class CheckHandshake {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new CheckHandshake().run();
   }
 }

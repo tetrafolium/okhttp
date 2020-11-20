@@ -40,7 +40,7 @@ public final class AccessHeaders {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new AccessHeaders().run();
   }
 }

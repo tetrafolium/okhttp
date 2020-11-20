@@ -34,7 +34,7 @@ public final class RewriteResponseCacheControl {
 
   private final OkHttpClient client;
 
-  public RewriteResponseCacheControl(File cacheDirectory) throws Exception {
+  public RewriteResponseCacheControl(final File cacheDirectory) throws Exception {
     Cache cache = new Cache(cacheDirectory, 1024 * 1024);
     cache.evictAll();
 
@@ -73,7 +73,7 @@ public final class RewriteResponseCacheControl {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new RewriteResponseCacheControl(new File("RewriteResponseCacheControl.tmp")).run();
   }
 }

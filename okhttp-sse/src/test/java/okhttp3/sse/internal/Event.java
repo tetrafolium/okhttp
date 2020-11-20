@@ -23,7 +23,7 @@ final class Event {
   final @Nullable String type;
   final String data;
 
-  Event(@Nullable String id, @Nullable String type, String data) {
+  Event(final @Nullable String id, final @Nullable String type, final String data) {
     if (data == null) throw new NullPointerException("data == null");
     this.id = id;
     this.type = type;
@@ -34,7 +34,7 @@ final class Event {
     return "Event{id='" + id + "', type='" + type + "', data='" + data + "'}";
   }
 
-  @Override public boolean equals(Object o) {
+  @Override public boolean equals(final Object o) {
     if (this == o) return true;
     if (!(o instanceof Event)) return false;
     Event other = (Event) o;

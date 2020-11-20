@@ -37,7 +37,7 @@ public final class Progress {
     final ProgressListener progressListener = new ProgressListener() {
       boolean firstUpdate = true;
 
-      @Override public void update(long bytesRead, long contentLength, boolean done) {
+      @Override public void update(final long bytesRead, final long contentLength, final boolean done) {
         if (done) {
           System.out.println("completed");
         } else {
@@ -75,7 +75,7 @@ public final class Progress {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new Progress().run();
   }
 
@@ -85,7 +85,7 @@ public final class Progress {
     private final ProgressListener progressListener;
     private BufferedSource bufferedSource;
 
-    ProgressResponseBody(ResponseBody responseBody, ProgressListener progressListener) {
+    ProgressResponseBody(final ResponseBody responseBody, final ProgressListener progressListener) {
       this.responseBody = responseBody;
       this.progressListener = progressListener;
     }
@@ -105,11 +105,11 @@ public final class Progress {
       return bufferedSource;
     }
 
-    private Source source(Source source) {
+    private Source source(final Source source) {
       return new ForwardingSource(source) {
         long totalBytesRead = 0L;
 
-        @Override public long read(Buffer sink, long byteCount) throws IOException {
+        @Override public long read(final Buffer sink, final long byteCount) throws IOException {
           long bytesRead = super.read(sink, byteCount);
           // read() returns the number of bytes read, or -1 if this source is exhausted.
           totalBytesRead += bytesRead != -1 ? bytesRead : 0;

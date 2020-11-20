@@ -99,7 +99,7 @@ public final class EventListenerTest {
   private SocksProxy socksProxy;
   private Cache cache = null;
 
-  @BeforeEach public void setUp(MockWebServer server) {
+  @BeforeEach public void setUp(final MockWebServer server) {
     this.server = server;
 
     platform.assumeNotOpenJSSE();
@@ -147,11 +147,11 @@ public final class EventListenerTest {
 
     final CountDownLatch completionLatch = new CountDownLatch(1);
     Callback callback = new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         completionLatch.countDown();
       }
 
-      @Override public void onResponse(Call call, Response response) {
+      @Override public void onResponse(final Call call, final Response response) {
         response.close();
         completionLatch.countDown();
       }
@@ -247,10 +247,10 @@ public final class EventListenerTest {
         .url(server.url("/"))
         .build());
     call.enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         response.close();
       }
     });
@@ -272,7 +272,7 @@ public final class EventListenerTest {
     assertThat(listener.recordedEventTypes()).containsExactly("Canceled");
   }
 
-  private void assertSuccessfulEventOrder(Matcher<Response> responseMatcher) throws IOException {
+  private void assertSuccessfulEventOrder(final Matcher<Response> responseMatcher) throws IOException {
     Call call = client.newCall(new Request.Builder()
         .url(server.url("/"))
         .build());
@@ -314,9 +314,9 @@ public final class EventListenerTest {
         "ResponseBodyStart", "ResponseBodyEnd", "ConnectionReleased", "CallEnd");
   }
 
-  private void assertBytesReadWritten(RecordingEventListener listener,
-      @Nullable Matcher<Long> requestHeaderLength, @Nullable Matcher<Long> requestBodyBytes,
-      @Nullable Matcher<Long> responseHeaderLength, @Nullable Matcher<Long> responseBodyBytes) {
+  private void assertBytesReadWritten(final RecordingEventListener listener,
+      final @Nullable Matcher<Long> requestHeaderLength, final @Nullable Matcher<Long> requestBodyBytes,
+      final @Nullable Matcher<Long> responseHeaderLength, final @Nullable Matcher<Long> responseBodyBytes) {
 
     if (requestHeaderLength != null) {
       RequestHeadersEnd responseHeadersEnd = listener.removeUpToEvent(RequestHeadersEnd.class);
@@ -351,11 +351,11 @@ public final class EventListenerTest {
 
   private Matcher<Long> greaterThan(final long value) {
     return new BaseMatcher<Long>() {
-      @Override public void describeTo(Description description) {
+      @Override public void describeTo(final Description description) {
         description.appendText("> " + value);
       }
 
-      @Override public boolean matches(Object o) {
+      @Override public boolean matches(final Object o) {
         return ((Long) o) > value;
       }
     };
@@ -363,11 +363,11 @@ public final class EventListenerTest {
 
   private Matcher<Response> matchesProtocol(final Protocol protocol) {
     return new BaseMatcher<Response>() {
-      @Override public void describeTo(Description description) {
+      @Override public void describeTo(final Description description) {
         description.appendText("is HTTP/2");
       }
 
-      @Override public boolean matches(Object o) {
+      @Override public boolean matches(final Object o) {
         return ((Response) o).protocol() == protocol;
       }
     };
@@ -920,7 +920,7 @@ public final class EventListenerTest {
     responseBodyFail(Protocol.HTTP_1_1);
   }
 
-  private void responseBodyFail(Protocol expectedProtocol) throws IOException {
+  private void responseBodyFail(final Protocol expectedProtocol) throws IOException {
     // Use a 2 MiB body so the disconnect won't happen until the client has read some data.
     int responseBodySize = 2 * 1024 * 1024; // 2 MiB
     server.enqueue(new MockResponse()
@@ -1022,7 +1022,7 @@ public final class EventListenerTest {
     requestBodyFail(null);
   }
 
-  private void requestBodyFail(@Nullable Protocol expectedProtocol) {
+  private void requestBodyFail(final @Nullable Protocol expectedProtocol) {
     server.enqueue(new MockResponse()
         .setSocketPolicy(SocketPolicy.DISCONNECT_DURING_REQUEST_BODY));
 
@@ -1059,7 +1059,7 @@ public final class EventListenerTest {
       return 1024 * 1024 * 4;
     }
 
-    @Override public void writeTo(BufferedSink sink) throws IOException {
+    @Override public void writeTo(final BufferedSink sink) throws IOException {
       try {
         writeChunk(sink);
         writeChunk(sink);
@@ -1074,7 +1074,7 @@ public final class EventListenerTest {
       }
     }
 
-    private void writeChunk(BufferedSink sink) throws IOException {
+    private void writeChunk(final BufferedSink sink) throws IOException {
       sink.write(new byte[1024 * 512]);
       sink.flush();
     }
@@ -1090,7 +1090,7 @@ public final class EventListenerTest {
         return 1024 * 1024 * 256;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         int failureCount = 0;
         for (int i = 0; i < 1024; i++) {
           try {
@@ -1150,7 +1150,7 @@ public final class EventListenerTest {
         return MediaType.get("text/plain");
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.write(new byte[8192]);
         sink.flush();
       }
@@ -1186,8 +1186,8 @@ public final class EventListenerTest {
         "ResponseBodyEnd", "ConnectionReleased", "CallEnd");
   }
 
-  private void requestBodySuccess(RequestBody body, Matcher<Long> requestBodyBytes,
-      Matcher<Long> responseHeaderLength) throws IOException {
+  private void requestBodySuccess(final RequestBody body, final Matcher<Long> requestBodyBytes,
+      final Matcher<Long> responseHeaderLength) throws IOException {
     server.enqueue(new MockResponse()
         .setResponseCode(200)
         .setBody("World!"));
@@ -1272,7 +1272,7 @@ public final class EventListenerTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             try {
               Thread.sleep(requestBodyDelay);
               sink.writeUtf8("abc");
@@ -1310,7 +1310,7 @@ public final class EventListenerTest {
     listener.takeEvent(CallEnd.class, 0L);
   }
 
-  private void enableTlsWithTunnel(boolean tunnelProxy) {
+  private void enableTlsWithTunnel(final boolean tunnelProxy) {
     client = client.newBuilder()
         .sslSocketFactory(
             handshakeCertificates.sslSocketFactory(), handshakeCertificates.trustManager())

@@ -232,8 +232,8 @@ public final class RelayTest {
     };
   }
 
-  private void assertFile(ByteString prefix, long upstreamSize, int metadataSize, String upstream,
-      ByteString metadata) throws IOException {
+  private void assertFile(final ByteString prefix, final long upstreamSize, final int metadataSize, final String upstream,
+      final ByteString metadata) throws IOException {
     BufferedSource source = Okio.buffer(Okio.source(file));
     assertThat(source.readByteString(prefix.size())).isEqualTo(prefix);
     assertThat(source.readLong()).isEqualTo(upstreamSize);

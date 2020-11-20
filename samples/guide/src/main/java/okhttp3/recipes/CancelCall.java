@@ -53,7 +53,7 @@ public class CancelCall {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new CancelCall().run();
   }
 }

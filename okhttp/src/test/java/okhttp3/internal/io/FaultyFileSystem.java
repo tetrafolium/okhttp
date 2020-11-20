@@ -31,11 +31,11 @@ public final class FaultyFileSystem implements FileSystem {
   private final Set<File> deleteFaults = new LinkedHashSet<>();
   private final Set<File> renameFaults = new LinkedHashSet<>();
 
-  public FaultyFileSystem(FileSystem delegate) {
+  public FaultyFileSystem(final FileSystem delegate) {
     this.delegate = delegate;
   }
 
-  public void setFaultyWrite(File file, boolean faulty) {
+  public void setFaultyWrite(final File file, final boolean faulty) {
     if (faulty) {
       writeFaults.add(file);
     } else {
@@ -43,7 +43,7 @@ public final class FaultyFileSystem implements FileSystem {
     }
   }
 
-  public void setFaultyDelete(File file, boolean faulty) {
+  public void setFaultyDelete(final File file, final boolean faulty) {
     if (faulty) {
       deleteFaults.add(file);
     } else {
@@ -51,7 +51,7 @@ public final class FaultyFileSystem implements FileSystem {
     }
   }
 
-  public void setFaultyRename(File file, boolean faulty) {
+  public void setFaultyRename(final File file, final boolean faulty) {
     if (faulty) {
       renameFaults.add(file);
     } else {
@@ -59,37 +59,37 @@ public final class FaultyFileSystem implements FileSystem {
     }
   }
 
-  @Override public Source source(File file) throws FileNotFoundException {
+  @Override public Source source(final File file) throws FileNotFoundException {
     return delegate.source(file);
   }
 
-  @Override public Sink sink(File file) throws FileNotFoundException {
+  @Override public Sink sink(final File file) throws FileNotFoundException {
     return new FaultySink(delegate.sink(file), file);
   }
 
-  @Override public Sink appendingSink(File file) throws FileNotFoundException {
+  @Override public Sink appendingSink(final File file) throws FileNotFoundException {
     return new FaultySink(delegate.appendingSink(file), file);
   }
 
-  @Override public void delete(File file) throws IOException {
+  @Override public void delete(final File file) throws IOException {
     if (deleteFaults.contains(file)) throw new IOException("boom!");
     delegate.delete(file);
   }
 
-  @Override public boolean exists(File file) {
+  @Override public boolean exists(final File file) {
     return delegate.exists(file);
   }
 
-  @Override public long size(File file) {
+  @Override public long size(final File file) {
     return delegate.size(file);
   }
 
-  @Override public void rename(File from, File to) throws IOException {
+  @Override public void rename(final File from, final File to) throws IOException {
     if (renameFaults.contains(from) || renameFaults.contains(to)) throw new IOException("boom!");
     delegate.rename(from, to);
   }
 
-  @Override public void deleteContents(File directory) throws IOException {
+  @Override public void deleteContents(final File directory) throws IOException {
     if (deleteFaults.contains(directory)) throw new IOException("boom!");
     delegate.deleteContents(directory);
   }
@@ -97,12 +97,12 @@ public final class FaultyFileSystem implements FileSystem {
   private class FaultySink extends ForwardingSink {
     private final File file;
 
-    public FaultySink(Sink delegate, File file) {
+    public FaultySink(final Sink delegate, final File file) {
       super(delegate);
       this.file = file;
     }
 
-    @Override public void write(Buffer source, long byteCount) throws IOException {
+    @Override public void write(final Buffer source, final long byteCount) throws IOException {
       if (writeFaults.contains(file)) throw new IOException("boom!");
       super.write(source, byteCount);
     }

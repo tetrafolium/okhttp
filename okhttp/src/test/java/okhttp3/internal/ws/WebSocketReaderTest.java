@@ -437,7 +437,7 @@ public final class WebSocketReaderTest {
     }
   }
 
-  private byte[] binaryData(int length) {
+  private byte[] binaryData(final int length) {
     byte[] junk = new byte[length];
     random.nextBytes(junk);
     return junk;

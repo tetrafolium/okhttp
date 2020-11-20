@@ -205,7 +205,7 @@ public final class ConnectionPoolTest {
   }
 
   /** Use a helper method so there's no hidden reference remaining on the stack. */
-  private void allocateAndLeakAllocation(ConnectionPool pool, RealConnection connection) {
+  private void allocateAndLeakAllocation(final ConnectionPool pool, final RealConnection connection) {
     OkHttpClient client = new OkHttpClient.Builder()
         .connectionPool(pool)
         .build();
@@ -216,7 +216,7 @@ public final class ConnectionPoolTest {
     }
   }
 
-  private RealConnection newConnection(RealConnectionPool pool, Route route, long idleAtNanos) {
+  private RealConnection newConnection(final RealConnectionPool pool, final Route route, final long idleAtNanos) {
     RealConnection result = RealConnection.Companion.newTestConnection(
         pool, route, new Socket(), idleAtNanos);
     synchronized (result) {
@@ -225,18 +225,18 @@ public final class ConnectionPoolTest {
     return result;
   }
 
-  private Address newAddress(String name) {
+  private Address newAddress(final String name) {
     return new Address(name, 1, Dns.SYSTEM, SocketFactory.getDefault(), null, null, null,
         new RecordingOkAuthenticator("password", null), null, Collections.emptyList(),
         Collections.emptyList(), ProxySelector.getDefault());
   }
 
-  private Route newRoute(Address address) {
+  private Route newRoute(final Address address) {
     return new Route(address, Proxy.NO_PROXY,
         InetSocketAddress.createUnresolved(address.url().host(), address.url().port()));
   }
 
-  private Request newRequest(Address address) {
+  private Request newRequest(final Address address) {
     return new Request.Builder()
         .url(address.url())
         .build();

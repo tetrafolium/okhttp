@@ -25,7 +25,7 @@ import picocli.CommandLine;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MainTest {
-  public static Main fromArgs(String... args) {
+  public static Main fromArgs(final String... args) {
     return CommandLine.populateCommand(new Main(), args);
   }
 
@@ -101,7 +101,7 @@ public class MainTest {
         "Mon, 18 Aug 2014 15:16:06 GMT");
   }
 
-  private static String bodyAsString(RequestBody body) {
+  private static String bodyAsString(final RequestBody body) {
     try {
       Buffer buffer = new Buffer();
       body.writeTo(buffer);

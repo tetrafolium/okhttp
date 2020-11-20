@@ -23,7 +23,7 @@ public class SampleServer extends Dispatcher {
   private final String root;
   private final int port;
 
-  public SampleServer(SSLContext sslContext, String root, int port) {
+  public SampleServer(final SSLContext sslContext, final String root, final int port) {
     this.sslContext = sslContext;
     this.root = root;
     this.port = port;
@@ -36,7 +36,7 @@ public class SampleServer extends Dispatcher {
     server.start(port);
   }
 
-  @Override public MockResponse dispatch(RecordedRequest request) {
+  @Override public MockResponse dispatch(final RecordedRequest request) {
     String path = request.getPath();
     try {
       if (!path.startsWith("/") || path.contains("..")) throw new FileNotFoundException();
@@ -58,7 +58,7 @@ public class SampleServer extends Dispatcher {
     }
   }
 
-  private MockResponse directoryToResponse(String basePath, File directory) {
+  private MockResponse directoryToResponse(final String basePath, final File directory) {
     if (!basePath.endsWith("/")) basePath += "/";
 
     StringBuilder response = new StringBuilder();
@@ -76,20 +76,20 @@ public class SampleServer extends Dispatcher {
         .setBody(response.toString());
   }
 
-  private MockResponse fileToResponse(String path, File file) throws IOException {
+  private MockResponse fileToResponse(final String path, final File file) throws IOException {
     return new MockResponse()
         .setStatus("HTTP/1.1 200")
         .setBody(fileToBytes(file))
         .addHeader("content-type: " + contentType(path));
   }
 
-  private Buffer fileToBytes(File file) throws IOException {
+  private Buffer fileToBytes(final File file) throws IOException {
     Buffer result = new Buffer();
     result.writeAll(Okio.source(file));
     return result;
   }
 
-  private String contentType(String path) {
+  private String contentType(final String path) {
     if (path.endsWith(".png")) return "image/png";
     if (path.endsWith(".jpg")) return "image/jpeg";
     if (path.endsWith(".jpeg")) return "image/jpeg";
@@ -99,7 +99,7 @@ public class SampleServer extends Dispatcher {
     return "application/octet-stream";
   }
 
-  public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
     if (args.length != 4) {
       System.out.println("Usage: SampleServer <keystore> <password> <root file> <port>");
       return;
@@ -115,7 +115,7 @@ public class SampleServer extends Dispatcher {
     server.run();
   }
 
-  private static SSLContext sslContext(String keystoreFile, String password)
+  private static SSLContext sslContext(final String keystoreFile, final String password)
       throws GeneralSecurityException, IOException {
     KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
     try (InputStream in = new FileInputStream(keystoreFile)) {

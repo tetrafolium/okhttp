@@ -124,7 +124,7 @@ public final class SocksProxy {
     });
   }
 
-  private void hello(BufferedSource fromSource, BufferedSink fromSink) throws IOException {
+  private void hello(final BufferedSource fromSource, final BufferedSink fromSink) throws IOException {
     int version = fromSource.readByte() & 0xff;
     int methodCount = fromSource.readByte() & 0xff;
     int selectedMethod = METHOD_NONE;
@@ -152,8 +152,8 @@ public final class SocksProxy {
     }
   }
 
-  private void acceptCommand(InetAddress fromAddress, BufferedSource fromSource,
-      BufferedSink fromSink) throws IOException {
+  private void acceptCommand(final InetAddress fromAddress, final BufferedSource fromSource,
+      final BufferedSink fromSink) throws IOException {
     // Read the command.
     int version = fromSource.readByte() & 0xff;
     if (version != VERSION_5) throw new ProtocolException("unexpected version: " + version);

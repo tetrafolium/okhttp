@@ -157,7 +157,7 @@ public final class HandshakeCertificatesTest {
     return new InetSocketAddress(serverAddress, serverSocket.getLocalPort());
   }
 
-  private Future<Handshake> doServerHandshake(HandshakeCertificates server) {
+  private Future<Handshake> doServerHandshake(final HandshakeCertificates server) {
     return executorService.submit(() -> {
       Socket rawSocket = null;
       SSLSocket sslSocket = null;
@@ -181,7 +181,7 @@ public final class HandshakeCertificatesTest {
   }
 
   private Future<Handshake> doClientHandshake(
-      HandshakeCertificates client, InetSocketAddress serverAddress) {
+      final HandshakeCertificates client, final InetSocketAddress serverAddress) {
     return executorService.submit(() -> {
       Socket rawSocket = SocketFactory.getDefault().createSocket();
       rawSocket.connect(serverAddress);
@@ -200,7 +200,7 @@ public final class HandshakeCertificatesTest {
     });
   }
 
-  private void assertPrivateKeysEquals(PrivateKey expected, PrivateKey actual) {
+  private void assertPrivateKeysEquals(final PrivateKey expected, final PrivateKey actual) {
     assertThat(ByteString.of(actual.getEncoded())).isEqualTo(
         ByteString.of(expected.getEncoded()));
   }

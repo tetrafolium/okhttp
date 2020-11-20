@@ -26,7 +26,7 @@ public final class OAuthSession {
   public final String team_id;
 
   public OAuthSession(
-      boolean ok, String accessToken, String scope, String userId, String teamName, String teamId) {
+      final boolean ok, final String accessToken, final String scope, final String userId, final String teamName, final String teamId) {
     this.ok = ok;
     this.access_token = accessToken;
     this.scope = scope;

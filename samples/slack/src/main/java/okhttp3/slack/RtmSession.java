@@ -28,11 +28,11 @@ public final class RtmSession extends WebSocketListener implements Closeable {
   /** Guarded by this. */
   private WebSocket webSocket;
 
-  public RtmSession(SlackApi slackApi) {
+  public RtmSession(final SlackApi slackApi) {
     this.slackApi = slackApi;
   }
 
-  public void open(String accessToken) throws IOException {
+  public void open(final String accessToken) throws IOException {
     if (webSocket != null) throw new IllegalStateException();
 
     RtmStartResponse rtmStartResponse = slackApi.rtmStart(accessToken);
@@ -41,21 +41,21 @@ public final class RtmSession extends WebSocketListener implements Closeable {
 
   // TODO(jwilson): can I read the response body? Do I have to?
   //                the body from slack is a 0-byte-buffer
-  @Override public synchronized void onOpen(WebSocket webSocket, Response response) {
+  @Override public synchronized void onOpen(final WebSocket webSocket, final Response response) {
     System.out.println("onOpen: " + response);
   }
 
   // TOOD(jwilson): decode incoming messages and dispatch them somewhere.
-  @Override public void onMessage(WebSocket webSocket, String text) {
+  @Override public void onMessage(final WebSocket webSocket, final String text) {
     System.out.println("onMessage: " + text);
   }
 
-  @Override public void onClosing(WebSocket webSocket, int code, String reason) {
+  @Override public void onClosing(final WebSocket webSocket, final int code, final String reason) {
     webSocket.close(1000, null);
     System.out.println("onClose (" + code + "): " + reason);
   }
 
-  @Override public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+  @Override public void onFailure(final WebSocket webSocket, final Throwable t, final Response response) {
     // TODO(jwilson): can I read the response body? Do I have to?
     System.out.println("onFailure " + response);
   }

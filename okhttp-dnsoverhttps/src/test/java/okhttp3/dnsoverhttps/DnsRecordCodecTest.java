@@ -33,7 +33,7 @@ public class DnsRecordCodecTest {
     assertThat(encoded).isEqualTo("AAABAAABAAAAAAAABmdvb2dsZQNjb20AAAEAAQ");
   }
 
-  private String encodeQuery(String host, int type) {
+  private String encodeQuery(final String host, final int type) {
     return DnsRecordCodec.INSTANCE.encodeQuery(host, type).base64Url().replace("=", "");
   }
 

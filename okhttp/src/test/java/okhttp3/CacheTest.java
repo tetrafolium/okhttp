@@ -73,7 +73,7 @@ public final class CacheTest {
   private Cache cache;
   private final CookieManager cookieManager = new CookieManager();
 
-  @BeforeEach public void setUp(MockWebServer server, MockWebServer server2) throws Exception {
+  @BeforeEach public void setUp(final MockWebServer server, final MockWebServer server2) throws Exception {
     this.server = server;
     this.server2 = server2;
 
@@ -154,7 +154,7 @@ public final class CacheTest {
     assertCached(false, 506);
   }
 
-  private void assertCached(boolean shouldPut, int responseCode) throws Exception {
+  private void assertCached(final boolean shouldPut, final int responseCode) throws Exception {
     int expectedResponseCode = responseCode;
 
     server = new MockWebServer();
@@ -221,7 +221,7 @@ public final class CacheTest {
    * Skipping bytes in the input stream caused ResponseCache corruption.
    * http://code.google.com/p/android/issues/detail?id=8175
    */
-  private void testResponseCaching(TransferKind transferKind) throws IOException {
+  private void testResponseCaching(final TransferKind transferKind) throws IOException {
     MockResponse mockResponse = new MockResponse()
         .addHeader("Last-Modified: " + formatDate(-1, TimeUnit.HOURS))
         .addHeader("Expires: " + formatDate(1, TimeUnit.HOURS))
@@ -456,7 +456,7 @@ public final class CacheTest {
   }
 
   private void temporaryRedirectCachedWithCachingHeader(
-      int responseCode, String headerName, String headerValue) throws Exception {
+      final int responseCode, final String headerName, final String headerValue) throws Exception {
     server.enqueue(new MockResponse()
         .setResponseCode(responseCode)
         .addHeader(headerName, headerValue)
@@ -474,7 +474,7 @@ public final class CacheTest {
     assertThat(get(url).body().string()).isEqualTo("a");
   }
 
-  private void temporaryRedirectNotCachedWithoutCachingHeader(int responseCode) throws Exception {
+  private void temporaryRedirectNotCachedWithoutCachingHeader(final int responseCode) throws Exception {
     server.enqueue(new MockResponse()
         .setResponseCode(responseCode)
         .addHeader("Location", "/a"));
@@ -522,7 +522,7 @@ public final class CacheTest {
     // indicates the end of the data stream.
   }
 
-  private void testServerPrematureDisconnect(TransferKind transferKind) throws IOException {
+  private void testServerPrematureDisconnect(final TransferKind transferKind) throws IOException {
     MockResponse mockResponse = new MockResponse();
     transferKind.setBody(mockResponse, "ABCDE\nFGHIJKLMNOPQRSTUVWXYZ", 16);
     server.enqueue(truncateViolently(mockResponse, 16));
@@ -559,7 +559,7 @@ public final class CacheTest {
     testClientPrematureDisconnect(TransferKind.END_OF_STREAM);
   }
 
-  private void testClientPrematureDisconnect(TransferKind transferKind) throws IOException {
+  private void testClientPrematureDisconnect(final TransferKind transferKind) throws IOException {
     // Setting a low transfer speed ensures that stream discarding will time out.
     MockResponse mockResponse = new MockResponse()
         .throttleBody(6, 1, TimeUnit.SECONDS);
@@ -760,7 +760,7 @@ public final class CacheTest {
     testRequestMethod("TRACE", false);
   }
 
-  private void testRequestMethod(String requestMethod, boolean expectCached) throws Exception {
+  private void testRequestMethod(final String requestMethod, final boolean expectCached) throws Exception {
     // 1. Seed the cache (potentially).
     // 2. Expect a cache hit or miss.
     server.enqueue(new MockResponse()
@@ -788,7 +788,7 @@ public final class CacheTest {
     }
   }
 
-  private RequestBody requestBodyOrNull(String requestMethod) {
+  private RequestBody requestBodyOrNull(final String requestMethod) {
     return (requestMethod.equals("POST") || requestMethod.equals("PUT"))
         ? RequestBody.create("foo", MediaType.get("text/plain"))
         : null;
@@ -806,7 +806,7 @@ public final class CacheTest {
     testMethodInvalidates("DELETE");
   }
 
-  private void testMethodInvalidates(String requestMethod) throws Exception {
+  private void testMethodInvalidates(final String requestMethod) throws Exception {
     // 1. Seed the cache.
     // 2. Invalidate it.
     // 3. Expect a cache miss.
@@ -1034,7 +1034,7 @@ public final class CacheTest {
         .addHeader("Expires: " + formatDate(1, TimeUnit.HOURS)));
   }
 
-  private void assertNonIdentityEncodingCached(MockResponse response) throws Exception {
+  private void assertNonIdentityEncodingCached(final MockResponse response) throws Exception {
     server.enqueue(response
         .setBody(gzip("ABCABCABC"))
         .addHeader("Content-Encoding: gzip"));
@@ -1366,8 +1366,8 @@ public final class CacheTest {
     assertThat(request.getHeader("If-Modified-Since")).isNull();
   }
 
-  private RecordedRequest assertClientSuppliedCondition(MockResponse seed, String conditionName,
-      String conditionValue) throws Exception {
+  private RecordedRequest assertClientSuppliedCondition(final MockResponse seed, final String conditionName,
+      final String conditionValue) throws Exception {
     server.enqueue(seed.setBody("A"));
     server.enqueue(new MockResponse()
         .setResponseCode(HttpURLConnection.HTTP_NOT_MODIFIED));
@@ -2258,7 +2258,8 @@ public final class CacheTest {
 
     // Confirm the interceptor isn't exercised.
     client = client.newBuilder()
-        .addNetworkInterceptor(chain -> { throw new AssertionError(); })
+        .addNetworkInterceptor(chain -> {
+            throw new AssertionError(); })
         .build();
     assertThat(get(url).body().string()).isEqualTo("A");
   }
@@ -2487,14 +2488,14 @@ public final class CacheTest {
         "A", "a1", "Content-Length", "4", "B", "b4", "B", "b5", "C", "c6"));
   }
 
-  private Response get(HttpUrl url) throws IOException {
+  private Response get(final HttpUrl url) throws IOException {
     Request request = new Request.Builder()
         .url(url)
         .build();
     return client.newCall(request).execute();
   }
 
-  private void writeFile(File directory, String file, String content) throws IOException {
+  private void writeFile(final File directory, final String file, final String content) throws IOException {
     BufferedSink sink = Okio.buffer(fileSystem.sink(new File(directory, file)));
     sink.writeUtf8(content);
     sink.close();
@@ -2504,17 +2505,17 @@ public final class CacheTest {
    * @param delta the offset from the current date to use. Negative values yield dates in the past;
    * positive values yield dates in the future.
    */
-  private String formatDate(long delta, TimeUnit timeUnit) {
+  private String formatDate(final long delta, final TimeUnit timeUnit) {
     return formatDate(new Date(System.currentTimeMillis() + timeUnit.toMillis(delta)));
   }
 
-  private String formatDate(Date date) {
+  private String formatDate(final Date date) {
     DateFormat rfc1123 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
     rfc1123.setTimeZone(TimeZone.getTimeZone("GMT"));
     return rfc1123.format(date);
   }
 
-  private void assertNotCached(MockResponse response) throws Exception {
+  private void assertNotCached(final MockResponse response) throws Exception {
     server.enqueue(response.setBody("A"));
     server.enqueue(new MockResponse()
         .setBody("B"));
@@ -2525,7 +2526,7 @@ public final class CacheTest {
   }
 
   /** @return the request with the conditional get headers. */
-  private RecordedRequest assertConditionallyCached(MockResponse response) throws Exception {
+  private RecordedRequest assertConditionallyCached(final MockResponse response) throws Exception {
     // scenario 1: condition succeeds
     server.enqueue(response.setBody("A").setStatus("HTTP/1.1 200 A-OK"));
     server.enqueue(new MockResponse()
@@ -2603,7 +2604,7 @@ public final class CacheTest {
         lastModifiedDate);
   }
 
-  private void assertFullyCached(MockResponse response) throws Exception {
+  private void assertFullyCached(final MockResponse response) throws Exception {
     server.enqueue(response.setBody("A"));
     server.enqueue(response.setBody("B"));
 
@@ -2616,7 +2617,7 @@ public final class CacheTest {
    * Shortens the body of {@code response} but not the corresponding headers. Only useful to test
    * how clients respond to the premature conclusion of the HTTP body.
    */
-  private MockResponse truncateViolently(MockResponse response, int numBytesToKeep) {
+  private MockResponse truncateViolently(final MockResponse response, final int numBytesToKeep) {
     response.setSocketPolicy(DISCONNECT_AT_END);
     Headers headers = response.getHeaders();
     Buffer truncatedBody = new Buffer();
@@ -2628,17 +2629,17 @@ public final class CacheTest {
 
   enum TransferKind {
     CHUNKED {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setChunkedBody(content, chunkSize);
       }
     },
     FIXED_LENGTH {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setBody(content);
       }
     },
     END_OF_STREAM {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setBody(content);
         response.setSocketPolicy(DISCONNECT_AT_END);
         response.removeHeader("Content-Length");
@@ -2647,13 +2648,13 @@ public final class CacheTest {
 
     abstract void setBody(MockResponse response, Buffer content, int chunkSize) throws IOException;
 
-    void setBody(MockResponse response, String content, int chunkSize) throws IOException {
+    void setBody(final MockResponse response, final String content, final int chunkSize) throws IOException {
       setBody(response, new Buffer().writeUtf8(content), chunkSize);
     }
   }
 
   /** Returns a gzipped copy of {@code bytes}. */
-  public Buffer gzip(String data) throws IOException {
+  public Buffer gzip(final String data) throws IOException {
     Buffer result = new Buffer();
     BufferedSink sink = Okio.buffer(new GzipSink(result));
     sink.writeUtf8(data);

@@ -44,7 +44,7 @@ public final class PreemptiveAuth {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new PreemptiveAuth().run();
   }
 
@@ -52,12 +52,12 @@ public final class PreemptiveAuth {
     private final String credentials;
     private final String host;
 
-    BasicAuthInterceptor(String host, String username, String password) {
+    BasicAuthInterceptor(final String host, final String username, final String password) {
       this.credentials = Credentials.basic(username, password);
       this.host = host;
     }
 
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       Request request = chain.request();
       if (request.url().host().equals(host)) {
         request = request.newBuilder()

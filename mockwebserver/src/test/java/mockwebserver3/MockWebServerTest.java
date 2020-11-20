@@ -65,7 +65,7 @@ public final class MockWebServerTest {
 
   private MockWebServer server;
 
-  @BeforeEach public void setUp(MockWebServer server) throws IOException {
+  @BeforeEach public void setUp(final MockWebServer server) throws IOException {
     this.server = server;
     platform.assumeNotBouncyCastle();
     server.start();
@@ -371,7 +371,7 @@ public final class MockWebServerTest {
     }
   }
 
-  private List<String> headersToList(MockResponse response) {
+  private List<String> headersToList(final MockResponse response) {
     Headers headers = response.getHeaders();
     int size = headers.size();
     List<String> headerList = new ArrayList<>(size);

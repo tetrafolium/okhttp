@@ -65,13 +65,13 @@ public final class RequestBodyCompression {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new RequestBodyCompression().run();
   }
 
   /** This interceptor compresses the HTTP request body. Many webservers can't handle this! */
   static class GzipRequestInterceptor implements Interceptor {
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       Request originalRequest = chain.request();
       if (originalRequest.body() == null || originalRequest.header("Content-Encoding") != null) {
         return chain.proceed(originalRequest);
@@ -94,7 +94,7 @@ public final class RequestBodyCompression {
           return -1; // We don't know the compressed length in advance!
         }
 
-        @Override public void writeTo(BufferedSink sink) throws IOException {
+        @Override public void writeTo(final BufferedSink sink) throws IOException {
           BufferedSink gzipSink = Okio.buffer(new GzipSink(sink));
           body.writeTo(gzipSink);
           gzipSink.close();

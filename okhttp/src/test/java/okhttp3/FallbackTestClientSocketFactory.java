@@ -34,21 +34,21 @@ public class FallbackTestClientSocketFactory extends DelegatingSSLSocketFactory 
    */
   public static final String TLS_FALLBACK_SCSV = "TLS_FALLBACK_SCSV";
 
-  public FallbackTestClientSocketFactory(SSLSocketFactory delegate) {
+  public FallbackTestClientSocketFactory(final SSLSocketFactory delegate) {
     super(delegate);
   }
 
-  @Override protected SSLSocket configureSocket(SSLSocket sslSocket) throws IOException {
+  @Override protected SSLSocket configureSocket(final SSLSocket sslSocket) throws IOException {
     return new TlsFallbackScsvDisabledSSLSocket(sslSocket);
   }
 
   private static class TlsFallbackScsvDisabledSSLSocket extends DelegatingSSLSocket {
 
-    public TlsFallbackScsvDisabledSSLSocket(SSLSocket socket) {
+    public TlsFallbackScsvDisabledSSLSocket(final SSLSocket socket) {
       super(socket);
     }
 
-    @Override public void setEnabledCipherSuites(String[] suites) {
+    @Override public void setEnabledCipherSuites(final String[] suites) {
       List<String> enabledCipherSuites = new ArrayList<>(suites.length);
       for (String suite : suites) {
         if (!suite.equals(TLS_FALLBACK_SCSV)) {

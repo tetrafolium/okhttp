@@ -121,7 +121,7 @@ public final class URLConnectionTest {
   private OkHttpClient client = clientTestRule.newClient();
   private @Nullable Cache cache;
 
-  @BeforeEach public void setUp(MockWebServer server, MockWebServer server2) {
+  @BeforeEach public void setUp(final MockWebServer server, final MockWebServer server2) {
     this.server = server;
     this.server2 = server2;
 
@@ -297,7 +297,7 @@ public final class URLConnectionTest {
     testRequestBodySurvivesRetries(TransferKind.CHUNKED);
   }
 
-  private void testRequestBodySurvivesRetries(TransferKind transferKind) throws Exception {
+  private void testRequestBodySurvivesRetries(final TransferKind transferKind) throws Exception {
     server.enqueue(new MockResponse()
         .setBody("abc"));
 
@@ -397,7 +397,7 @@ public final class URLConnectionTest {
     }
   }
 
-  private void testServerClosesOutput(SocketPolicy socketPolicy) throws Exception {
+  private void testServerClosesOutput(final SocketPolicy socketPolicy) throws Exception {
     server.enqueue(new MockResponse()
         .setBody("This connection won't pool properly")
         .setSocketPolicy(socketPolicy));
@@ -429,7 +429,7 @@ public final class URLConnectionTest {
         || server.getRequestCount() == 3 && server.takeRequest().getSequenceNumber() == 0).isTrue();
   }
 
-  enum WriteKind {BYTE_BY_BYTE, SMALL_BUFFERS, LARGE_BUFFERS}
+  enum WriteKind { BYTE_BY_BYTE, SMALL_BUFFERS, LARGE_BUFFERS }
 
   @Test public void chunkedUpload_byteByByte() throws Exception {
     doUpload(TransferKind.CHUNKED, WriteKind.BYTE_BY_BYTE);
@@ -455,7 +455,7 @@ public final class URLConnectionTest {
     doUpload(TransferKind.FIXED_LENGTH, WriteKind.LARGE_BUFFERS);
   }
 
-  private void doUpload(TransferKind uploadKind, WriteKind writeKind) throws Exception {
+  private void doUpload(final TransferKind uploadKind, final WriteKind writeKind) throws Exception {
     int n = 512 * 1024;
     server.setBodyLimit(0);
     server.enqueue(new MockResponse());
@@ -469,7 +469,7 @@ public final class URLConnectionTest {
         return uploadKind == TransferKind.CHUNKED ? -1L : n;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         if (writeKind == WriteKind.BYTE_BY_BYTE) {
           for (int i = 0; i < n; ++i) {
             sink.writeByte('x');
@@ -524,7 +524,7 @@ public final class URLConnectionTest {
     connectViaHttpsReusingConnections(true);
   }
 
-  private void connectViaHttpsReusingConnections(boolean rebuildClient) throws Exception {
+  private void connectViaHttpsReusingConnections(final boolean rebuildClient) throws Exception {
     server.useHttps(handshakeCertificates.sslSocketFactory(), false);
     server.enqueue(new MockResponse()
         .setBody("this response comes via HTTPS"));
@@ -724,7 +724,7 @@ public final class URLConnectionTest {
     testConnectViaProxy(ProxyConfig.HTTP_PROXY_SYSTEM_PROPERTY);
   }
 
-  private void testConnectViaProxy(ProxyConfig proxyConfig) throws Exception {
+  private void testConnectViaProxy(final ProxyConfig proxyConfig) throws Exception {
     MockResponse mockResponse = new MockResponse()
         .setBody("this response comes via a proxy");
     server.enqueue(mockResponse);
@@ -760,26 +760,26 @@ public final class URLConnectionTest {
     }
   }
 
-  private void testConnectViaSocketFactory(boolean useHttps) throws IOException {
+  private void testConnectViaSocketFactory(final boolean useHttps) throws IOException {
     SocketFactory uselessSocketFactory = new SocketFactory() {
       @Override public Socket createSocket() {
         throw new IllegalArgumentException("useless");
       }
 
-      @Override public Socket createSocket(InetAddress host, int port) {
+      @Override public Socket createSocket(final InetAddress host, final int port) {
         return null;
       }
 
-      @Override public Socket createSocket(InetAddress address, int port, InetAddress localAddress,
-          int localPort) {
+      @Override public Socket createSocket(final InetAddress address, final int port, final InetAddress localAddress,
+          final int localPort) {
         return null;
       }
 
-      @Override public Socket createSocket(String host, int port) {
+      @Override public Socket createSocket(final String host, final int port) {
         return null;
       }
 
-      @Override public Socket createSocket(String host, int port, InetAddress localHost, int localPort) {
+      @Override public Socket createSocket(final String host, final int port, final InetAddress localHost, final int localPort) {
         return null;
       }
     };
@@ -866,7 +866,7 @@ public final class URLConnectionTest {
     testConnectViaDirectProxyToHttps(ProxyConfig.HTTP_PROXY_SYSTEM_PROPERTY);
   }
 
-  private void testConnectViaDirectProxyToHttps(ProxyConfig proxyConfig) throws Exception {
+  private void testConnectViaDirectProxyToHttps(final ProxyConfig proxyConfig) throws Exception {
     server.useHttps(handshakeCertificates.sslSocketFactory(), false);
     server.enqueue(new MockResponse()
         .setBody("this response comes via HTTPS"));
@@ -905,7 +905,7 @@ public final class URLConnectionTest {
    * We were verifying the wrong hostname when connecting to an HTTPS site through a proxy.
    * http://b/3097277
    */
-  private void testConnectViaHttpProxyToHttps(ProxyConfig proxyConfig) throws Exception {
+  private void testConnectViaHttpProxyToHttps(final ProxyConfig proxyConfig) throws Exception {
     RecordingHostnameVerifier hostnameVerifier = new RecordingHostnameVerifier();
 
     server.useHttps(handshakeCertificates.sslSocketFactory(), true);
@@ -1114,12 +1114,12 @@ public final class URLConnectionTest {
 
     client = client.newBuilder()
         .proxySelector(new ProxySelector() {
-          @Override public List<Proxy> select(URI uri) {
+          @Override public List<Proxy> select(final URI uri) {
             return Collections.singletonList(server.toProxyAddress());
           }
 
           @Override public void connectFailed(
-              URI uri, SocketAddress socketAddress, IOException e) {
+              final URI uri, final SocketAddress socketAddress, final IOException e) {
           }
         }).build();
     HttpUrl url = HttpUrl.get("http://android.com/foo");
@@ -1153,10 +1153,10 @@ public final class URLConnectionTest {
     AtomicReference<Call> callReference = new AtomicReference<>();
 
     class DisconnectingCookieJar implements CookieJar {
-      @Override public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+      @Override public void saveFromResponse(final HttpUrl url, final List<Cookie> cookies) {
       }
 
-      @Override public List<Cookie> loadForRequest(HttpUrl url) {
+      @Override public List<Cookie> loadForRequest(final HttpUrl url) {
         callReference.get().cancel();
         return Collections.emptyList();
       }
@@ -1198,7 +1198,7 @@ public final class URLConnectionTest {
    * Reads {@code count} characters from the stream. If the stream is exhausted before {@code count}
    * characters can be read, the remaining characters are returned and the stream is closed.
    */
-  private String readAscii(InputStream in, int count) throws IOException {
+  private String readAscii(final InputStream in, final int count) throws IOException {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < count; i++) {
       int value = in.read();
@@ -1223,7 +1223,7 @@ public final class URLConnectionTest {
     testMarkAndReset(TransferKind.END_OF_STREAM);
   }
 
-  private void testMarkAndReset(TransferKind transferKind) throws IOException {
+  private void testMarkAndReset(final TransferKind transferKind) throws IOException {
     MockResponse response = new MockResponse();
     transferKind.setBody(response, "ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1024);
     server.enqueue(response);
@@ -1394,8 +1394,8 @@ public final class URLConnectionTest {
    * request that followed or prevented connection reuse. http://code.google.com/p/android/issues/detail?id=7059
    * http://code.google.com/p/android/issues/detail?id=38817
    */
-  private void testClientConfiguredGzipContentEncodingAndConnectionReuse(TransferKind transferKind,
-      boolean tls) throws Exception {
+  private void testClientConfiguredGzipContentEncodingAndConnectionReuse(final TransferKind transferKind,
+      final boolean tls) throws Exception {
     if (tls) {
       SSLSocketFactory socketFactory = handshakeCertificates.sslSocketFactory();
       RecordingHostnameVerifier hostnameVerifier = new RecordingHostnameVerifier();
@@ -1473,7 +1473,7 @@ public final class URLConnectionTest {
     testEarlyDisconnectDoesntHarmPooling(TransferKind.FIXED_LENGTH);
   }
 
-  private void testEarlyDisconnectDoesntHarmPooling(TransferKind transferKind) throws Exception {
+  private void testEarlyDisconnectDoesntHarmPooling(final TransferKind transferKind) throws Exception {
     MockResponse mockResponse1 = new MockResponse();
     transferKind.setBody(mockResponse1, "ABCDEFGHIJK", 1024);
     server.enqueue(mockResponse1);
@@ -1552,7 +1552,7 @@ public final class URLConnectionTest {
     testAuthenticateWithStreamingPost(TransferKind.CHUNKED);
   }
 
-  private void testAuthenticateWithStreamingPost(TransferKind streamingMode) throws Exception {
+  private void testAuthenticateWithStreamingPost(final TransferKind streamingMode) throws Exception {
     server.enqueue(new MockResponse()
         .setResponseCode(401)
         .addHeader("WWW-Authenticate: Basic realm=\"protected area\"")
@@ -1601,7 +1601,7 @@ public final class URLConnectionTest {
     postBodyRetransmittedAfterAuthorizationFail("");
   }
 
-  private void postBodyRetransmittedAfterAuthorizationFail(String body) throws Exception {
+  private void postBodyRetransmittedAfterAuthorizationFail(final String body) throws Exception {
     server.enqueue(new MockResponse()
         .setResponseCode(401));
     server.enqueue(new MockResponse());
@@ -1680,7 +1680,7 @@ public final class URLConnectionTest {
     assertThat(call.toLowerCase(US)).contains("scheme=basic");
   }
 
-  private List<String> authCallsForHeader(String authHeader) throws IOException {
+  private List<String> authCallsForHeader(final String authHeader) throws IOException {
     boolean proxy = authHeader.startsWith("Proxy-");
     int responseCode = proxy ? 407 : 401;
     RecordingAuthenticator authenticator = new RecordingAuthenticator(null);
@@ -1728,7 +1728,7 @@ public final class URLConnectionTest {
     assertMethodForbidsNoRequestBody("PATCH");
   }
 
-  private void assertMethodPermitsRequestBody(String requestMethod) {
+  private void assertMethodPermitsRequestBody(final String requestMethod) {
     Request request = new Request.Builder()
         .url(server.url("/"))
         .method(requestMethod, RequestBody.create("abc", null))
@@ -1736,7 +1736,7 @@ public final class URLConnectionTest {
     assertThat(request.method()).isEqualTo(requestMethod);
   }
 
-  private void assertMethodForbidsRequestBody(String requestMethod) {
+  private void assertMethodForbidsRequestBody(final String requestMethod) {
     try {
       new Request.Builder()
           .url(server.url("/"))
@@ -1747,7 +1747,7 @@ public final class URLConnectionTest {
     }
   }
 
-  private void assertMethodPermitsNoRequestBody(String requestMethod) {
+  private void assertMethodPermitsNoRequestBody(final String requestMethod) {
     Request request = new Request.Builder()
         .url(server.url("/"))
         .method(requestMethod, null)
@@ -1755,7 +1755,7 @@ public final class URLConnectionTest {
     assertThat(request.method()).isEqualTo(requestMethod);
   }
 
-  private void assertMethodForbidsNoRequestBody(String requestMethod) {
+  private void assertMethodForbidsNoRequestBody(final String requestMethod) {
     try {
       new Request.Builder()
           .url(server.url("/"))
@@ -1774,7 +1774,7 @@ public final class URLConnectionTest {
     assertValidRequestMethod("CONNECT");
   }
 
-  private void assertValidRequestMethod(String requestMethod) throws Exception {
+  private void assertValidRequestMethod(final String requestMethod) throws Exception {
     server.enqueue(new MockResponse());
     Response response = getResponse(new Request.Builder()
         .url(server.url("/"))
@@ -1822,7 +1822,7 @@ public final class URLConnectionTest {
    * Users have reported problems using HTTPS with streaming request bodies.
    * http://code.google.com/p/android/issues/detail?id=12860
    */
-  private void testSecureStreamingPost(TransferKind streamingMode) throws Exception {
+  private void testSecureStreamingPost(final TransferKind streamingMode) throws Exception {
     server.useHttps(handshakeCertificates.sslSocketFactory(), false);
     server.enqueue(new MockResponse()
         .setBody("Success!"));
@@ -2025,7 +2025,7 @@ public final class URLConnectionTest {
     testRedirected(TransferKind.END_OF_STREAM, false);
   }
 
-  private void testRedirected(TransferKind transferKind, boolean reuse) throws Exception {
+  private void testRedirected(final TransferKind transferKind, final boolean reuse) throws Exception {
     MockResponse mockResponse = new MockResponse()
         .setResponseCode(HTTP_MOVED_TEMP)
         .addHeader("Location: /foo");
@@ -2155,7 +2155,7 @@ public final class URLConnectionTest {
     redirectToAnotherOriginServer(true);
   }
 
-  private void redirectToAnotherOriginServer(boolean https) throws Exception {
+  private void redirectToAnotherOriginServer(final boolean https) throws Exception {
     if (https) {
       server.useHttps(handshakeCertificates.sslSocketFactory(), false);
       server2.useHttps(handshakeCertificates.sslSocketFactory(), false);
@@ -2201,7 +2201,7 @@ public final class URLConnectionTest {
     final List<URI> proxySelectionRequests = new ArrayList<>();
     client = client.newBuilder()
         .proxySelector(new ProxySelector() {
-          @Override public List<Proxy> select(URI uri) {
+          @Override public List<Proxy> select(final URI uri) {
             proxySelectionRequests.add(uri);
             MockWebServer proxyServer = (uri.getPort() == server.getPort())
                 ? server
@@ -2209,7 +2209,7 @@ public final class URLConnectionTest {
             return asList(proxyServer.toProxyAddress());
           }
 
-          @Override public void connectFailed(URI uri, SocketAddress address, IOException failure) {
+          @Override public void connectFailed(final URI uri, final SocketAddress address, final IOException failure) {
             throw new AssertionError();
           }
         })
@@ -2274,7 +2274,7 @@ public final class URLConnectionTest {
     testResponseRedirectedWithPost(HTTP_MOVED_TEMP, TransferKind.FIXED_LENGTH);
   }
 
-  private void testResponseRedirectedWithPost(int redirectCode, TransferKind transferKind)
+  private void testResponseRedirectedWithPost(final int redirectCode, final TransferKind transferKind)
       throws Exception {
     server.enqueue(new MockResponse()
         .setResponseCode(redirectCode)
@@ -2392,7 +2392,7 @@ public final class URLConnectionTest {
    * }</pre>
    */
   static class LegacyRedirectInterceptor implements Interceptor {
-    @Override public Response intercept(Chain chain) throws IOException {
+    @Override public Response intercept(final Chain chain) throws IOException {
       Response response = chain.proceed(chain.request());
 
       int code = response.code();
@@ -2463,7 +2463,7 @@ public final class URLConnectionTest {
     assertThat(responseString).isEqualTo("This page has moved!");
   }
 
-  private void testRedirect(boolean temporary, String method) throws Exception {
+  private void testRedirect(final boolean temporary, final String method) throws Exception {
     MockResponse response1 = new MockResponse()
         .setResponseCode(temporary ? HTTP_TEMP_REDIRECT : HTTP_PERM_REDIRECT)
         .addHeader("Location: /page2");
@@ -2647,7 +2647,7 @@ public final class URLConnectionTest {
     server.setServerSocketFactory(
         new DelegatingServerSocketFactory(ServerSocketFactory.getDefault()) {
           @Override
-          protected ServerSocket configureServerSocket(ServerSocket serverSocket)
+          protected ServerSocket configureServerSocket(final ServerSocket serverSocket)
               throws IOException {
             serverSocket.setReceiveBufferSize(SOCKET_BUFFER_SIZE);
             return serverSocket;
@@ -2655,7 +2655,7 @@ public final class URLConnectionTest {
         });
     client = client.newBuilder()
         .socketFactory(new DelegatingSocketFactory(SocketFactory.getDefault()) {
-          @Override protected Socket configureSocket(Socket socket) throws IOException {
+          @Override protected Socket configureSocket(final Socket socket) throws IOException {
             socket.setReceiveBufferSize(SOCKET_BUFFER_SIZE);
             socket.setSendBufferSize(SOCKET_BUFFER_SIZE);
             return socket;
@@ -2675,7 +2675,7 @@ public final class URLConnectionTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             byte[] data = new byte[2 * 1024 * 1024]; // 2 MiB.
             sink.write(data);
           }
@@ -2818,7 +2818,7 @@ public final class URLConnectionTest {
    * also permit flush so that buffered streams can do a no-op flush when they are closed.
    * http://b/3038470
    */
-  private void testFlushAfterStreamTransmitted(TransferKind transferKind) throws IOException {
+  private void testFlushAfterStreamTransmitted(final TransferKind transferKind) throws IOException {
     server.enqueue(new MockResponse()
         .setBody("abc"));
 
@@ -2826,7 +2826,7 @@ public final class URLConnectionTest {
     Response response = getResponse(new Request.Builder()
         .url(server.url("/"))
         .post(new ForwardingRequestBody(transferKind.newRequestBody("def")) {
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sinkReference.set(sink);
             super.writeTo(sink);
           }
@@ -3001,7 +3001,7 @@ public final class URLConnectionTest {
     testInputStreamAvailable(TransferKind.END_OF_STREAM);
   }
 
-  private void testInputStreamAvailable(TransferKind transferKind) throws IOException {
+  private void testInputStreamAvailable(final TransferKind transferKind) throws IOException {
     String body = "ABCDEFGH";
     MockResponse mockResponse = new MockResponse();
     transferKind.setBody(mockResponse, body, 4);
@@ -3040,7 +3040,7 @@ public final class URLConnectionTest {
     reusedConnectionFailsWithPost(TransferKind.FIXED_LENGTH, 16384);
   }
 
-  private void reusedConnectionFailsWithPost(TransferKind transferKind, int requestSize)
+  private void reusedConnectionFailsWithPost(final TransferKind transferKind, final int requestSize)
       throws Exception {
     server.enqueue(new MockResponse()
         .setBody("A")
@@ -3124,7 +3124,7 @@ public final class URLConnectionTest {
         return 4L;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("abc");
       }
     };
@@ -3151,7 +3151,7 @@ public final class URLConnectionTest {
         return 3L;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("abcd");
       }
     };
@@ -3403,7 +3403,7 @@ public final class URLConnectionTest {
     setsNegotiatedProtocolHeader(Protocol.HTTP_2);
   }
 
-  private void setsNegotiatedProtocolHeader(Protocol protocol) throws IOException {
+  private void setsNegotiatedProtocolHeader(final Protocol protocol) throws IOException {
     enableProtocol(protocol);
     server.enqueue(new MockResponse()
         .setBody("A"));
@@ -3449,7 +3449,7 @@ public final class URLConnectionTest {
     zeroLengthPut();
   }
 
-  private void zeroLengthPayload(String method) throws Exception {
+  private void zeroLengthPayload(final String method) throws Exception {
     server.enqueue(new MockResponse());
 
     Response response = getResponse(new Request.Builder()
@@ -3506,7 +3506,7 @@ public final class URLConnectionTest {
             return contentLength;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             byte[] buffer = new byte[1024 * 1024];
             for (long bytesWritten = 0; bytesWritten < contentLength; ) {
               int byteCount = (int) Math.min(buffer.length, contentLength - bytesWritten);
@@ -3756,22 +3756,22 @@ public final class URLConnectionTest {
     assertThat(response.code()).isEqualTo(401);
   }
 
-  private Request newRequest(String s) {
+  private Request newRequest(final String s) {
     return newRequest(server.url(s));
   }
 
-  private Request newRequest(HttpUrl url) {
+  private Request newRequest(final HttpUrl url) {
     return new Request.Builder()
         .url(url)
         .build();
   }
 
-  private Response getResponse(Request request) throws IOException {
+  private Response getResponse(final Request request) throws IOException {
     return client.newCall(request).execute();
   }
 
   /** Returns a gzipped copy of {@code bytes}. */
-  public Buffer gzip(String data) throws IOException {
+  public Buffer gzip(final String data) throws IOException {
     Buffer result = new Buffer();
     BufferedSink gzipSink = Okio.buffer(new GzipSink(result));
     gzipSink.writeUtf8(data);
@@ -3779,27 +3779,27 @@ public final class URLConnectionTest {
     return result;
   }
 
-  private void assertContent(String expected, Response response, int limit)
+  private void assertContent(final String expected, final Response response, final int limit)
       throws IOException {
     assertThat(readAscii(response.body().byteStream(), limit)).isEqualTo(
         expected);
   }
 
-  private void assertContent(String expected, Response response) throws IOException {
+  private void assertContent(final String expected, final Response response) throws IOException {
     assertContent(expected, response, Integer.MAX_VALUE);
   }
 
-  private Set<String> newSet(String... elements) {
+  private Set<String> newSet(final String... elements) {
     return new LinkedHashSet<>(asList(elements));
   }
 
   enum TransferKind {
     CHUNKED {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setChunkedBody(content, chunkSize);
       }
 
-      @Override RequestBody newRequestBody(String body) {
+      @Override RequestBody newRequestBody(final String body) {
         return new RequestBody() {
           @Override public long contentLength() {
             return -1L;
@@ -3809,18 +3809,18 @@ public final class URLConnectionTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sink.writeUtf8(body);
           }
         };
       }
     },
     FIXED_LENGTH {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setBody(content);
       }
 
-      @Override RequestBody newRequestBody(String body) {
+      @Override RequestBody newRequestBody(final String body) {
         return new RequestBody() {
           @Override public long contentLength() {
             return Utf8.size(body);
@@ -3830,20 +3830,20 @@ public final class URLConnectionTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             sink.writeUtf8(body);
           }
         };
       }
     },
     END_OF_STREAM {
-      @Override void setBody(MockResponse response, Buffer content, int chunkSize) {
+      @Override void setBody(final MockResponse response, final Buffer content, final int chunkSize) {
         response.setBody(content);
         response.setSocketPolicy(DISCONNECT_AT_END);
         response.removeHeader("Content-Length");
       }
 
-      @Override RequestBody newRequestBody(String body) {
+      @Override RequestBody newRequestBody(final String body) {
         throw new TestAbortedException("END_OF_STREAM not implemented for requests");
       }
     };
@@ -3852,14 +3852,14 @@ public final class URLConnectionTest {
 
     abstract RequestBody newRequestBody(String body);
 
-    void setBody(MockResponse response, String content, int chunkSize) throws IOException {
+    void setBody(final MockResponse response, final String content, final int chunkSize) throws IOException {
       setBody(response, new Buffer().writeUtf8(content), chunkSize);
     }
   }
 
   enum ProxyConfig {
     NO_PROXY() {
-      @Override public Call.Factory connect(MockWebServer server, OkHttpClient client) {
+      @Override public Call.Factory connect(final MockWebServer server, final OkHttpClient client) {
         return client.newBuilder()
             .proxy(Proxy.NO_PROXY)
             .build();
@@ -3867,7 +3867,7 @@ public final class URLConnectionTest {
     },
 
     CREATE_ARG() {
-      @Override public Call.Factory connect(MockWebServer server, OkHttpClient client) {
+      @Override public Call.Factory connect(final MockWebServer server, final OkHttpClient client) {
         return client.newBuilder()
             .proxy(server.toProxyAddress())
             .build();
@@ -3875,7 +3875,7 @@ public final class URLConnectionTest {
     },
 
     PROXY_SYSTEM_PROPERTY() {
-      @Override public Call.Factory connect(MockWebServer server, OkHttpClient client) {
+      @Override public Call.Factory connect(final MockWebServer server, final OkHttpClient client) {
         System.setProperty("proxyHost", server.getHostName());
         System.setProperty("proxyPort", Integer.toString(server.getPort()));
         return client;
@@ -3883,7 +3883,7 @@ public final class URLConnectionTest {
     },
 
     HTTP_PROXY_SYSTEM_PROPERTY() {
-      @Override public Call.Factory connect(MockWebServer server, OkHttpClient client) {
+      @Override public Call.Factory connect(final MockWebServer server, final OkHttpClient client) {
         System.setProperty("http.proxyHost", server.getHostName());
         System.setProperty("http.proxyPort", Integer.toString(server.getPort()));
         return client;
@@ -3891,7 +3891,7 @@ public final class URLConnectionTest {
     },
 
     HTTPS_PROXY_SYSTEM_PROPERTY() {
-      @Override public Call.Factory connect(MockWebServer server, OkHttpClient client) {
+      @Override public Call.Factory connect(final MockWebServer server, final OkHttpClient client) {
         System.setProperty("https.proxyHost", server.getHostName());
         System.setProperty("https.proxyPort", Integer.toString(server.getPort()));
         return client;
@@ -3902,7 +3902,7 @@ public final class URLConnectionTest {
         throws IOException;
 
     public Call connect(
-        MockWebServer server, OkHttpClient client, HttpUrl url) throws IOException {
+        final MockWebServer server, final OkHttpClient client, final HttpUrl url) throws IOException {
       Request request = new Request.Builder()
           .url(url)
           .build();
@@ -3914,7 +3914,7 @@ public final class URLConnectionTest {
     private final List<String> calls = new ArrayList<>();
     private final X509TrustManager delegate;
 
-    RecordingTrustManager(X509TrustManager delegate) {
+    RecordingTrustManager(final X509TrustManager delegate) {
       this.delegate = delegate;
     }
 
@@ -3922,15 +3922,15 @@ public final class URLConnectionTest {
       return delegate.getAcceptedIssuers();
     }
 
-    @Override public void checkClientTrusted(X509Certificate[] chain, String authType) {
+    @Override public void checkClientTrusted(final X509Certificate[] chain, final String authType) {
       calls.add("checkClientTrusted " + certificatesToString(chain));
     }
 
-    @Override public void checkServerTrusted(X509Certificate[] chain, String authType) {
+    @Override public void checkServerTrusted(final X509Certificate[] chain, final String authType) {
       calls.add("checkServerTrusted " + certificatesToString(chain));
     }
 
-    private String certificatesToString(X509Certificate[] certificates) {
+    private String certificatesToString(final X509Certificate[] certificates) {
       List<String> result = new ArrayList<>();
       for (X509Certificate certificate : certificates) {
         result.add(certificate.getSubjectDN() + " " + certificate.getSerialNumber());
@@ -3943,7 +3943,7 @@ public final class URLConnectionTest {
    * Tests that use this will fail unless boot classpath is set. Ex. {@code
    * -Xbootclasspath/p:/tmp/alpn-boot-8.0.0.v20140317}
    */
-  private void enableProtocol(Protocol protocol) {
+  private void enableProtocol(final Protocol protocol) {
     client = client.newBuilder()
         .sslSocketFactory(
             handshakeCertificates.sslSocketFactory(), handshakeCertificates.trustManager())

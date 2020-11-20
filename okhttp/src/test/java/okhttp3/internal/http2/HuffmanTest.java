@@ -38,7 +38,7 @@ public final class HuffmanTest {
     assertRoundTrip(ByteString.of(buf));
   }
 
-  private void assertRoundTrip(ByteString data) throws IOException {
+  private void assertRoundTrip(final ByteString data) throws IOException {
     Buffer encodeBuffer = new Buffer();
     Huffman.INSTANCE.encode(data, encodeBuffer);
     assertThat(Huffman.INSTANCE.encodedLength(data)).isEqualTo(encodeBuffer.size());

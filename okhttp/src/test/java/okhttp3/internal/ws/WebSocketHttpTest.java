@@ -92,7 +92,7 @@ public final class WebSocketHttpTest {
     return clientTestRule;
   }
 
-  @BeforeEach public void setUp(MockWebServer webServer) {
+  @BeforeEach public void setUp(final MockWebServer webServer) {
     this.webServer = webServer;
 
     platform.assumeNotOpenJSSE();
@@ -179,7 +179,7 @@ public final class WebSocketHttpTest {
 
     final RuntimeException e = new RuntimeException();
     clientListener.setNextEventDelegate(new WebSocketListener() {
-      @Override public void onOpen(WebSocket webSocket, Response response) {
+      @Override public void onOpen(final WebSocket webSocket, final Response response) {
         throw e;
       }
     });
@@ -197,7 +197,7 @@ public final class WebSocketHttpTest {
 
     final RuntimeException e = new RuntimeException("boom");
     clientListener.setNextEventDelegate(new WebSocketListener() {
-      @Override public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+      @Override public void onFailure(final WebSocket webSocket, final Throwable t, final Response response) {
         throw e;
       }
     });
@@ -216,7 +216,7 @@ public final class WebSocketHttpTest {
 
     final RuntimeException e = new RuntimeException();
     clientListener.setNextEventDelegate(new WebSocketListener() {
-      @Override public void onMessage(WebSocket webSocket, String text) {
+      @Override public void onMessage(final WebSocket webSocket, final String text) {
         throw e;
       }
     });
@@ -236,7 +236,7 @@ public final class WebSocketHttpTest {
 
     final RuntimeException e = new RuntimeException();
     clientListener.setNextEventDelegate(new WebSocketListener() {
-      @Override public void onClosing(WebSocket webSocket, int code, String reason) {
+      @Override public void onClosing(final WebSocket webSocket, final int code, final String reason) {
         throw e;
       }
     });
@@ -254,7 +254,7 @@ public final class WebSocketHttpTest {
     clientListener.assertOpen();
     WebSocket server = serverListener.assertOpen();
     clientListener.setNextEventDelegate(new WebSocketListener() {
-      @Override public void onClosing(WebSocket webSocket, int code, String reason) {
+      @Override public void onClosing(final WebSocket webSocket, final int code, final String reason) {
         webSocket.close(1000, null);
       }
     });
@@ -556,7 +556,7 @@ public final class WebSocketHttpTest {
    */
   @Test public void readTimeoutAppliesWithinFrames() {
     webServer.setDispatcher(new Dispatcher() {
-      @Override public MockResponse dispatch(RecordedRequest request) {
+      @Override public MockResponse dispatch(final RecordedRequest request) {
         return upgradeResponse(request)
             .setBody(new Buffer().write(ByteString.decodeHex("81"))) // Truncated frame.
             .removeHeader("Content-Length")
@@ -654,7 +654,7 @@ public final class WebSocketHttpTest {
     // Stall in onOpen to prevent pongs from being sent.
     final CountDownLatch latch = new CountDownLatch(1);
     webServer.enqueue(new MockResponse().withWebSocketUpgrade(new WebSocketListener() {
-      @Override public void onOpen(WebSocket webSocket, Response response) {
+      @Override public void onOpen(final WebSocket webSocket, final Response response) {
         try {
           latch.await(); // The server can't respond to pings!
         } catch (InterruptedException e) {
@@ -831,7 +831,7 @@ public final class WebSocketHttpTest {
     successfulExtensions("permessage-deflate; server_max_window_bits=15");
   }
 
-  private void successfulExtensions(String extensionsHeader) throws Exception {
+  private void successfulExtensions(final String extensionsHeader) throws Exception {
     webServer.enqueue(new MockResponse()
         .addHeader("Sec-WebSocket-Extensions", extensionsHeader)
         .withWebSocketUpgrade(serverListener));
@@ -877,7 +877,7 @@ public final class WebSocketHttpTest {
         .isEqualTo("permessage-deflate");
   }
 
-  private void extensionNegotiationFailure(String extensionsHeader) throws Exception {
+  private void extensionNegotiationFailure(final String extensionsHeader) throws Exception {
     webServer.enqueue(new MockResponse()
         .addHeader("Sec-WebSocket-Extensions", extensionsHeader)
         .withWebSocketUpgrade(serverListener));
@@ -896,7 +896,7 @@ public final class WebSocketHttpTest {
     serverListener.assertExhausted();
   }
 
-  private MockResponse upgradeResponse(RecordedRequest request) {
+  private MockResponse upgradeResponse(final RecordedRequest request) {
     String key = request.getHeader("Sec-WebSocket-Key");
     return new MockResponse()
         .setStatus("HTTP/1.1 101 Switching Protocols")
@@ -905,7 +905,7 @@ public final class WebSocketHttpTest {
         .setHeader("Sec-WebSocket-Accept", WebSocketProtocol.INSTANCE.acceptHeader(key));
   }
 
-  private void websocketScheme(String scheme) {
+  private void websocketScheme(final String scheme) {
     webServer.enqueue(new MockResponse().withWebSocketUpgrade(serverListener));
 
     Request request = new Request.Builder()
@@ -926,14 +926,14 @@ public final class WebSocketHttpTest {
     return newWebSocket(new Request.Builder().get().url(webServer.url("/")).build());
   }
 
-  private RealWebSocket newWebSocket(Request request) {
+  private RealWebSocket newWebSocket(final Request request) {
     RealWebSocket webSocket = new RealWebSocket(TaskRunner.INSTANCE, request, clientListener,
         random, client.pingIntervalMillis(), null, 0L);
     webSocket.connect(client);
     return webSocket;
   }
 
-  private void closeWebSockets(WebSocket webSocket, WebSocket server) {
+  private void closeWebSockets(final WebSocket webSocket, final WebSocket server) {
     server.close(1001, "");
     clientListener.assertClosing(1001, "");
     webSocket.close(1000, "");

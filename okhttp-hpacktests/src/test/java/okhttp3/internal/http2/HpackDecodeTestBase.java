@@ -36,7 +36,7 @@ public class HpackDecodeTestBase {
   /**
    * Reads all stories in the folders provided, asserts if no story found.
    */
-  protected static List<Object> createStories(String[] interopTests)
+  protected static List<Object> createStories(final String[] interopTests)
       throws Exception {
     if (interopTests.length == 0) {
       return Collections.singletonList(MISSING);
@@ -55,7 +55,7 @@ public class HpackDecodeTestBase {
   private final Buffer bytesIn = new Buffer();
   private final Hpack.Reader hpackReader = new Hpack.Reader(bytesIn, 4096);
 
-  protected void testDecoder(Story story) throws Exception {
+  protected void testDecoder(final Story story) throws Exception {
     for (Case testCase : story.getCases()) {
       bytesIn.write(testCase.getWire());
       hpackReader.readHeaders();
@@ -71,7 +71,7 @@ public class HpackDecodeTestBase {
    * TODO: See if duped headers should be preserved on decode and verify.
    */
   private static void assertSetEquals(
-      String message, List<Header> expected, List<Header> observed) {
+      final String message, final List<Header> expected, final List<Header> observed) {
     assertThat(new LinkedHashSet<>(observed)).overridingErrorMessage(message).isEqualTo(
         new LinkedHashSet<>(expected));
   }

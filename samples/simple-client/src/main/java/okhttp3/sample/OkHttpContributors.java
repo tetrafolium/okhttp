@@ -21,7 +21,7 @@ public class OkHttpContributors {
     int contributions;
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     OkHttpClient client = new OkHttpClient();
 
     // Create request for remote resource.

@@ -46,7 +46,7 @@ public final class SlackApi {
   public final String clientSecret;
   public final int port;
 
-  public SlackApi(String clientId, String clientSecret, int port) {
+  public SlackApi(final String clientId, final String clientSecret, final int port) {
     this.httpClient = new OkHttpClient.Builder()
         .build();
     this.moshi = new Moshi.Builder()
@@ -58,7 +58,7 @@ public final class SlackApi {
   }
 
   /** See https://api.slack.com/docs/oauth. */
-  public HttpUrl authorizeUrl(String scopes, HttpUrl redirectUrl, ByteString state, String team) {
+  public HttpUrl authorizeUrl(final String scopes, final HttpUrl redirectUrl, final ByteString state, final String team) {
     HttpUrl.Builder builder = baseUrl.newBuilder("/oauth/authorize")
         .addQueryParameter("client_id", clientId)
         .addQueryParameter("scope", scopes)
@@ -73,7 +73,7 @@ public final class SlackApi {
   }
 
   /** See https://api.slack.com/methods/oauth.access. */
-  public OAuthSession exchangeCode(String code, HttpUrl redirectUrl) throws IOException {
+  public OAuthSession exchangeCode(final String code, final HttpUrl redirectUrl) throws IOException {
     HttpUrl url = baseUrl.newBuilder("oauth.access")
         .addQueryParameter("client_id", clientId)
         .addQueryParameter("client_secret", clientSecret)
@@ -91,7 +91,7 @@ public final class SlackApi {
   }
 
   /** See https://api.slack.com/methods/rtm.start. */
-  public RtmStartResponse rtmStart(String accessToken) throws IOException {
+  public RtmStartResponse rtmStart(final String accessToken) throws IOException {
     HttpUrl url = baseUrl.newBuilder("rtm.start")
         .addQueryParameter("token", accessToken)
         .build();
@@ -106,18 +106,18 @@ public final class SlackApi {
   }
 
   /** See https://api.slack.com/rtm. */
-  public WebSocket rtm(HttpUrl url, WebSocketListener listener) {
+  public WebSocket rtm(final HttpUrl url, final WebSocketListener listener) {
     return httpClient.newWebSocket(new Request.Builder()
         .url(url)
         .build(), listener);
   }
 
   static final class SlackJsonAdapters {
-    @ToJson String urlToJson(HttpUrl httpUrl) {
+    @ToJson String urlToJson(final HttpUrl httpUrl) {
       return httpUrl.toString();
     }
 
-    @FromJson HttpUrl urlFromJson(String urlString) {
+    @FromJson HttpUrl urlFromJson(final String urlString) {
       if (urlString.startsWith("wss:")) urlString = "https:" + urlString.substring(4);
       if (urlString.startsWith("ws:")) urlString = "http:" + urlString.substring(3);
       return HttpUrl.get(urlString);

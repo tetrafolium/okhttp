@@ -53,7 +53,7 @@ public final class ConnectionCoalescingTest {
   private HttpUrl url;
   private List<InetAddress> serverIps;
 
-  @BeforeEach public void setUp(MockWebServer server) throws Exception {
+  @BeforeEach public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
 
     platform.assumeHttp2Support();
@@ -179,8 +179,8 @@ public final class ConnectionCoalescingTest {
     CountDownLatch latch3 = new CountDownLatch(1);
     CountDownLatch latch4 = new CountDownLatch(1);
     EventListener listener1 = new EventListener() {
-      @Override public void connectStart(Call call, InetSocketAddress inetSocketAddress,
-          Proxy proxy) {
+      @Override public void connectStart(final Call call, final InetSocketAddress inetSocketAddress,
+          final Proxy proxy) {
         try {
           // Wait for request2 to guarantee we make 2 separate connections to the server.
           latch1.await();
@@ -189,15 +189,15 @@ public final class ConnectionCoalescingTest {
         }
       }
 
-      @Override public void connectionAcquired(Call call, Connection connection) {
+      @Override public void connectionAcquired(final Call call, final Connection connection) {
         // We have the connection and it's in the pool. Let request2 proceed to make a connection.
         latch2.countDown();
       }
     };
 
     EventListener request2Listener = new EventListener() {
-      @Override public void connectStart(Call call, InetSocketAddress inetSocketAddress,
-          Proxy proxy) {
+      @Override public void connectStart(final Call call, final InetSocketAddress inetSocketAddress,
+          final Proxy proxy) {
         // Let request1 proceed to make a connection.
         latch1.countDown();
         try {
@@ -208,7 +208,7 @@ public final class ConnectionCoalescingTest {
         }
       }
 
-      @Override public void connectionAcquired(Call call, Connection connection) {
+      @Override public void connectionAcquired(final Call call, final Connection connection) {
         // We obtained the coalesced connection. Let request1 violently destroy it.
         latch3.countDown();
         try {
@@ -232,7 +232,7 @@ public final class ConnectionCoalescingTest {
     Request request = new Request.Builder().url(sanUrl).build();
     Call call1 = client1.newCall(request);
     call1.enqueue(new Callback() {
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         try {
           // Wait until request2 acquires the connection before we destroy it violently.
           latch3.await();
@@ -244,7 +244,7 @@ public final class ConnectionCoalescingTest {
         latch4.countDown();
       }
 
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         fail();
       }
     });
@@ -421,7 +421,7 @@ public final class ConnectionCoalescingTest {
     AtomicInteger connectCount = new AtomicInteger();
     EventListener listener = new EventListener() {
       @Override public void connectStart(
-          Call call, InetSocketAddress inetSocketAddress, Proxy proxy) {
+          final Call call, final InetSocketAddress inetSocketAddress, final Proxy proxy) {
         connectCount.getAndIncrement();
       }
     };
@@ -506,11 +506,11 @@ public final class ConnectionCoalescingTest {
   @Test public void redirectWithDevSetup() throws Exception {
     X509TrustManager TRUST_MANAGER = new X509TrustManager() {
       @Override
-      public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
+      public void checkClientTrusted(final X509Certificate[] x509Certificates, final String s) {
       }
 
       @Override
-      public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
+      public void checkServerTrusted(final X509Certificate[] x509Certificates, final String s) {
       }
 
       @Override
@@ -532,11 +532,11 @@ public final class ConnectionCoalescingTest {
     assertThat(client.connectionPool().connectionCount()).isEqualTo(2);
   }
 
-  private Response execute(HttpUrl url) throws IOException {
+  private Response execute(final HttpUrl url) throws IOException {
     return client.newCall(new Request.Builder().url(url).build()).execute();
   }
 
-  private void assert200Http2Response(Response response, String expectedHost) {
+  private void assert200Http2Response(final Response response, final String expectedHost) {
     assertThat(response.code()).isEqualTo(200);
     assertThat(response.request().url().host()).isEqualTo(expectedHost);
     assertThat(response.protocol()).isEqualTo(Protocol.HTTP_2);

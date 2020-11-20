@@ -32,17 +32,17 @@ public final class RecordingProxySelector extends ProxySelector {
   public final List<URI> requestedUris = new ArrayList<>();
   public final List<String> failures = new ArrayList<>();
 
-  @Override public List<Proxy> select(URI uri) {
+  @Override public List<Proxy> select(final URI uri) {
     requestedUris.add(uri);
     return proxies;
   }
 
-  public void assertRequests(URI... expectedUris) {
+  public void assertRequests(final URI... expectedUris) {
     assertThat(requestedUris).containsExactly(expectedUris);
     requestedUris.clear();
   }
 
-  @Override public void connectFailed(URI uri, SocketAddress sa, IOException ioe) {
+  @Override public void connectFailed(final URI uri, final SocketAddress sa, final IOException ioe) {
     InetSocketAddress socketAddress = (InetSocketAddress) sa;
     failures.add(Util.format("%s %s:%d %s",
         uri, socketAddress, socketAddress.getPort(), ioe.getMessage()));

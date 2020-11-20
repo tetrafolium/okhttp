@@ -61,7 +61,7 @@ public final class ThreadInterruptTest {
     server.setServerSocketFactory(
         new DelegatingServerSocketFactory(ServerSocketFactory.getDefault()) {
           @Override
-          protected ServerSocket configureServerSocket(ServerSocket serverSocket)
+          protected ServerSocket configureServerSocket(final ServerSocket serverSocket)
               throws IOException {
             serverSocket.setReceiveBufferSize(SOCKET_BUFFER_SIZE);
             return serverSocket;
@@ -70,7 +70,7 @@ public final class ThreadInterruptTest {
     client = clientTestRule.newClientBuilder()
         .socketFactory(new DelegatingSocketFactory(SocketFactory.getDefault()) {
           @Override
-          protected Socket configureSocket(Socket socket) throws IOException {
+          protected Socket configureSocket(final Socket socket) throws IOException {
             socket.setSendBufferSize(SOCKET_BUFFER_SIZE);
             socket.setReceiveBufferSize(SOCKET_BUFFER_SIZE);
             return socket;
@@ -94,7 +94,7 @@ public final class ThreadInterruptTest {
             return null;
           }
 
-          @Override public void writeTo(BufferedSink sink) throws IOException {
+          @Override public void writeTo(final BufferedSink sink) throws IOException {
             for (int i = 0; i < 10; i++) {
               sink.writeByte(0);
               sink.flush();
@@ -139,7 +139,7 @@ public final class ThreadInterruptTest {
     responseBody.close();
   }
 
-  private void sleep(int delayMillis) {
+  private void sleep(final int delayMillis) {
     try {
       Thread.sleep(delayMillis);
     } catch (InterruptedException e) {
@@ -147,7 +147,7 @@ public final class ThreadInterruptTest {
     }
   }
 
-  private void interruptLater(int delayMillis) {
+  private void interruptLater(final int delayMillis) {
     Thread toInterrupt = Thread.currentThread();
     Thread interruptingCow = new Thread(() -> {
       sleep(delayMillis);

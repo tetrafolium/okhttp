@@ -277,16 +277,16 @@ public final class WebSocketWriterTest {
     }
   }
 
-  private void assertData(String hex) throws EOFException {
+  private void assertData(final String hex) throws EOFException {
     assertData(ByteString.decodeHex(hex));
   }
 
-  private void assertData(ByteString expected) throws EOFException {
+  private void assertData(final ByteString expected) throws EOFException {
     ByteString actual = data.readByteString(Math.min(expected.size(), data.size()));
     assertThat(actual).isEqualTo(expected);
   }
 
-  private static byte[] binaryData(int length) {
+  private static byte[] binaryData(final int length) {
     byte[] junk = new byte[length];
     new Random(0).nextBytes(junk);
     return junk;

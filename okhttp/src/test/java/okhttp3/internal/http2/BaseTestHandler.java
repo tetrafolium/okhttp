@@ -23,21 +23,21 @@ import okio.ByteString;
 import static org.junit.Assert.fail;
 
 class BaseTestHandler implements Http2Reader.Handler {
-  @Override public void data(boolean inFinished, int streamId, BufferedSource source, int length)
+  @Override public void data(final boolean inFinished, final int streamId, final BufferedSource source, final int length)
       throws IOException {
     fail();
   }
 
-  @Override public void headers(boolean inFinished, int streamId, int associatedStreamId,
-      List<Header> headerBlock) {
+  @Override public void headers(final boolean inFinished, final int streamId, final int associatedStreamId,
+      final List<Header> headerBlock) {
     fail();
   }
 
-  @Override public void rstStream(int streamId, ErrorCode errorCode) {
+  @Override public void rstStream(final int streamId, final ErrorCode errorCode) {
     fail();
   }
 
-  @Override public void settings(boolean clearPrevious, Settings settings) {
+  @Override public void settings(final boolean clearPrevious, final Settings settings) {
     fail();
   }
 
@@ -45,30 +45,30 @@ class BaseTestHandler implements Http2Reader.Handler {
     fail();
   }
 
-  @Override public void ping(boolean ack, int payload1, int payload2) {
+  @Override public void ping(final boolean ack, final int payload1, final int payload2) {
     fail();
   }
 
-  @Override public void goAway(int lastGoodStreamId, ErrorCode errorCode, ByteString debugData) {
+  @Override public void goAway(final int lastGoodStreamId, final ErrorCode errorCode, final ByteString debugData) {
     fail();
   }
 
-  @Override public void windowUpdate(int streamId, long windowSizeIncrement) {
+  @Override public void windowUpdate(final int streamId, final long windowSizeIncrement) {
     fail();
   }
 
-  @Override public void priority(int streamId, int streamDependency, int weight,
-      boolean exclusive) {
+  @Override public void priority(final int streamId, final int streamDependency, final int weight,
+      final boolean exclusive) {
     fail();
   }
 
   @Override
-  public void pushPromise(int streamId, int associatedStreamId, List<Header> headerBlock) {
+  public void pushPromise(final int streamId, final int associatedStreamId, final List<Header> headerBlock) {
     fail();
   }
 
-  @Override public void alternateService(int streamId, String origin, ByteString protocol,
-      String host, int port, long maxAge) {
+  @Override public void alternateService(final int streamId, final String origin, final ByteString protocol,
+      final String host, final int port, final long maxAge) {
     fail();
   }
 }

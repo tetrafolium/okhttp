@@ -45,7 +45,7 @@ public final class WholeOperationTimeoutTest {
   private final OkHttpClient client = clientTestRule.newClient();
 
   @BeforeEach
-  public void setUp(MockWebServer server) throws Exception {
+  public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
   }
 
@@ -103,12 +103,12 @@ public final class WholeOperationTimeoutTest {
     Call call = client.newCall(request);
     call.timeout().timeout(250, TimeUnit.MILLISECONDS);
     call.enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         exceptionRef.set(e);
         latch.countDown();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         response.close();
         latch.countDown();
       }
@@ -152,12 +152,12 @@ public final class WholeOperationTimeoutTest {
     Call call = client.newCall(request);
     call.timeout().timeout(250, TimeUnit.MILLISECONDS);
     call.enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         exceptionRef.set(e);
         latch.countDown();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         response.close();
         latch.countDown();
       }
@@ -203,11 +203,11 @@ public final class WholeOperationTimeoutTest {
     Call call = client.newCall(request);
     call.timeout().timeout(250, TimeUnit.MILLISECONDS);
     call.enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         latch.countDown();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         try {
           Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -319,7 +319,7 @@ public final class WholeOperationTimeoutTest {
         return MediaType.parse("text/plain");
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         try {
           sink.writeUtf8("abc");
           sink.flush();

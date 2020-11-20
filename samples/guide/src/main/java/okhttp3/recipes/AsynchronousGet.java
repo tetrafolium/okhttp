@@ -33,11 +33,11 @@ public final class AsynchronousGet {
         .build();
 
     client.newCall(request).enqueue(new Callback() {
-      @Override public void onFailure(Call call, IOException e) {
+      @Override public void onFailure(final Call call, final IOException e) {
         e.printStackTrace();
       }
 
-      @Override public void onResponse(Call call, Response response) throws IOException {
+      @Override public void onResponse(final Call call, final Response response) throws IOException {
         try (ResponseBody responseBody = response.body()) {
           if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
@@ -52,7 +52,7 @@ public final class AsynchronousGet {
     });
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new AsynchronousGet().run();
   }
 }

@@ -35,7 +35,7 @@ import javax.net.ssl.SSLSocket;
 public abstract class DelegatingSSLSocket extends SSLSocket {
   protected final SSLSocket delegate;
 
-  public DelegatingSSLSocket(SSLSocket delegate) {
+  public DelegatingSSLSocket(final SSLSocket delegate) {
     this.delegate = delegate;
   }
 
@@ -55,7 +55,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getEnabledCipherSuites();
   }
 
-  @Override public void setEnabledCipherSuites(String[] suites) {
+  @Override public void setEnabledCipherSuites(final String[] suites) {
     delegate.setEnabledCipherSuites(suites);
   }
 
@@ -67,7 +67,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getEnabledProtocols();
   }
 
-  @Override public void setEnabledProtocols(String[] protocols) {
+  @Override public void setEnabledProtocols(final String[] protocols) {
     delegate.setEnabledProtocols(protocols);
   }
 
@@ -75,11 +75,11 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getSession();
   }
 
-  @Override public void addHandshakeCompletedListener(HandshakeCompletedListener listener) {
+  @Override public void addHandshakeCompletedListener(final HandshakeCompletedListener listener) {
     delegate.addHandshakeCompletedListener(listener);
   }
 
-  @Override public void removeHandshakeCompletedListener(HandshakeCompletedListener listener) {
+  @Override public void removeHandshakeCompletedListener(final HandshakeCompletedListener listener) {
     delegate.removeHandshakeCompletedListener(listener);
   }
 
@@ -87,7 +87,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     delegate.startHandshake();
   }
 
-  @Override public void setUseClientMode(boolean mode) {
+  @Override public void setUseClientMode(final boolean mode) {
     delegate.setUseClientMode(mode);
   }
 
@@ -95,11 +95,11 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getUseClientMode();
   }
 
-  @Override public void setNeedClientAuth(boolean need) {
+  @Override public void setNeedClientAuth(final boolean need) {
     delegate.setNeedClientAuth(need);
   }
 
-  @Override public void setWantClientAuth(boolean want) {
+  @Override public void setWantClientAuth(final boolean want) {
     delegate.setWantClientAuth(want);
   }
 
@@ -111,7 +111,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getWantClientAuth();
   }
 
-  @Override public void setEnableSessionCreation(boolean flag) {
+  @Override public void setEnableSessionCreation(final boolean flag) {
     delegate.setEnableSessionCreation(flag);
   }
 
@@ -123,7 +123,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getSSLParameters();
   }
 
-  @Override public void setSSLParameters(SSLParameters p) {
+  @Override public void setSSLParameters(final SSLParameters p) {
     delegate.setSSLParameters(p);
   }
 
@@ -179,27 +179,27 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getTcpNoDelay();
   }
 
-  @Override public void setKeepAlive(boolean keepAlive) throws SocketException {
+  @Override public void setKeepAlive(final boolean keepAlive) throws SocketException {
     delegate.setKeepAlive(keepAlive);
   }
 
-  @Override public void setSendBufferSize(int size) throws SocketException {
+  @Override public void setSendBufferSize(final int size) throws SocketException {
     delegate.setSendBufferSize(size);
   }
 
-  @Override public void setReceiveBufferSize(int size) throws SocketException {
+  @Override public void setReceiveBufferSize(final int size) throws SocketException {
     delegate.setReceiveBufferSize(size);
   }
 
-  @Override public void setSoLinger(boolean on, int timeout) throws SocketException {
+  @Override public void setSoLinger(final boolean on, final int timeout) throws SocketException {
     delegate.setSoLinger(on, timeout);
   }
 
-  @Override public void setSoTimeout(int timeout) throws SocketException {
+  @Override public void setSoTimeout(final int timeout) throws SocketException {
     delegate.setSoTimeout(timeout);
   }
 
-  @Override public void setTcpNoDelay(boolean on) throws SocketException {
+  @Override public void setTcpNoDelay(final boolean on) throws SocketException {
     delegate.setTcpNoDelay(on);
   }
 
@@ -227,15 +227,15 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.isClosed();
   }
 
-  @Override public void bind(SocketAddress localAddr) throws IOException {
+  @Override public void bind(final SocketAddress localAddr) throws IOException {
     delegate.bind(localAddr);
   }
 
-  @Override public void connect(SocketAddress remoteAddr) throws IOException {
+  @Override public void connect(final SocketAddress remoteAddr) throws IOException {
     delegate.connect(remoteAddr);
   }
 
-  @Override public void connect(SocketAddress remoteAddr, int timeout) throws IOException {
+  @Override public void connect(final SocketAddress remoteAddr, final int timeout) throws IOException {
     delegate.connect(remoteAddr, timeout);
   }
 
@@ -247,7 +247,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.isOutputShutdown();
   }
 
-  @Override public void setReuseAddress(boolean reuse) throws SocketException {
+  @Override public void setReuseAddress(final boolean reuse) throws SocketException {
     delegate.setReuseAddress(reuse);
   }
 
@@ -255,7 +255,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getReuseAddress();
   }
 
-  @Override public void setOOBInline(boolean oobinline) throws SocketException {
+  @Override public void setOOBInline(final boolean oobinline) throws SocketException {
     delegate.setOOBInline(oobinline);
   }
 
@@ -263,7 +263,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getOOBInline();
   }
 
-  @Override public void setTrafficClass(int value) throws SocketException {
+  @Override public void setTrafficClass(final int value) throws SocketException {
     delegate.setTrafficClass(value);
   }
 
@@ -271,7 +271,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getTrafficClass();
   }
 
-  @Override public void sendUrgentData(int value) throws IOException {
+  @Override public void sendUrgentData(final int value) throws IOException {
     delegate.sendUrgentData(value);
   }
 
@@ -279,7 +279,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
     return delegate.getChannel();
   }
 
-  @Override public void setPerformancePreferences(int connectionTime, int latency, int bandwidth) {
+  @Override public void setPerformancePreferences(final int connectionTime, final int latency, final int bandwidth) {
     delegate.setPerformancePreferences(connectionTime, latency, bandwidth);
   }
 
@@ -313,7 +313,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
   }
 
   @SuppressWarnings("MissingOverride") // Can only override with JDK 9+
-  public <T> Socket setOption(SocketOption<T> name, T value) throws IOException {
+  public <T> Socket setOption(final SocketOption<T> name, final T value) throws IOException {
     try {
       SSLSocket.class.getMethod("setOption", SocketOption.class, Object.class).invoke(delegate, name, value);
       return this;
@@ -326,7 +326,7 @@ public abstract class DelegatingSSLSocket extends SSLSocket {
       "MissingOverride", // Can only override with JDK 9+
       "unchecked" // Using reflection to delegate.
   })
-  public <T> T getOption(SocketOption<T> name) throws IOException {
+  public <T> T getOption(final SocketOption<T> name) throws IOException {
     try {
       return (T) SSLSocket.class.getMethod("getOption", SocketOption.class).invoke(delegate, name);
     } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

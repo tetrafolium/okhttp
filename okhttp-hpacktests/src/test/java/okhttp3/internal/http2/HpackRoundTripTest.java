@@ -46,7 +46,7 @@ public class HpackRoundTripTest extends HpackDecodeTestBase {
 
   @ParameterizedTest
   @ArgumentsSource(StoriesTestProvider.class)
-  public void testRoundTrip(Story story) throws Exception {
+  public void testRoundTrip(final Story story) throws Exception {
     Assumptions.assumeFalse(story == Story.MISSING, "Test stories missing, checkout git submodule");
 
     Story story2 = story.clone();

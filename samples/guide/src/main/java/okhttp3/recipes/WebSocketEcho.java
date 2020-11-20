@@ -23,31 +23,31 @@ public final class WebSocketEcho extends WebSocketListener {
     client.dispatcher().executorService().shutdown();
   }
 
-  @Override public void onOpen(WebSocket webSocket, Response response) {
+  @Override public void onOpen(final WebSocket webSocket, final Response response) {
     webSocket.send("Hello...");
     webSocket.send("...World!");
     webSocket.send(ByteString.decodeHex("deadbeef"));
     webSocket.close(1000, "Goodbye, World!");
   }
 
-  @Override public void onMessage(WebSocket webSocket, String text) {
+  @Override public void onMessage(final WebSocket webSocket, final String text) {
     System.out.println("MESSAGE: " + text);
   }
 
-  @Override public void onMessage(WebSocket webSocket, ByteString bytes) {
+  @Override public void onMessage(final WebSocket webSocket, final ByteString bytes) {
     System.out.println("MESSAGE: " + bytes.hex());
   }
 
-  @Override public void onClosing(WebSocket webSocket, int code, String reason) {
+  @Override public void onClosing(final WebSocket webSocket, final int code, final String reason) {
     webSocket.close(1000, null);
     System.out.println("CLOSE: " + code + " " + reason);
   }
 
-  @Override public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+  @Override public void onFailure(final WebSocket webSocket, final Throwable t, final Response response) {
     t.printStackTrace();
   }
 
-  public static void main(String... args) {
+  public static void main(final String... args) {
     new WebSocketEcho().run();
   }
 }

@@ -264,7 +264,7 @@ public final class PublicSuffixDatabaseTest {
     checkPublicSuffix("xn--fiqs8s", null);
   }
 
-  private void checkPublicSuffix(String domain, String registrablePart) {
+  private void checkPublicSuffix(final String domain, final String registrablePart) {
     if (domain == null) {
       try {
         publicSuffixDatabase.getEffectiveTldPlusOne(null);

@@ -40,7 +40,7 @@ public final class TestLogHandler implements TestRule, BeforeEachCallback, After
   private final BlockingQueue<String> logs = new LinkedBlockingQueue<>();
 
   private final Handler handler = new Handler() {
-    @Override public void publish(LogRecord logRecord) {
+    @Override public void publish(final LogRecord logRecord) {
       logs.add(logRecord.getLevel() + ": " + logRecord.getMessage());
     }
 
@@ -53,22 +53,22 @@ public final class TestLogHandler implements TestRule, BeforeEachCallback, After
 
   private Level previousLevel;
 
-  public TestLogHandler(Class<?> loggerName) {
+  public TestLogHandler(final Class<?> loggerName) {
     logger = Logger.getLogger(loggerName.getName());
   }
 
-  @Override public void beforeEach(ExtensionContext context) {
+  @Override public void beforeEach(final ExtensionContext context) {
     previousLevel = logger.getLevel();
     logger.addHandler(handler);
     logger.setLevel(Level.FINEST);
   }
 
-  @Override public void afterEach(ExtensionContext context) {
+  @Override public void afterEach(final ExtensionContext context) {
     logger.setLevel(previousLevel);
     logger.removeHandler(handler);
   }
 
-  @Override public Statement apply(Statement base, Description description) {
+  @Override public Statement apply(final Statement base, final Description description) {
     return new Statement() {
       @Override public void evaluate() throws Throwable {
         beforeEach(null);

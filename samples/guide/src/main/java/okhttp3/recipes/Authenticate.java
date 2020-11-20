@@ -29,7 +29,7 @@ public final class Authenticate {
   public Authenticate() {
     client = new OkHttpClient.Builder()
         .authenticator(new Authenticator() {
-          @Override public Request authenticate(Route route, Response response) throws IOException {
+          @Override public Request authenticate(final Route route, final Response response) throws IOException {
             if (response.request().header("Authorization") != null) {
               return null; // Give up, we've already attempted to authenticate.
             }
@@ -57,7 +57,7 @@ public final class Authenticate {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new Authenticate().run();
   }
 }

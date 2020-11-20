@@ -253,7 +253,7 @@ public final class CertificateChainCleanerTest {
   }
 
   /** Returns a chain starting at the leaf certificate and progressing to the root. */
-  private List<HeldCertificate> chainOfLength(int length) {
+  private List<HeldCertificate> chainOfLength(final int length) {
     List<HeldCertificate> result = new ArrayList<>();
     for (int i = 1; i <= length; i++) {
       result.add(0, new HeldCertificate.Builder()
@@ -264,7 +264,7 @@ public final class CertificateChainCleanerTest {
     return result;
   }
 
-  private List<Certificate> list(HeldCertificate... heldCertificates) {
+  private List<Certificate> list(final HeldCertificate... heldCertificates) {
     List<Certificate> result = new ArrayList<>();
     for (HeldCertificate heldCertificate : heldCertificates) {
       result.add(heldCertificate.certificate());

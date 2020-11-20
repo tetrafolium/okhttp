@@ -75,12 +75,12 @@ public final class HttpLoggingInterceptorTest {
 
   private Interceptor extraNetworkInterceptor = null;
 
-  private void setLevel(Level level) {
+  private void setLevel(final Level level) {
     networkInterceptor.setLevel(level);
     applicationInterceptor.setLevel(level);
   }
 
-  @BeforeEach public void setUp(MockWebServer server) {
+  @BeforeEach public void setUp(final MockWebServer server) {
     this.server = server;
 
     client = new OkHttpClient.Builder()
@@ -305,7 +305,7 @@ public final class HttpLoggingInterceptorTest {
         return PLAIN;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("Hi!");
       }
     };
@@ -445,7 +445,7 @@ public final class HttpLoggingInterceptorTest {
     bodyGetNoBody(205);
   }
 
-  private void bodyGetNoBody(int code) throws IOException {
+  private void bodyGetNoBody(final int code) throws IOException {
     server.enqueue(new MockResponse()
         .setStatus("HTTP/1.1 " + code + " No Content"));
     Response response = client.newCall(request().build()).execute();
@@ -741,7 +741,8 @@ public final class HttpLoggingInterceptorTest {
   @Test public void connectFail() throws IOException {
     setLevel(Level.BASIC);
     client = new OkHttpClient.Builder()
-        .dns(hostname -> { throw new UnknownHostException("reason"); })
+        .dns(hostname -> {
+            throw new UnknownHostException("reason"); })
         .addInterceptor(applicationInterceptor)
         .build();
 
@@ -854,7 +855,7 @@ public final class HttpLoggingInterceptorTest {
         return null;
       }
 
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         sink.writeUtf8("Hello request!");
         sink.close();
       }
@@ -897,7 +898,7 @@ public final class HttpLoggingInterceptorTest {
       }
 
       int counter = 0;
-      @Override public void writeTo(BufferedSink sink) throws IOException {
+      @Override public void writeTo(final BufferedSink sink) throws IOException {
         counter++;
         assertThat(counter).isLessThanOrEqualTo(1);
 
@@ -936,14 +937,14 @@ public final class HttpLoggingInterceptorTest {
     private final List<String> logs = new ArrayList<>();
     private int index;
 
-    LogRecorder assertLogEqual(String expected) {
+    LogRecorder assertLogEqual(final String expected) {
       assertThat(index).overridingErrorMessage("No more messages found").isLessThan(logs.size());
       String actual = logs.get(index++);
       assertThat(actual).isEqualTo(expected);
       return this;
     }
 
-    LogRecorder assertLogMatch(String pattern) {
+    LogRecorder assertLogMatch(final String pattern) {
       assertThat(index).overridingErrorMessage("No more messages found").isLessThan(logs.size());
       String actual = logs.get(index++);
       assertThat(actual).matches(Pattern.compile(pattern, Pattern.DOTALL));
@@ -955,7 +956,7 @@ public final class HttpLoggingInterceptorTest {
           "More messages remain: " + logs.subList(index, logs.size())).isEqualTo(index);
     }
 
-    @Override public void log(String message) {
+    @Override public void log(final String message) {
       logs.add(message);
     }
   }

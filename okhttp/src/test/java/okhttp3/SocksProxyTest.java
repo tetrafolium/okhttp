@@ -39,7 +39,7 @@ public final class SocksProxyTest {
   private MockWebServer server;
   private final SocksProxy socksProxy = new SocksProxy();
 
-  @BeforeEach public void setUp(MockWebServer server) throws Exception {
+  @BeforeEach public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
     socksProxy.play();
   }
@@ -72,11 +72,11 @@ public final class SocksProxyTest {
     server.enqueue(new MockResponse().setBody("abc"));
 
     ProxySelector proxySelector = new ProxySelector() {
-      @Override public List<Proxy> select(URI uri) {
+      @Override public List<Proxy> select(final URI uri) {
         return Collections.singletonList(socksProxy.proxy());
       }
 
-      @Override public void connectFailed(URI uri, SocketAddress socketAddress, IOException e) {
+      @Override public void connectFailed(final URI uri, final SocketAddress socketAddress, final IOException e) {
         throw new AssertionError();
       }
     };

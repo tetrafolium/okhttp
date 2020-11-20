@@ -210,13 +210,13 @@ public final class RouteSelectorTest {
 
   @Test public void proxySelectorReturnsNull() throws Exception {
     ProxySelector nullProxySelector = new ProxySelector() {
-      @Override public List<Proxy> select(URI uri) {
+      @Override public List<Proxy> select(final URI uri) {
         assertThat(uri.getHost()).isEqualTo(uriHost);
         return null;
       }
 
       @Override public void connectFailed(
-          URI uri, SocketAddress socketAddress, IOException e) {
+          final URI uri, final SocketAddress socketAddress, final IOException e) {
         throw new AssertionError();
       }
     };
@@ -476,8 +476,8 @@ public final class RouteSelectorTest {
             : "Route{host:1234}");
   }
 
-  private void assertRoute(Route route, Address address, Proxy proxy, InetAddress socketAddress,
-      int socketPort) {
+  private void assertRoute(final Route route, final Address address, final Proxy proxy, final InetAddress socketAddress,
+      final int socketPort) {
     assertThat(route.address()).isEqualTo(address);
     assertThat(route.proxy()).isEqualTo(proxy);
     assertThat(route.socketAddress().getAddress()).isEqualTo(socketAddress);

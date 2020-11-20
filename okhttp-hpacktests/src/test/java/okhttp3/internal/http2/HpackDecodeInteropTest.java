@@ -29,7 +29,7 @@ public class HpackDecodeInteropTest extends HpackDecodeTestBase {
 
   @ParameterizedTest
   @ArgumentsSource(StoriesTestProvider.class)
-  public void testGoodDecoderInterop(Story story) throws Exception {
+  public void testGoodDecoderInterop(final Story story) throws Exception {
     Assumptions.assumeFalse(story == Story.MISSING, "Test stories missing, checkout git submodule");
 
     testDecoder(story);

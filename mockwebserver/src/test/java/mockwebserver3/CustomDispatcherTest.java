@@ -33,7 +33,7 @@ public class CustomDispatcherTest {
   private MockWebServer mockWebServer;
 
   @BeforeEach
-  public void setUp(MockWebServer mockWebServer) throws Exception {
+  public void setUp(final MockWebServer mockWebServer) throws Exception {
     this.mockWebServer = mockWebServer;
   }
 
@@ -41,7 +41,7 @@ public class CustomDispatcherTest {
     final List<RecordedRequest> requestsMade = new ArrayList<>();
     final Dispatcher dispatcher = new Dispatcher() {
       @Override
-      public MockResponse dispatch(RecordedRequest request) {
+      public MockResponse dispatch(final RecordedRequest request) {
         requestsMade.add(request);
         return new MockResponse();
       }
@@ -63,7 +63,7 @@ public class CustomDispatcherTest {
     final CountDownLatch latch = new CountDownLatch(1);
     final Dispatcher dispatcher = new Dispatcher() {
       @Override
-      public MockResponse dispatch(RecordedRequest request) throws InterruptedException {
+      public MockResponse dispatch(final RecordedRequest request) throws InterruptedException {
         if (request.getPath().equals(firstRequest)) {
           latch.await();
         }
@@ -88,7 +88,7 @@ public class CustomDispatcherTest {
     assertThat(secondResponseCode.get()).isEqualTo(200);
   }
 
-  private Thread buildRequestThread(String path, AtomicInteger responseCode) {
+  private Thread buildRequestThread(final String path, final AtomicInteger responseCode) {
     return new Thread(() -> {
       URL url = mockWebServer.url(path).url();
       HttpURLConnection conn;

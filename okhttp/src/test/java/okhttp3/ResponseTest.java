@@ -76,7 +76,7 @@ public final class ResponseTest {
    * Returns a new response body that refuses to be read once it has been closed. This is true of
    * most {@link BufferedSource} instances, but not of {@link Buffer}.
    */
-  private ResponseBody responseBody(String content) {
+  private ResponseBody responseBody(final String content) {
     final Buffer data = new Buffer().writeUtf8(content);
 
     Source source = new Source() {
@@ -86,7 +86,7 @@ public final class ResponseTest {
         closed = true;
       }
 
-      @Override public long read(Buffer sink, long byteCount) throws IOException {
+      @Override public long read(final Buffer sink, final long byteCount) throws IOException {
         if (closed) throw new IllegalStateException();
         return data.read(sink, byteCount);
       }
@@ -99,11 +99,11 @@ public final class ResponseTest {
     return ResponseBody.create(Okio.buffer(source), null, -1);
   }
 
-  private Response newResponse(ResponseBody responseBody) {
+  private Response newResponse(final ResponseBody responseBody) {
     return newResponse(responseBody, 200);
   }
 
-  private Response newResponse(ResponseBody responseBody, int code) {
+  private Response newResponse(final ResponseBody responseBody, final int code) {
     return new Response.Builder()
         .request(new Request.Builder()
             .url("https://example.com/")

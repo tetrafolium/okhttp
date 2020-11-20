@@ -42,7 +42,7 @@ public final class OAuthSessionFactory extends Dispatcher implements Closeable {
   /** Guarded by this. */
   private Map<ByteString, Listener> listeners = new LinkedHashMap<>();
 
-  public OAuthSessionFactory(SlackApi slackApi) {
+  public OAuthSessionFactory(final SlackApi slackApi) {
     this.slackApi = slackApi;
   }
 
@@ -54,7 +54,7 @@ public final class OAuthSessionFactory extends Dispatcher implements Closeable {
     mockWebServer.start(slackApi.port);
   }
 
-  public HttpUrl newAuthorizeUrl(String scopes, String team, Listener listener) {
+  public HttpUrl newAuthorizeUrl(final String scopes, final String team, final Listener listener) {
     if (mockWebServer == null) throw new IllegalStateException();
 
     ByteString state = randomToken();
@@ -76,7 +76,7 @@ public final class OAuthSessionFactory extends Dispatcher implements Closeable {
   }
 
   /** When the browser hits the redirect URL, use the provided code to ask Slack for a session. */
-  @Override public MockResponse dispatch(RecordedRequest request) {
+  @Override public MockResponse dispatch(final RecordedRequest request) {
     HttpUrl requestUrl = mockWebServer.url(request.getPath());
     String code = requestUrl.queryParameter("code");
     String stateString = requestUrl.queryParameter("state");

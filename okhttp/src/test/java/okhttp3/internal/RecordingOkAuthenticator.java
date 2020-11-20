@@ -31,7 +31,7 @@ public final class RecordingOkAuthenticator implements Authenticator {
   public @Nullable String credential;
   public @Nullable String scheme;
 
-  public RecordingOkAuthenticator(@Nullable String credential, @Nullable String scheme) {
+  public RecordingOkAuthenticator(final @Nullable String credential, final @Nullable String scheme) {
     this.credential = credential;
     this.scheme = scheme;
   }
@@ -46,7 +46,7 @@ public final class RecordingOkAuthenticator implements Authenticator {
     return routes.get(0);
   }
 
-  @Override public Request authenticate(Route route, Response response) throws IOException {
+  @Override public Request authenticate(final Route route, final Response response) throws IOException {
     if (route == null) throw new NullPointerException("route == null");
     if (response == null) throw new NullPointerException("response == null");
 
@@ -61,7 +61,7 @@ public final class RecordingOkAuthenticator implements Authenticator {
         .build();
   }
 
-  private boolean schemeMatches(Response response) {
+  private boolean schemeMatches(final Response response) {
     if (scheme == null) return true;
 
     for (Challenge challenge : response.challenges()) {

@@ -59,7 +59,7 @@ public final class CustomCipherSuites {
     X509TrustManager trustManager = defaultTrustManager();
     SSLSocketFactory sslSocketFactory = defaultSslSocketFactory(trustManager);
     SSLSocketFactory customSslSocketFactory = new DelegatingSSLSocketFactory(sslSocketFactory) {
-      @Override protected SSLSocket configureSocket(SSLSocket socket) throws IOException {
+      @Override protected SSLSocket configureSocket(final SSLSocket socket) throws IOException {
         socket.setEnabledCipherSuites(javaNames(spec.cipherSuites()));
         return socket;
       }
@@ -75,10 +75,10 @@ public final class CustomCipherSuites {
    * Returns the VM's default SSL socket factory, using {@code trustManager} for trusted root
    * certificates.
    */
-  private SSLSocketFactory defaultSslSocketFactory(X509TrustManager trustManager)
+  private SSLSocketFactory defaultSslSocketFactory(final X509TrustManager trustManager)
       throws NoSuchAlgorithmException, KeyManagementException {
     SSLContext sslContext = SSLContext.getInstance("TLS");
-    sslContext.init(null, new TrustManager[] { trustManager }, null);
+    sslContext.init(null, new TrustManager[] {trustManager }, null);
 
     return sslContext.getSocketFactory();
   }
@@ -96,7 +96,7 @@ public final class CustomCipherSuites {
     return (X509TrustManager) trustManagers[0];
   }
 
-  private String[] javaNames(List<CipherSuite> cipherSuites) {
+  private String[] javaNames(final List<CipherSuite> cipherSuites) {
     String[] result = new String[cipherSuites.size()];
     for (int i = 0; i < result.length; i++) {
       result[i] = cipherSuites.get(i).javaName();
@@ -111,7 +111,7 @@ public final class CustomCipherSuites {
   static class DelegatingSSLSocketFactory extends SSLSocketFactory {
     protected final SSLSocketFactory delegate;
 
-    DelegatingSSLSocketFactory(SSLSocketFactory delegate) {
+    DelegatingSSLSocketFactory(final SSLSocketFactory delegate) {
       this.delegate = delegate;
     }
 
@@ -124,30 +124,30 @@ public final class CustomCipherSuites {
     }
 
     @Override public Socket createSocket(
-        Socket socket, String host, int port, boolean autoClose) throws IOException {
+        final Socket socket, final String host, final int port, final boolean autoClose) throws IOException {
       return configureSocket((SSLSocket) delegate.createSocket(socket, host, port, autoClose));
     }
 
-    @Override public Socket createSocket(String host, int port) throws IOException {
+    @Override public Socket createSocket(final String host, final int port) throws IOException {
       return configureSocket((SSLSocket) delegate.createSocket(host, port));
     }
 
     @Override public Socket createSocket(
-        String host, int port, InetAddress localHost, int localPort) throws IOException {
+        final String host, final int port, final InetAddress localHost, final int localPort) throws IOException {
       return configureSocket((SSLSocket) delegate.createSocket(host, port, localHost, localPort));
     }
 
-    @Override public Socket createSocket(InetAddress host, int port) throws IOException {
+    @Override public Socket createSocket(final InetAddress host, final int port) throws IOException {
       return configureSocket((SSLSocket) delegate.createSocket(host, port));
     }
 
     @Override public Socket createSocket(
-        InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+        final InetAddress address, final int port, final InetAddress localAddress, final int localPort) throws IOException {
       return configureSocket((SSLSocket) delegate.createSocket(
           address, port, localAddress, localPort));
     }
 
-    protected SSLSocket configureSocket(SSLSocket socket) throws IOException {
+    protected SSLSocket configureSocket(final SSLSocket socket) throws IOException {
       return socket;
     }
   }
@@ -165,7 +165,7 @@ public final class CustomCipherSuites {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new CustomCipherSuites().run();
   }
 }

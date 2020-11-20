@@ -69,7 +69,7 @@ public final class ClientAuthTest {
   private HeldCertificate clientCert;
 
   @BeforeEach
-  public void setUp(MockWebServer server) {
+  public void setUp(final MockWebServer server) {
     this.server = server;
 
     platform.assumeNotOpenJSSE();
@@ -321,7 +321,7 @@ public final class ClientAuthTest {
   }
 
   private OkHttpClient buildClient(
-      HeldCertificate heldCertificate, X509Certificate... intermediates) {
+      final HeldCertificate heldCertificate, final X509Certificate... intermediates) {
     HandshakeCertificates.Builder builder = new HandshakeCertificates.Builder()
         .addTrustedCertificate(serverRootCa.certificate());
 

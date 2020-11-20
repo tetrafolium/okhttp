@@ -39,12 +39,12 @@ public class RecordedRequestTest {
     private final InetAddress remoteAddress;
     private final int localPort;
 
-    private FakeSocket(InetAddress inetAddress, int localPort) {
+    private FakeSocket(final InetAddress inetAddress, final int localPort) {
       this(inetAddress, localPort, inetAddress, 1234);
     }
 
-    private FakeSocket(InetAddress localAddress, int localPort, InetAddress remoteAddress,
-        int remotePort) {
+    private FakeSocket(final InetAddress localAddress, final int localPort, final InetAddress remoteAddress,
+        final int remotePort) {
       this.localAddress = localAddress;
       this.localPort = localPort;
       this.remoteAddress = remoteAddress;

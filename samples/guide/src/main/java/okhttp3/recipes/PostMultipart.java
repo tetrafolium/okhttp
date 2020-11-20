@@ -58,7 +58,7 @@ public final class PostMultipart {
     }
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     new PostMultipart().run();
   }
 }

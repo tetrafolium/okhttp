@@ -110,21 +110,21 @@ public class ConnectionSpecSelectorTest {
   }
 
   private static ConnectionSpecSelector createConnectionSpecSelector(
-      ConnectionSpec... connectionSpecs) {
+      final ConnectionSpec... connectionSpecs) {
     return new ConnectionSpecSelector(asList(connectionSpecs));
   }
 
-  private SSLSocket createSocketWithEnabledProtocols(TlsVersion... tlsVersions) throws IOException {
+  private SSLSocket createSocketWithEnabledProtocols(final TlsVersion... tlsVersions) throws IOException {
     SSLSocket socket = (SSLSocket) handshakeCertificates.sslSocketFactory().createSocket();
     socket.setEnabledProtocols(javaNames(tlsVersions));
     return socket;
   }
 
-  private static void assertEnabledProtocols(SSLSocket socket, TlsVersion... required) {
+  private static void assertEnabledProtocols(final SSLSocket socket, final TlsVersion... required) {
     assertThat(socket.getEnabledProtocols()).containsExactlyInAnyOrder(javaNames(required));
   }
 
-  private static String[] javaNames(TlsVersion... tlsVersions) {
+  private static String[] javaNames(final TlsVersion... tlsVersions) {
     String[] protocols = new String[tlsVersions.length];
     for (int i = 0; i < tlsVersions.length; i++) {
       protocols[i] = tlsVersions[i].javaName();

@@ -29,7 +29,7 @@ public class DelegatingSSLSocketFactory extends SSLSocketFactory {
 
   private final SSLSocketFactory delegate;
 
-  public DelegatingSSLSocketFactory(SSLSocketFactory delegate) {
+  public DelegatingSSLSocketFactory(final SSLSocketFactory delegate) {
     this.delegate = delegate;
   }
 
@@ -38,24 +38,24 @@ public class DelegatingSSLSocketFactory extends SSLSocketFactory {
     return configureSocket(sslSocket);
   }
 
-  @Override public SSLSocket createSocket(String host, int port) throws IOException {
+  @Override public SSLSocket createSocket(final String host, final int port) throws IOException {
     SSLSocket sslSocket = (SSLSocket) delegate.createSocket(host, port);
     return configureSocket(sslSocket);
   }
 
   @Override public SSLSocket createSocket(
-      String host, int port, InetAddress localAddress, int localPort) throws IOException {
+      final String host, final int port, final InetAddress localAddress, final int localPort) throws IOException {
     SSLSocket sslSocket = (SSLSocket) delegate.createSocket(host, port, localAddress, localPort);
     return configureSocket(sslSocket);
   }
 
-  @Override public SSLSocket createSocket(InetAddress host, int port) throws IOException {
+  @Override public SSLSocket createSocket(final InetAddress host, final int port) throws IOException {
     SSLSocket sslSocket = (SSLSocket) delegate.createSocket(host, port);
     return configureSocket(sslSocket);
   }
 
   @Override public SSLSocket createSocket(
-      InetAddress host, int port, InetAddress localAddress, int localPort) throws IOException {
+      final InetAddress host, final int port, final InetAddress localAddress, final int localPort) throws IOException {
     SSLSocket sslSocket = (SSLSocket) delegate.createSocket(host, port, localAddress, localPort);
     return configureSocket(sslSocket);
   }
@@ -69,12 +69,12 @@ public class DelegatingSSLSocketFactory extends SSLSocketFactory {
   }
 
   @Override public SSLSocket createSocket(
-      Socket socket, String host, int port, boolean autoClose) throws IOException {
+      final Socket socket, final String host, final int port, final boolean autoClose) throws IOException {
     SSLSocket sslSocket = (SSLSocket) delegate.createSocket(socket, host, port, autoClose);
     return configureSocket(sslSocket);
   }
 
-  protected SSLSocket configureSocket(SSLSocket sslSocket) throws IOException {
+  protected SSLSocket configureSocket(final SSLSocket sslSocket) throws IOException {
     // No-op by default.
     return sslSocket;
   }

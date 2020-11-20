@@ -44,7 +44,7 @@ public final class EventSourceHttpTest {
   private final EventSourceRecorder listener = new EventSourceRecorder();
   private OkHttpClient client = clientTestRule.newClient();
 
-  @BeforeEach public void before(MockWebServer server) {
+  @BeforeEach public void before(final MockWebServer server) {
     this.server = server;
   }
 
@@ -149,7 +149,7 @@ public final class EventSourceHttpTest {
     return newEventSource(null);
   }
 
-  private EventSource newEventSource(@Nullable String accept) {
+  private EventSource newEventSource(final @Nullable String accept) {
     Request.Builder builder = new Request.Builder()
         .url(server.url("/"));
 

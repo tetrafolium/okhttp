@@ -55,54 +55,54 @@ class UrlComponentEncodingTester {
         .override(Encoding.PERCENT, UNICODE_2, UNICODE_3, UNICODE_4);
   }
 
-  private UrlComponentEncodingTester allAscii(Encoding encoding) {
+  private UrlComponentEncodingTester allAscii(final Encoding encoding) {
     for (int i = 0; i < 128; i++) {
       encodings.put(i, encoding);
     }
     return this;
   }
 
-  public UrlComponentEncodingTester override(Encoding encoding, int... codePoints) {
+  public UrlComponentEncodingTester override(final Encoding encoding, final int... codePoints) {
     for (int codePoint : codePoints) {
       encodings.put(codePoint, encoding);
     }
     return this;
   }
 
-  public UrlComponentEncodingTester nonPrintableAscii(Encoding encoding) {
-    encodings.put(       0x0, encoding); // Null character
-    encodings.put(       0x1, encoding); // Start of Header
-    encodings.put(       0x2, encoding); // Start of Text
-    encodings.put(       0x3, encoding); // End of Text
-    encodings.put(       0x4, encoding); // End of Transmission
-    encodings.put(       0x5, encoding); // Enquiry
-    encodings.put(       0x6, encoding); // Acknowledgment
-    encodings.put(       0x7, encoding); // Bell
+  public UrlComponentEncodingTester nonPrintableAscii(final Encoding encoding) {
+    encodings.put(0x0, encoding); // Null character
+    encodings.put(0x1, encoding); // Start of Header
+    encodings.put(0x2, encoding); // Start of Text
+    encodings.put(0x3, encoding); // End of Text
+    encodings.put(0x4, encoding); // End of Transmission
+    encodings.put(0x5, encoding); // Enquiry
+    encodings.put(0x6, encoding); // Acknowledgment
+    encodings.put(0x7, encoding); // Bell
     encodings.put((int) '\b', encoding); // Backspace
-    encodings.put(       0xb, encoding); // Vertical Tab
-    encodings.put(       0xe, encoding); // Shift Out
-    encodings.put(       0xf, encoding); // Shift In
-    encodings.put(      0x10, encoding); // Data Link Escape
-    encodings.put(      0x11, encoding); // Device Control 1 (oft. XON)
-    encodings.put(      0x12, encoding); // Device Control 2
-    encodings.put(      0x13, encoding); // Device Control 3 (oft. XOFF)
-    encodings.put(      0x14, encoding); // Device Control 4
-    encodings.put(      0x15, encoding); // Negative Acknowledgment
-    encodings.put(      0x16, encoding); // Synchronous idle
-    encodings.put(      0x17, encoding); // End of Transmission Block
-    encodings.put(      0x18, encoding); // Cancel
-    encodings.put(      0x19, encoding); // End of Medium
-    encodings.put(      0x1a, encoding); // Substitute
-    encodings.put(      0x1b, encoding); // Escape
-    encodings.put(      0x1c, encoding); // File Separator
-    encodings.put(      0x1d, encoding); // Group Separator
-    encodings.put(      0x1e, encoding); // Record Separator
-    encodings.put(      0x1f, encoding); // Unit Separator
-    encodings.put(      0x7f, encoding); // Delete
+    encodings.put(0xb, encoding); // Vertical Tab
+    encodings.put(0xe, encoding); // Shift Out
+    encodings.put(0xf, encoding); // Shift In
+    encodings.put(0x10, encoding); // Data Link Escape
+    encodings.put(0x11, encoding); // Device Control 1 (oft. XON)
+    encodings.put(0x12, encoding); // Device Control 2
+    encodings.put(0x13, encoding); // Device Control 3 (oft. XOFF)
+    encodings.put(0x14, encoding); // Device Control 4
+    encodings.put(0x15, encoding); // Negative Acknowledgment
+    encodings.put(0x16, encoding); // Synchronous idle
+    encodings.put(0x17, encoding); // End of Transmission Block
+    encodings.put(0x18, encoding); // Cancel
+    encodings.put(0x19, encoding); // End of Medium
+    encodings.put(0x1a, encoding); // Substitute
+    encodings.put(0x1b, encoding); // Escape
+    encodings.put(0x1c, encoding); // File Separator
+    encodings.put(0x1d, encoding); // Group Separator
+    encodings.put(0x1e, encoding); // Record Separator
+    encodings.put(0x1f, encoding); // Unit Separator
+    encodings.put(0x7f, encoding); // Delete
     return this;
   }
 
-  public UrlComponentEncodingTester nonAscii(Encoding encoding) {
+  public UrlComponentEncodingTester nonAscii(final Encoding encoding) {
     encodings.put(UNICODE_2, encoding);
     encodings.put(UNICODE_3, encoding);
     encodings.put(UNICODE_4, encoding);
@@ -113,7 +113,7 @@ class UrlComponentEncodingTester {
    * Configure code points to be escaped for conversion to {@code java.net.URI}. That class is more
    * strict than the others.
    */
-  public UrlComponentEncodingTester escapeForUri(int... codePoints) {
+  public UrlComponentEncodingTester escapeForUri(final int... codePoints) {
     uriEscapedCodePoints.append(new String(codePoints, 0, codePoints.length));
     return this;
   }
@@ -122,12 +122,12 @@ class UrlComponentEncodingTester {
    * Configure code points to be stripped in conversion to {@code java.net.URI}. That class is more
    * strict than the others.
    */
-  public UrlComponentEncodingTester stripForUri(int... codePoints) {
+  public UrlComponentEncodingTester stripForUri(final int... codePoints) {
     uriStrippedCodePoints.append(new String(codePoints, 0, codePoints.length));
     return this;
   }
 
-  public UrlComponentEncodingTester test(Component component) {
+  public UrlComponentEncodingTester test(final Component component) {
     for (Map.Entry<Integer, Encoding> entry : encodings.entrySet()) {
       Encoding encoding = entry.getValue();
       int codePoint = entry.getKey();
@@ -150,7 +150,7 @@ class UrlComponentEncodingTester {
     return this;
   }
 
-  private void testParseAlreadyEncoded(int codePoint, Encoding encoding, Component component) {
+  private void testParseAlreadyEncoded(final int codePoint, final Encoding encoding, final Component component) {
     String expected = component.canonicalize(encoding.encode(codePoint));
     String urlString = component.urlString(expected);
     HttpUrl url = HttpUrl.get(urlString);
@@ -161,7 +161,7 @@ class UrlComponentEncodingTester {
     }
   }
 
-  private void testEncodeAndDecode(int codePoint, String codePointString, Component component) {
+  private void testEncodeAndDecode(final int codePoint, final String codePointString, final Component component) {
     HttpUrl.Builder builder = HttpUrl.get("http://host/").newBuilder();
     component.set(builder, codePointString);
     HttpUrl url = builder.build();
@@ -173,7 +173,7 @@ class UrlComponentEncodingTester {
   }
 
   private void testParseOriginal(
-      int codePoint, String codePointString, Encoding encoding, Component component) {
+      final int codePoint, final String codePointString, final Encoding encoding, final Component component) {
     String expected = encoding.encode(codePoint);
     if (encoding != Encoding.PERCENT) return;
     String urlString = component.urlString(codePointString);
@@ -186,7 +186,7 @@ class UrlComponentEncodingTester {
     }
   }
 
-  private void testToUrl(int codePoint, Encoding encoding, Component component) {
+  private void testToUrl(final int codePoint, final Encoding encoding, final Component component) {
     String encoded = encoding.encode(codePoint);
     HttpUrl httpUrl = HttpUrl.get(component.urlString(encoded));
     URL javaNetUrl = httpUrl.url();
@@ -195,7 +195,7 @@ class UrlComponentEncodingTester {
     }
   }
 
-  private void testFromUrl(int codePoint, Encoding encoding, Component component) {
+  private void testFromUrl(final int codePoint, final Encoding encoding, final Component component) {
     String encoded = encoding.encode(codePoint);
     HttpUrl httpUrl = HttpUrl.get(component.urlString(encoded));
     HttpUrl toAndFromJavaNetUrl = HttpUrl.get(httpUrl.url());
@@ -205,7 +205,7 @@ class UrlComponentEncodingTester {
   }
 
   private void testUri(
-      int codePoint, String codePointString, Encoding encoding, Component component) {
+      final int codePoint, final String codePointString, final Encoding encoding, final Component component) {
     if (codePoint == '%') return;
 
     String encoded = encoding.encode(codePoint);
@@ -242,7 +242,7 @@ class UrlComponentEncodingTester {
     }
   }
 
-  private void testForbidden(int codePoint, String codePointString, Component component) {
+  private void testForbidden(final int codePoint, final String codePointString, final Component component) {
     HttpUrl.Builder builder = HttpUrl.get("http://host/").newBuilder();
     try {
       component.set(builder, codePointString);
@@ -253,13 +253,13 @@ class UrlComponentEncodingTester {
 
   public enum Encoding {
     IDENTITY {
-      @Override public String encode(int codePoint) {
+      @Override public String encode(final int codePoint) {
         return new String(new int[] {codePoint}, 0, 1);
       }
     },
 
     PERCENT {
-      @Override public String encode(int codePoint) {
+      @Override public String encode(final int codePoint) {
         ByteString utf8 = ByteString.encodeUtf8(IDENTITY.encode(codePoint));
         Buffer percentEncoded = new Buffer();
         for (int i = 0; i < utf8.size(); i++) {
@@ -275,140 +275,140 @@ class UrlComponentEncodingTester {
     /** This code point is special and should not be tested. */
     SKIP;
 
-    public String encode(int codePoint) {
+    public String encode(final int codePoint) {
       throw new UnsupportedOperationException();
     }
   }
 
   public enum Component {
     USER {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://" + value + "@example.com/";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         return url.encodedUsername();
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.username(value);
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         return url.username();
       }
     },
     PASSWORD {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://:" + value + "@example.com/";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         return url.encodedPassword();
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.password(value);
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         return url.password();
       }
     },
     HOST {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://a" + value + "z.com/";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         return get(url);
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.host("a" + value + "z.com");
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         String host = url.host();
         return host.substring(1, host.length() - 5).toLowerCase(Locale.ROOT);
       }
 
-      @Override public String canonicalize(String s) {
+      @Override public String canonicalize(final String s) {
         return s.toLowerCase(Locale.US);
       }
     },
     PATH {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://example.com/a" + value + "z/";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         String path = url.encodedPath();
         return path.substring(2, path.length() - 2);
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.addPathSegment("a" + value + "z");
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         String pathSegment = url.pathSegments().get(0);
         return pathSegment.substring(1, pathSegment.length() - 1);
       }
     },
     QUERY {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://example.com/?a" + value + "z";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         String query = url.encodedQuery();
         return query.substring(1, query.length() - 1);
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.query("a" + value + "z");
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         String query = url.query();
         return query.substring(1, query.length() - 1);
       }
     },
     QUERY_VALUE {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://example.com/?q=a" + value + "z";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         String query = url.encodedQuery();
         return query.substring(3, query.length() - 1);
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.addQueryParameter("q", "a" + value + "z");
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         String value = url.queryParameter("q");
         return value.substring(1, value.length() - 1);
       }
     },
     FRAGMENT {
-      @Override public String urlString(String value) {
+      @Override public String urlString(final String value) {
         return "http://example.com/#a" + value + "z";
       }
 
-      @Override public String encodedValue(HttpUrl url) {
+      @Override public String encodedValue(final HttpUrl url) {
         String fragment = url.encodedFragment();
         return fragment.substring(1, fragment.length() - 1);
       }
 
-      @Override public void set(HttpUrl.Builder builder, String value) {
+      @Override public void set(final HttpUrl.Builder builder, final String value) {
         builder.fragment("a" + value + "z");
       }
 
-      @Override public String get(HttpUrl url) {
+      @Override public String get(final HttpUrl url) {
         String fragment = url.fragment();
         return fragment.substring(1, fragment.length() - 1);
       }
@@ -426,7 +426,7 @@ class UrlComponentEncodingTester {
      * Returns a character equivalent to 's' in this component. This is used to convert hostname
      * characters to lowercase.
      */
-    public String canonicalize(String s) {
+    public String canonicalize(final String s) {
       return s;
     }
   }

@@ -57,7 +57,7 @@ public final class CertificatePinnerChainValidationTest {
   private MockWebServer server;
 
   @BeforeEach
-  public void setup(MockWebServer server) {
+  public void setup(final MockWebServer server) {
     this.server = server;
     platform.assumeNotBouncyCastle();
   }
@@ -347,8 +347,8 @@ public final class CertificatePinnerChainValidationTest {
     }
   }
 
-  private SSLSocketFactory newServerSocketFactory(HeldCertificate heldCertificate,
-      X509Certificate... intermediates) throws GeneralSecurityException {
+  private SSLSocketFactory newServerSocketFactory(final HeldCertificate heldCertificate,
+      final X509Certificate... intermediates) throws GeneralSecurityException {
     // Test setup fails on JDK9
     // java.security.KeyStoreException: Certificate chain is not valid
     // at sun.security.pkcs12.PKCS12KeyStore.setKeyEntry

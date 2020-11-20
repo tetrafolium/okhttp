@@ -30,24 +30,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 public final class EventSourceRecorder extends EventSourceListener {
   private final BlockingQueue<Object> events = new LinkedBlockingDeque<>();
 
-  @Override public void onOpen(EventSource eventSource, Response response) {
+  @Override public void onOpen(final EventSource eventSource, final Response response) {
     Platform.get().log("[ES] onOpen", Platform.INFO, null);
     events.add(new Open(eventSource, response));
   }
 
-  @Override public void onEvent(EventSource eventSource, @Nullable String id, @Nullable String type,
-      String data) {
+  @Override public void onEvent(final EventSource eventSource, final @Nullable String id, final @Nullable String type,
+      final String data) {
     Platform.get().log("[ES] onEvent", Platform.INFO, null);
     events.add(new Event(id, type, data));
   }
 
-  @Override public void onClosed(EventSource eventSource) {
+  @Override public void onClosed(final EventSource eventSource) {
     Platform.get().log("[ES] onClosed", Platform.INFO, null);
     events.add(new Closed());
   }
 
   @Override
-  public void onFailure(EventSource eventSource, @Nullable Throwable t, @Nullable Response response) {
+  public void onFailure(final EventSource eventSource, final @Nullable Throwable t, final @Nullable Response response) {
     Platform.get().log("[ES] onFailure", Platform.INFO, t);
     events.add(new Failure(t, response));
   }
@@ -68,7 +68,7 @@ public final class EventSourceRecorder extends EventSourceListener {
     assertThat(events).isEmpty();
   }
 
-  public void assertEvent(@Nullable String id, @Nullable String type, String data) {
+  public void assertEvent(final @Nullable String id, final @Nullable String type, final String data) {
     Object actual = nextEvent();
     assertThat(actual).isEqualTo(new Event(id, type, data));
   }
@@ -88,7 +88,7 @@ public final class EventSourceRecorder extends EventSourceListener {
     }
   }
 
-  public void assertFailure(@Nullable String message) {
+  public void assertFailure(final @Nullable String message) {
     Object event = nextEvent();
     if (!(event instanceof Failure)) {
       throw new AssertionError("Expected Failure but was " + event);
@@ -104,7 +104,7 @@ public final class EventSourceRecorder extends EventSourceListener {
     final EventSource eventSource;
     final Response response;
 
-    Open(EventSource eventSource, Response response) {
+    Open(final EventSource eventSource, final Response response) {
       this.eventSource = eventSource;
       this.response = response;
     }
@@ -119,7 +119,7 @@ public final class EventSourceRecorder extends EventSourceListener {
     final Response response;
     final String responseBody;
 
-    Failure(Throwable t, Response response) {
+    Failure(final Throwable t, final Response response) {
       this.t = t;
       this.response = response;
       String responseBody = null;

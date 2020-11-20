@@ -25,7 +25,7 @@ import okhttp3.Response;
 import static okhttp3.internal.Util.immutableListOf;
 
 public final class ExternalHttp2Example {
-  public static void main(String[] args) throws Exception {
+  public static void main(final String[] args) throws Exception {
     OkHttpClient client = new OkHttpClient.Builder()
         .protocols(immutableListOf(Protocol.HTTP_2, Protocol.HTTP_1_1))
         .build();

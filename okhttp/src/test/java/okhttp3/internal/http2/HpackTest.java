@@ -1073,27 +1073,27 @@ public final class HpackTest {
     assertThat(hpackWriter.headerCount).isEqualTo(2);
   }
 
-  private Hpack.Reader newReader(Buffer source) {
+  private Hpack.Reader newReader(final Buffer source) {
     return new Hpack.Reader(source, 4096);
   }
 
-  private Buffer byteStream(int... bytes) {
+  private Buffer byteStream(final int... bytes) {
     return new Buffer().write(intArrayToByteArray(bytes));
   }
 
-  private void checkEntry(Header entry, String name, String value, int size) {
+  private void checkEntry(final Header entry, final String name, final String value, final int size) {
     assertThat(entry.name.utf8()).isEqualTo(name);
     assertThat(entry.value.utf8()).isEqualTo(value);
     assertThat(entry.hpackSize).isEqualTo(size);
   }
 
-  private void assertBytes(int... bytes) throws IOException {
+  private void assertBytes(final int... bytes) throws IOException {
     ByteString expected = intArrayToByteArray(bytes);
     ByteString actual = bytesOut.readByteString();
     assertThat(actual).isEqualTo(expected);
   }
 
-  private ByteString intArrayToByteArray(int[] bytes) {
+  private ByteString intArrayToByteArray(final int[] bytes) {
     byte[] data = new byte[bytes.length];
     for (int i = 0; i < bytes.length; i++) {
       data[i] = (byte) bytes[i];

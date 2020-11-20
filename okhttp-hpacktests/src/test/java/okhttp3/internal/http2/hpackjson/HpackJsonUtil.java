@@ -42,11 +42,11 @@ public final class HpackJsonUtil {
   private static final Moshi MOSHI = new Moshi.Builder().build();
   private static final JsonAdapter<Story> STORY_JSON_ADAPTER = MOSHI.adapter(Story.class);
 
-  private static Story readStory(InputStream jsonResource) throws IOException {
+  private static Story readStory(final InputStream jsonResource) throws IOException {
     return STORY_JSON_ADAPTER.fromJson(Okio.buffer(Okio.source(jsonResource)));
   }
 
-  private static Story readStory(File file) throws IOException {
+  private static Story readStory(final File file) throws IOException {
     return STORY_JSON_ADAPTER.fromJson(Okio.buffer(Okio.source(file)));
   }
 
@@ -76,7 +76,7 @@ public final class HpackJsonUtil {
   /**
    * Reads stories named "story_xx.json" from the folder provided.
    */
-  public static List<Story> readStories(String testFolderName) throws Exception {
+  public static List<Story> readStories(final String testFolderName) throws Exception {
     List<Story> result = new ArrayList<>();
     int i = 0;
     while (true) { // break after last test.

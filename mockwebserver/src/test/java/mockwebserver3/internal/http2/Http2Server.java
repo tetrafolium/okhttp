@@ -50,7 +50,7 @@ public final class Http2Server extends Http2Connection.Listener {
   private final File baseDirectory;
   private final SSLSocketFactory sslSocketFactory;
 
-  public Http2Server(File baseDirectory, SSLSocketFactory sslSocketFactory) {
+  public Http2Server(final File baseDirectory, final SSLSocketFactory sslSocketFactory) {
     this.baseDirectory = baseDirectory;
     this.sslSocketFactory = sslSocketFactory;
   }
@@ -89,7 +89,7 @@ public final class Http2Server extends Http2Connection.Listener {
     }
   }
 
-  private SSLSocket doSsl(Socket socket) throws IOException {
+  private SSLSocket doSsl(final Socket socket) throws IOException {
     SSLSocket sslSocket = (SSLSocket) sslSocketFactory.createSocket(
         socket, socket.getInetAddress().getHostAddress(), socket.getPort(), true);
     sslSocket.setUseClientMode(false);
@@ -100,7 +100,7 @@ public final class Http2Server extends Http2Connection.Listener {
     return sslSocket;
   }
 
-  @Override public void onStream(Http2Stream stream) throws IOException {
+  @Override public void onStream(final Http2Stream stream) throws IOException {
     try {
       Headers requestHeaders = stream.takeHeaders();
       String path = null;
@@ -130,7 +130,7 @@ public final class Http2Server extends Http2Connection.Listener {
     }
   }
 
-  private void send404(Http2Stream stream, String path) throws IOException {
+  private void send404(final Http2Stream stream, final String path) throws IOException {
     List<Header> responseHeaders = asList(
         new Header(":status", "404"),
         new Header(":version", "HTTP/1.1"),
@@ -142,7 +142,7 @@ public final class Http2Server extends Http2Connection.Listener {
     out.close();
   }
 
-  private void serveDirectory(Http2Stream stream, File[] files) throws IOException {
+  private void serveDirectory(final Http2Stream stream, final File[] files) throws IOException {
     List<Header> responseHeaders = asList(
         new Header(":status", "200"),
         new Header(":version", "HTTP/1.1"),
@@ -157,7 +157,7 @@ public final class Http2Server extends Http2Connection.Listener {
     out.close();
   }
 
-  private void serveFile(Http2Stream stream, File file) throws IOException {
+  private void serveFile(final Http2Stream stream, final File file) throws IOException {
     List<Header> responseHeaders = asList(
         new Header(":status", "200"),
         new Header(":version", "HTTP/1.1"),
@@ -169,7 +169,7 @@ public final class Http2Server extends Http2Connection.Listener {
     }
   }
 
-  private String contentType(File file) {
+  private String contentType(final File file) {
     if (file.getName().endsWith(".css")) return "text/css";
     if (file.getName().endsWith(".gif")) return "image/gif";
     if (file.getName().endsWith(".html")) return "text/html";
@@ -180,7 +180,7 @@ public final class Http2Server extends Http2Connection.Listener {
     return "text/plain";
   }
 
-  public static void main(String... args) throws Exception {
+  public static void main(final String... args) throws Exception {
     if (args.length != 1 || args[0].startsWith("-")) {
       System.out.println("Usage: Http2Server <base directory>");
       return;

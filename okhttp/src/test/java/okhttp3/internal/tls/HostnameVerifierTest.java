@@ -671,7 +671,7 @@ public final class HostnameVerifierTest {
     assertThat(verifier.verify("K.com", session)).isFalse();
   }
 
-  private Stream<String> certificateSANs(X509Certificate peerCertificate)
+  private Stream<String> certificateSANs(final X509Certificate peerCertificate)
       throws CertificateParsingException {
     Collection<List<?>> subjectAlternativeNames = peerCertificate.getSubjectAlternativeNames();
 
@@ -748,12 +748,12 @@ public final class HostnameVerifierTest {
     assertThat(Util.canParseAsIpAddress("www.nintendo.co.jp")).isFalse();
   }
 
-  private X509Certificate certificate(String certificate) throws Exception {
+  private X509Certificate certificate(final String certificate) throws Exception {
     return (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(
         new ByteArrayInputStream(certificate.getBytes(UTF_8)));
   }
 
-  private SSLSession session(String certificate) throws Exception {
+  private SSLSession session(final String certificate) throws Exception {
     return new FakeSSLSession(certificate(certificate));
   }
 }

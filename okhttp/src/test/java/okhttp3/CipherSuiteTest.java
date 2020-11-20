@@ -113,9 +113,9 @@ public class CipherSuiteTest {
 
   @Test public void applyIntersectionRetainsSslPrefixes() throws Exception {
     FakeSslSocket socket = new FakeSslSocket();
-    socket.setEnabledProtocols(new String[] { "TLSv1" });
-    socket.setSupportedCipherSuites(new String[] { "SSL_A", "SSL_B", "SSL_C", "SSL_D", "SSL_E" });
-    socket.setEnabledCipherSuites(new String[] { "SSL_A", "SSL_B", "SSL_C" });
+    socket.setEnabledProtocols(new String[] {"TLSv1" });
+    socket.setSupportedCipherSuites(new String[] {"SSL_A", "SSL_B", "SSL_C", "SSL_D", "SSL_E" });
+    socket.setEnabledCipherSuites(new String[] {"SSL_A", "SSL_B", "SSL_C" });
 
     ConnectionSpec connectionSpec = new ConnectionSpec.Builder(true)
         .tlsVersions(TlsVersion.TLS_1_0)
@@ -123,14 +123,14 @@ public class CipherSuiteTest {
         .build();
     applyConnectionSpec(connectionSpec, socket, false);
 
-    assertArrayEquals(new String[] { "SSL_A", "SSL_C" }, socket.enabledCipherSuites);
+    assertArrayEquals(new String[] {"SSL_A", "SSL_C" }, socket.enabledCipherSuites);
   }
 
   @Test public void applyIntersectionRetainsTlsPrefixes() throws Exception {
     FakeSslSocket socket = new FakeSslSocket();
-    socket.setEnabledProtocols(new String[] { "TLSv1" });
-    socket.setSupportedCipherSuites(new String[] { "TLS_A", "TLS_B", "TLS_C", "TLS_D", "TLS_E" });
-    socket.setEnabledCipherSuites(new String[] { "TLS_A", "TLS_B", "TLS_C" });
+    socket.setEnabledProtocols(new String[] {"TLSv1" });
+    socket.setSupportedCipherSuites(new String[] {"TLS_A", "TLS_B", "TLS_C", "TLS_D", "TLS_E" });
+    socket.setEnabledCipherSuites(new String[] {"TLS_A", "TLS_B", "TLS_C" });
 
     ConnectionSpec connectionSpec = new ConnectionSpec.Builder(true)
         .tlsVersions(TlsVersion.TLS_1_0)
@@ -138,14 +138,14 @@ public class CipherSuiteTest {
         .build();
     applyConnectionSpec(connectionSpec, socket, false);
 
-    assertArrayEquals(new String[] { "TLS_A", "TLS_C" }, socket.enabledCipherSuites);
+    assertArrayEquals(new String[] {"TLS_A", "TLS_C" }, socket.enabledCipherSuites);
   }
 
   @Test public void applyIntersectionAddsSslScsvForFallback() throws Exception {
     FakeSslSocket socket = new FakeSslSocket();
-    socket.setEnabledProtocols(new String[] { "TLSv1" });
-    socket.setSupportedCipherSuites(new String[] { "SSL_A", "SSL_FALLBACK_SCSV" });
-    socket.setEnabledCipherSuites(new String[] { "SSL_A" });
+    socket.setEnabledProtocols(new String[] {"TLSv1" });
+    socket.setSupportedCipherSuites(new String[] {"SSL_A", "SSL_FALLBACK_SCSV" });
+    socket.setEnabledCipherSuites(new String[] {"SSL_A" });
 
     ConnectionSpec connectionSpec = new ConnectionSpec.Builder(true)
         .tlsVersions(TlsVersion.TLS_1_0)
@@ -153,14 +153,14 @@ public class CipherSuiteTest {
         .build();
     applyConnectionSpec(connectionSpec, socket, true);
 
-    assertArrayEquals(new String[] { "SSL_A", "SSL_FALLBACK_SCSV" }, socket.enabledCipherSuites);
+    assertArrayEquals(new String[] {"SSL_A", "SSL_FALLBACK_SCSV" }, socket.enabledCipherSuites);
   }
 
   @Test public void applyIntersectionAddsTlsScsvForFallback() throws Exception {
     FakeSslSocket socket = new FakeSslSocket();
-    socket.setEnabledProtocols(new String[] { "TLSv1" });
-    socket.setSupportedCipherSuites(new String[] { "TLS_A", "TLS_FALLBACK_SCSV" });
-    socket.setEnabledCipherSuites(new String[] { "TLS_A" });
+    socket.setEnabledProtocols(new String[] {"TLSv1" });
+    socket.setSupportedCipherSuites(new String[] {"TLS_A", "TLS_FALLBACK_SCSV" });
+    socket.setEnabledCipherSuites(new String[] {"TLS_A" });
 
     ConnectionSpec connectionSpec = new ConnectionSpec.Builder(true)
         .tlsVersions(TlsVersion.TLS_1_0)
@@ -168,14 +168,14 @@ public class CipherSuiteTest {
         .build();
     applyConnectionSpec(connectionSpec, socket, true);
 
-    assertArrayEquals(new String[] { "TLS_A", "TLS_FALLBACK_SCSV" }, socket.enabledCipherSuites);
+    assertArrayEquals(new String[] {"TLS_A", "TLS_FALLBACK_SCSV" }, socket.enabledCipherSuites);
   }
 
   @Test public void applyIntersectionToProtocolVersion() throws Exception {
     FakeSslSocket socket = new FakeSslSocket();
-    socket.setEnabledProtocols(new String[] { "TLSv1", "TLSv1.1", "TLSv1.2" });
-    socket.setSupportedCipherSuites(new String[] { "TLS_A" });
-    socket.setEnabledCipherSuites(new String[] { "TLS_A" });
+    socket.setEnabledProtocols(new String[] {"TLSv1", "TLSv1.1", "TLSv1.2" });
+    socket.setSupportedCipherSuites(new String[] {"TLS_A" });
+    socket.setEnabledCipherSuites(new String[] {"TLS_A" });
 
     ConnectionSpec connectionSpec = new ConnectionSpec.Builder(true)
         .tlsVersions(TlsVersion.TLS_1_1, TlsVersion.TLS_1_2, TlsVersion.TLS_1_3)
@@ -183,7 +183,7 @@ public class CipherSuiteTest {
         .build();
     applyConnectionSpec(connectionSpec, socket, false);
 
-    assertArrayEquals(new String[] { "TLSv1.1", "TLSv1.2" }, socket.enabledProtocols);
+    assertArrayEquals(new String[] {"TLSv1.1", "TLSv1.2" }, socket.enabledProtocols);
   }
 
   static final class FakeSslSocket extends DelegatingSSLSocket {
@@ -199,7 +199,7 @@ public class CipherSuiteTest {
       return enabledProtocols;
     }
 
-    @Override public void setEnabledProtocols(String[] enabledProtocols) {
+    @Override public void setEnabledProtocols(final String[] enabledProtocols) {
       this.enabledProtocols = enabledProtocols;
     }
 
@@ -207,7 +207,7 @@ public class CipherSuiteTest {
       return supportedCipherSuites;
     }
 
-    public void setSupportedCipherSuites(String[] supportedCipherSuites) {
+    public void setSupportedCipherSuites(final String[] supportedCipherSuites) {
       this.supportedCipherSuites = supportedCipherSuites;
     }
 
@@ -215,7 +215,7 @@ public class CipherSuiteTest {
       return enabledCipherSuites;
     }
 
-    @Override public void setEnabledCipherSuites(String[] enabledCipherSuites) {
+    @Override public void setEnabledCipherSuites(final String[] enabledCipherSuites) {
       this.enabledCipherSuites = enabledCipherSuites;
     }
   }

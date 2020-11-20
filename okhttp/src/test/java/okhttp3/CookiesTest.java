@@ -50,7 +50,7 @@ public class CookiesTest {
   private OkHttpClient client = clientTestRule.newClient();
 
   @BeforeEach
-  public void setUp(MockWebServer server) throws Exception {
+  public void setUp(final MockWebServer server) throws Exception {
     this.server = server;
   }
 
@@ -170,14 +170,14 @@ public class CookiesTest {
     final HttpUrl serverUrl = urlWithIpAddress(server, "/");
 
     CookieHandler androidCookieHandler = new CookieHandler() {
-      @Override public Map<String, List<String>> get(URI uri, Map<String, List<String>> map)
+      @Override public Map<String, List<String>> get(final URI uri, final Map<String, List<String>> map)
           throws IOException {
         return Collections.singletonMap("Cookie", Collections.singletonList("$Version=\"1\"; "
             + "a=\"android\";$Path=\"/\";$Domain=\"" + serverUrl.host() + "\"; "
             + "b=\"banana\";$Path=\"/\";$Domain=\"" + serverUrl.host() + "\""));
       }
 
-      @Override public void put(URI uri, Map<String, List<String>> map) throws IOException {
+      @Override public void put(final URI uri, final Map<String, List<String>> map) throws IOException {
       }
     };
 
@@ -250,8 +250,8 @@ public class CookiesTest {
   @Test public void testCookiesSentIgnoresCase() throws Exception {
     client = client.newBuilder()
         .cookieJar(new JavaNetCookieJar(new CookieManager() {
-          @Override public Map<String, List<String>> get(URI uri,
-              Map<String, List<String>> requestHeaders) throws IOException {
+          @Override public Map<String, List<String>> get(final URI uri,
+              final Map<String, List<String>> requestHeaders) throws IOException {
             Map<String, List<String>> result = new LinkedHashMap<>();
             result.put("COOKIE", Collections.singletonList("Bar=bar"));
             result.put("cooKIE2", Collections.singletonList("Baz=baz"));
@@ -322,14 +322,14 @@ public class CookiesTest {
     assertThat(actualCookies).isEmpty();
   }
 
-  private HttpUrl urlWithIpAddress(MockWebServer server, String path) throws Exception {
+  private HttpUrl urlWithIpAddress(final MockWebServer server, final String path) throws Exception {
     return server.url(path)
         .newBuilder()
         .host(InetAddress.getByName(server.getHostName()).getHostAddress())
         .build();
   }
 
-  private void get(HttpUrl url) throws Exception {
+  private void get(final HttpUrl url) throws Exception {
     Call call = client.newCall(new Request.Builder()
         .url(url)
         .build());

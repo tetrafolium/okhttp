@@ -976,11 +976,11 @@ public final class Http2ConnectionTest {
     final CountDownLatch maxConcurrentStreamsUpdated = new CountDownLatch(1);
     final AtomicInteger maxConcurrentStreams = new AtomicInteger();
     Http2Connection.Listener listener = new Http2Connection.Listener() {
-      @Override public void onStream(Http2Stream stream) throws IOException {
+      @Override public void onStream(final Http2Stream stream) throws IOException {
         throw new AssertionError();
       }
 
-      @Override public void onSettings(Http2Connection connection, Settings settings) {
+      @Override public void onSettings(final Http2Connection connection, final Settings settings) {
         maxConcurrentStreams.set(settings.getMaxConcurrentStreams());
         maxConcurrentStreamsUpdated.countDown();
       }
@@ -1948,11 +1948,11 @@ public final class Http2ConnectionTest {
     assertThat(queues).hasSize(1);
   }
 
-  private Buffer data(int byteCount) {
+  private Buffer data(final int byteCount) {
     return new Buffer().write(new byte[byteCount]);
   }
 
-  private void assertStreamData(String expected, Source source) throws IOException {
+  private void assertStreamData(final String expected, final Source source) throws IOException {
     String actual = Okio.buffer(source).readUtf8();
     assertThat(actual).isEqualTo(expected);
   }
@@ -1974,11 +1974,11 @@ public final class Http2ConnectionTest {
     latch.await();
   }
 
-  static int roundUp(int num, int divisor) {
+  static int roundUp(final int num, final int divisor) {
     return (num + divisor - 1) / divisor;
   }
 
-  private Http2Connection connectWithSettings(boolean client, Settings settings) throws Exception {
+  private Http2Connection connectWithSettings(final boolean client, final Settings settings) throws Exception {
     peer.setClient(client);
     peer.sendFrame().settings(settings);
     peer.acceptFrame(); // ACK
@@ -1986,13 +1986,13 @@ public final class Http2ConnectionTest {
     return connect(peer);
   }
 
-  private Http2Connection connect(MockHttp2Peer peer) throws Exception {
+  private Http2Connection connect(final MockHttp2Peer peer) throws Exception {
     return connect(peer, IGNORE, Http2Connection.Listener.REFUSE_INCOMING_STREAMS);
   }
 
   /** Builds a new connection to {@code peer} with settings acked. */
-  private Http2Connection connect(MockHttp2Peer peer, PushObserver pushObserver,
-      Http2Connection.Listener listener) throws Exception {
+  private Http2Connection connect(final MockHttp2Peer peer, final PushObserver pushObserver,
+      final Http2Connection.Listener listener) throws Exception {
     Http2Connection connection = new Http2Connection.Builder(true, TaskRunner.INSTANCE)
         .socket(peer.openSocket())
         .pushObserver(pushObserver)
@@ -2011,21 +2011,21 @@ public final class Http2ConnectionTest {
 
   static final PushObserver IGNORE = new PushObserver() {
 
-    @Override public boolean onRequest(int streamId, List<Header> requestHeaders) {
+    @Override public boolean onRequest(final int streamId, final List<Header> requestHeaders) {
       return false;
     }
 
-    @Override public boolean onHeaders(int streamId, List<Header> responseHeaders, boolean last) {
+    @Override public boolean onHeaders(final int streamId, final List<Header> responseHeaders, final boolean last) {
       return false;
     }
 
-    @Override public boolean onData(int streamId, BufferedSource source, int byteCount,
-        boolean last) throws IOException {
+    @Override public boolean onData(final int streamId, final BufferedSource source, final int byteCount,
+        final boolean last) throws IOException {
       source.skip(byteCount);
       return false;
     }
 
-    @Override public void onReset(int streamId, ErrorCode errorCode) {
+    @Override public void onReset(final int streamId, final ErrorCode errorCode) {
     }
   };
 
@@ -2039,7 +2039,7 @@ public final class Http2ConnectionTest {
       return events.remove(0);
     }
 
-    @Override public synchronized boolean onRequest(int streamId, List<Header> requestHeaders) {
+    @Override public synchronized boolean onRequest(final int streamId, final List<Header> requestHeaders) {
       assertThat(streamId).isEqualTo(2);
       events.add(requestHeaders);
       notifyAll();
@@ -2047,7 +2047,7 @@ public final class Http2ConnectionTest {
     }
 
     @Override public synchronized boolean onHeaders(
-        int streamId, List<Header> responseHeaders, boolean last) {
+        final int streamId, final List<Header> responseHeaders, final boolean last) {
       assertThat(streamId).isEqualTo(2);
       assertThat(last).isTrue();
       events.add(responseHeaders);
@@ -2056,13 +2056,13 @@ public final class Http2ConnectionTest {
     }
 
     @Override public synchronized boolean onData(
-        int streamId, BufferedSource source, int byteCount, boolean last) {
+        final int streamId, final BufferedSource source, final int byteCount, final boolean last) {
       events.add(new AssertionError("onData"));
       notifyAll();
       return false;
     }
 
-    @Override public synchronized void onReset(int streamId, ErrorCode errorCode) {
+    @Override public synchronized void onReset(final int streamId, final ErrorCode errorCode) {
       events.add(new AssertionError("onReset"));
       notifyAll();
     }

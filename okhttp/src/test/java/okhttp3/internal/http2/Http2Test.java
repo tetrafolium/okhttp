@@ -68,8 +68,8 @@ public final class Http2Test {
     assertThat(sendHeaderFrames(true, sentHeaders)).isEqualTo(frame);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void headers(boolean inFinished, int streamId,
-          int associatedStreamId, List<Header> headerBlock) {
+      @Override public void headers(final boolean inFinished, final int streamId,
+          final int associatedStreamId, final List<Header> headerBlock) {
         assertThat(inFinished).isTrue();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(associatedStreamId).isEqualTo(-1);
@@ -91,15 +91,15 @@ public final class Http2Test {
     frame.writeAll(headerBytes);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void priority(int streamId, int streamDependency, int weight,
-          boolean exclusive) {
+      @Override public void priority(final int streamId, final int streamDependency, final int weight,
+          final boolean exclusive) {
         assertThat(streamDependency).isEqualTo(0);
         assertThat(weight).isEqualTo(256);
         assertThat(exclusive).isFalse();
       }
 
-      @Override public void headers(boolean inFinished, int streamId,
-          int associatedStreamId, List<Header> nameValueBlock) {
+      @Override public void headers(final boolean inFinished, final int streamId,
+          final int associatedStreamId, final List<Header> nameValueBlock) {
         assertThat(inFinished).isFalse();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(associatedStreamId).isEqualTo(-1);
@@ -133,8 +133,8 @@ public final class Http2Test {
 
     // Reading the above frames should result in a concatenated headerBlock.
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void headers(boolean inFinished, int streamId,
-          int associatedStreamId, List<Header> headerBlock) {
+      @Override public void headers(final boolean inFinished, final int streamId,
+          final int associatedStreamId, final List<Header> headerBlock) {
         assertThat(inFinished).isFalse();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(associatedStreamId).isEqualTo(-1);
@@ -167,7 +167,7 @@ public final class Http2Test {
 
     reader.nextFrame(false, new BaseTestHandler() {
       @Override
-      public void pushPromise(int streamId, int promisedStreamId, List<Header> headerBlock) {
+      public void pushPromise(final int streamId, final int promisedStreamId, final List<Header> headerBlock) {
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(promisedStreamId).isEqualTo(expectedPromisedStreamId);
         assertThat(headerBlock).isEqualTo(pushPromise);
@@ -204,7 +204,7 @@ public final class Http2Test {
     // Reading the above frames should result in a concatenated headerBlock.
     reader.nextFrame(false, new BaseTestHandler() {
       @Override
-      public void pushPromise(int streamId, int promisedStreamId, List<Header> headerBlock) {
+      public void pushPromise(final int streamId, final int promisedStreamId, final List<Header> headerBlock) {
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(promisedStreamId).isEqualTo(expectedPromisedStreamId);
         assertThat(headerBlock).isEqualTo(pushPromise);
@@ -220,7 +220,7 @@ public final class Http2Test {
     frame.writeInt(ErrorCode.PROTOCOL_ERROR.getHttpCode());
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void rstStream(int streamId, ErrorCode errorCode) {
+      @Override public void rstStream(final int streamId, final ErrorCode errorCode) {
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(errorCode).isEqualTo(ErrorCode.PROTOCOL_ERROR);
       }
@@ -240,7 +240,7 @@ public final class Http2Test {
     frame.writeInt(0);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void settings(boolean clearPrevious, Settings settings) {
+      @Override public void settings(final boolean clearPrevious, final Settings settings) {
         // No clearPrevious in HTTP/2.
         assertThat(clearPrevious).isFalse();
         assertThat(settings.getHeaderTableSize()).isEqualTo(reducedTableSizeBytes);
@@ -275,7 +275,7 @@ public final class Http2Test {
 
     final AtomicInteger settingValue = new AtomicInteger();
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void settings(boolean clearPrevious, Settings settings) {
+      @Override public void settings(final boolean clearPrevious, final Settings settings) {
         settingValue.set(settings.get(7));
       }
     });
@@ -291,7 +291,7 @@ public final class Http2Test {
     frame.writeInt(1);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void settings(boolean clearPrevious, Settings settings) {
+      @Override public void settings(final boolean clearPrevious, final Settings settings) {
         // no-op
       }
     });
@@ -379,7 +379,7 @@ public final class Http2Test {
     assertThat(sendPingFrame(true, expectedPayload1, expectedPayload2)).isEqualTo(frame);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void ping(boolean ack, int payload1, int payload2) {
+      @Override public void ping(final boolean ack, final int payload1, final int payload2) {
         assertThat(ack).isTrue();
         assertThat(payload1).isEqualTo(expectedPayload1);
         assertThat(payload2).isEqualTo(expectedPayload2);
@@ -401,8 +401,8 @@ public final class Http2Test {
     assertThat(sendDataFrame(new Buffer().write(expectedData))).isEqualTo(frame);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void data(boolean inFinished, int streamId, BufferedSource source,
-          int length) throws IOException {
+      @Override public void data(final boolean inFinished, final int streamId, final BufferedSource source,
+          final int length) throws IOException {
         assertThat(inFinished).isFalse();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(length).isEqualTo(Http2.INITIAL_MAX_FRAME_SIZE);
@@ -572,7 +572,7 @@ public final class Http2Test {
     assertThat(windowUpdate(expectedWindowSizeIncrement)).isEqualTo(frame);
 
     reader.nextFrame(false, new BaseTestHandler() {
-      @Override public void windowUpdate(int streamId, long windowSizeIncrement) {
+      @Override public void windowUpdate(final int streamId, final long windowSizeIncrement) {
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(windowSizeIncrement).isEqualTo(expectedWindowSizeIncrement);
       }
@@ -612,7 +612,7 @@ public final class Http2Test {
 
     reader.nextFrame(false, new BaseTestHandler() {
       @Override public void goAway(
-          int lastGoodStreamId, ErrorCode errorCode, ByteString debugData) {
+          final int lastGoodStreamId, final ErrorCode errorCode, final ByteString debugData) {
         assertThat(lastGoodStreamId).isEqualTo(expectedStreamId);
         assertThat(errorCode).isEqualTo(expectedError);
         assertThat(debugData.size()).isEqualTo(0);
@@ -638,7 +638,7 @@ public final class Http2Test {
 
     reader.nextFrame(false, new BaseTestHandler() {
       @Override public void goAway(
-          int lastGoodStreamId, ErrorCode errorCode, ByteString debugData) {
+          final int lastGoodStreamId, final ErrorCode errorCode, final ByteString debugData) {
         assertThat(lastGoodStreamId).isEqualTo(0);
         assertThat(errorCode).isEqualTo(expectedError);
         assertThat(debugData).isEqualTo(expectedData);
@@ -682,45 +682,45 @@ public final class Http2Test {
     }
   }
 
-  private Buffer literalHeaders(List<Header> sentHeaders) throws IOException {
+  private Buffer literalHeaders(final List<Header> sentHeaders) throws IOException {
     Buffer out = new Buffer();
     new Hpack.Writer(out).writeHeaders(sentHeaders);
     return out;
   }
 
-  private Buffer sendHeaderFrames(boolean outFinished, List<Header> headers) throws IOException {
+  private Buffer sendHeaderFrames(final boolean outFinished, final List<Header> headers) throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).headers(outFinished, expectedStreamId, headers);
     return out;
   }
 
-  private Buffer sendPushPromiseFrames(int streamId, List<Header> headers) throws IOException {
+  private Buffer sendPushPromiseFrames(final int streamId, final List<Header> headers) throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).pushPromise(expectedStreamId, streamId, headers);
     return out;
   }
 
-  private Buffer sendPingFrame(boolean ack, int payload1, int payload2) throws IOException {
+  private Buffer sendPingFrame(final boolean ack, final int payload1, final int payload2) throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).ping(ack, payload1, payload2);
     return out;
   }
 
-  private Buffer sendGoAway(int lastGoodStreamId, ErrorCode errorCode, byte[] debugData)
+  private Buffer sendGoAway(final int lastGoodStreamId, final ErrorCode errorCode, final byte[] debugData)
       throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).goAway(lastGoodStreamId, errorCode, debugData);
     return out;
   }
 
-  private Buffer sendDataFrame(Buffer data) throws IOException {
+  private Buffer sendDataFrame(final Buffer data) throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).dataFrame(expectedStreamId, FLAG_NONE, data,
         (int) data.size());
     return out;
   }
 
-  private Buffer windowUpdate(long windowSizeIncrement) throws IOException {
+  private Buffer windowUpdate(final long windowSizeIncrement) throws IOException {
     Buffer out = new Buffer();
     new Http2Writer(out, true).windowUpdate(expectedStreamId, windowSizeIncrement);
     return out;
@@ -728,8 +728,8 @@ public final class Http2Test {
 
   private Http2Reader.Handler assertHeaderBlock() {
     return new BaseTestHandler() {
-      @Override public void headers(boolean inFinished, int streamId,
-          int associatedStreamId, List<Header> headerBlock) {
+      @Override public void headers(final boolean inFinished, final int streamId,
+          final int associatedStreamId, final List<Header> headerBlock) {
         assertThat(inFinished).isFalse();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(associatedStreamId).isEqualTo(-1);
@@ -740,8 +740,8 @@ public final class Http2Test {
 
   private Http2Reader.Handler assertData() {
     return new BaseTestHandler() {
-      @Override public void data(boolean inFinished, int streamId, BufferedSource source,
-          int length) throws IOException {
+      @Override public void data(final boolean inFinished, final int streamId, final BufferedSource source,
+          final int length) throws IOException {
         assertThat(inFinished).isFalse();
         assertThat(streamId).isEqualTo(expectedStreamId);
         assertThat(length).isEqualTo(1123);
@@ -753,7 +753,7 @@ public final class Http2Test {
     };
   }
 
-  private static Buffer gzip(byte[] data) throws IOException {
+  private static Buffer gzip(final byte[] data) throws IOException {
     Buffer buffer = new Buffer();
     Okio.buffer(new GzipSink(buffer)).write(data).close();
     return buffer;
@@ -770,7 +770,7 @@ public final class Http2Test {
     return headerEntries(nameValues);
   }
 
-  private static void writeMedium(BufferedSink sink, int i) throws IOException {
+  private static void writeMedium(final BufferedSink sink, final int i) throws IOException {
     sink.writeByte((i >>> 16) & 0xff);
     sink.writeByte((i >>> 8) & 0xff);
     sink.writeByte(i & 0xff);
