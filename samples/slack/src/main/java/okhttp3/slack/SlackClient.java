@@ -84,13 +84,8 @@ public final class SlackClient {
         + "pins:write reactions:read reactions:write search:read stars:read stars:write team:read "
         + "usergroups:read usergroups:write users:read users:write identify";
 
-    if (true) {
+    {
       client.requestOauthSession(scopes, null);
-    } else {
-      OAuthSession session = new OAuthSession(true,
-          "xoxp-XXXXXXXXXX-XXXXXXXXXX-XXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-          scopes, "UXXXXXXXX", "My Slack Group", "TXXXXXXXX");
-      client.initOauthSession(session);
     }
 
     client.awaitAccessToken(Timeout.NONE);
